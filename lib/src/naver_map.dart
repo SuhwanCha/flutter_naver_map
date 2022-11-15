@@ -38,6 +38,7 @@ class NaverMap extends StatefulWidget {
     this.maxZoom = 21.0,
     this.logoInteractionEnabled = true,
     this.logoAlign = LogoAlign.BottomLeft,
+    this.logoMargin,
   }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
@@ -248,6 +249,9 @@ class NaverMap extends StatefulWidget {
 
   /// Alignment of Naver logo
   final LogoAlign logoAlign;
+
+  /// Margin of Naver logo
+  final EdgeInsets? logoMargin;
 
   @override
   _NaverMapState createState() => _NaverMapState();
@@ -474,6 +478,7 @@ class _NaverMapOptions {
     this.minZoom,
     this.logoInteractionEnabled,
     this.logoAlign,
+    this.logoMargin,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -498,6 +503,7 @@ class _NaverMapOptions {
       minZoom: map.minZoom,
       logoInteractionEnabled: map.logoInteractionEnabled,
       logoAlign: map.logoAlign,
+      logoMargin: map.logoMargin,
     );
   }
 
@@ -521,6 +527,7 @@ class _NaverMapOptions {
   final double? minZoom;
   final bool? logoInteractionEnabled;
   final LogoAlign? logoAlign;
+  final EdgeInsets? logoMargin;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -563,6 +570,16 @@ class _NaverMapOptions {
             : null);
     addIfNonNull('logoInteractionEnabled', logoInteractionEnabled);
     addIfNonNull('logoAlign', logoAlign?.index);
+    addIfNonNull(
+        'logoMargin',
+        logoMargin != null
+            ? [
+                logoMargin!.left,
+                logoMargin!.top,
+                logoMargin!.right,
+                logoMargin!.bottom,
+              ]
+            : null);
     return optionsMap;
   }
 
