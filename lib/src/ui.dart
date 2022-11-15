@@ -58,3 +58,19 @@ enum MapLayer {
   /// 지적편집도 그룹입니다. 활성화할 경우 지적편집도가 노출됩니다.
   LAYER_GROUP_CADASTRAL,
 }
+
+/// Alignment of the Naver logo.
+enum LogoAlign {
+  
+  /// Aligns the logo to the bottom left corner.
+  BottomLeft,
+
+  /// Aligns the logo to the bottom right corner.
+  BottomRight,
+
+  /// Aligns the logo to the top left corner.
+  TopLeft,
+
+  /// Aligns the logo to the top right corner.
+  TopRight,
+}

@@ -37,6 +37,7 @@ class NaverMap extends StatefulWidget {
     this.minZoom = 0.0,
     this.maxZoom = 21.0,
     this.logoInteractionEnabled = true,
+    this.logoAlign = LogoAlign.BottomLeft,
   }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
@@ -244,6 +245,9 @@ class NaverMap extends StatefulWidget {
   /// 메뉴를 만들어야 합니다.
   /// 기본값은 YES입니다.
   final bool logoInteractionEnabled;
+
+  /// Alignment of Naver logo
+  final LogoAlign logoAlign;
 
   @override
   _NaverMapState createState() => _NaverMapState();
@@ -469,6 +473,7 @@ class _NaverMapOptions {
     this.maxZoom,
     this.minZoom,
     this.logoInteractionEnabled,
+    this.logoAlign,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -492,6 +497,7 @@ class _NaverMapOptions {
       maxZoom: map.maxZoom,
       minZoom: map.minZoom,
       logoInteractionEnabled: map.logoInteractionEnabled,
+      logoAlign: map.logoAlign,
     );
   }
 
@@ -514,6 +520,7 @@ class _NaverMapOptions {
   final double? maxZoom;
   final double? minZoom;
   final bool? logoInteractionEnabled;
+  final LogoAlign? logoAlign;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -555,6 +562,7 @@ class _NaverMapOptions {
               ]
             : null);
     addIfNonNull('logoInteractionEnabled', logoInteractionEnabled);
+    addIfNonNull('logoAlign', logoAlign?.index);
     return optionsMap;
   }
 

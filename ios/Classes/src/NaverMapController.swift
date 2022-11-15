@@ -31,6 +31,7 @@ protocol NaverMapOptionSink {
 
     // Updated
     func setLogoInteractionEnabled(_ logoInteractionEnabled: Bool)
+    func setLogoAlign(_ logoAlign: Int)
 }
 
 
@@ -376,6 +377,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let logoInteractionEnabled = option["logoInteractionEnabled"] as? Bool{
             sink.setLogoInteractionEnabled(logoInteractionEnabled)
         }
+        if let logoAlign = option["logoAlign"] as? Int{
+            sink.setLogoAlign(logoAlign)
+        }
     }
     
     // Naver touch Delegate method
@@ -515,6 +519,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
 
     func setLogoInteractionEnabled(_ logoInteractionEnabled: Bool) {
         mapView!.logoInteractionEnabled = logoInteractionEnabled
+    }
+
+    func setLogoAlign(_ logoAlign: Int) {
+        mapView!.logoAlign = NMFLogoAlign(rawValue: logoAlign)!
     }
     
     // ===================== authManagerDelegate ========================
