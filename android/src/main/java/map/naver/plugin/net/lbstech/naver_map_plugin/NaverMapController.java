@@ -8,6 +8,7 @@ import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.START
 import static map.naver.plugin.net.lbstech.naver_map_plugin.NaverMapPlugin.STOPPED;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -27,6 +28,8 @@ import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.app.LegalNoticeActivity;
+import com.naver.maps.map.app.OpenSourceLicenseActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -388,6 +391,19 @@ public class NaverMapController implements
                         null);
             }
             break;
+
+            case "showLegalNotice": {
+                android.content.Intent view = new android.content.Intent(activity.getApplicationContext(),
+                        LegalNoticeActivity.class);
+                activity.startActivity(view);
+            }
+            break;
+
+            case "showOpenSourceLicense": {
+                android.content.Intent view = new android.content.Intent(activity.getApplicationContext(),
+                        OpenSourceLicenseActivity.class);
+                activity.startActivity(view);
+            }
         }
     }
 

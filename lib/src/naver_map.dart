@@ -1,4 +1,3 @@
-
 part of naver_map_plugin;
 
 /// ### 네이버지도
@@ -232,6 +231,12 @@ class NaverMap extends StatefulWidget {
   /// Enable logo interaction
   /// default true
   ///
+  /// You should implement LegalNotice and OpenSourceLicense to use this feature.
+  /// It's implemented in [NaverMapController], and you can use it like this:
+  /// ```dart
+  /// _controller.future.then((value) => value.showLegalNotice());
+  /// _controller.future.then((value) => value.showOpenSourceLicense());
+  /// ```
   /// 네이버 로고 클릭을 활성화할지 여부를 지정합니다. 활성화하면 네이버 로고 클릭시 범례, 법적 공지,
   /// 오픈소스 라이선스를 보여주는 알림창이 열립니다.
   /// 이 옵션을 NO로 지정하는 앱은 반드시 앱 내에 네이버 지도 SDK의 법적 공지

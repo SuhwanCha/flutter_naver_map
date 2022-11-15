@@ -229,6 +229,16 @@ class NaverMapController {
     final result = await _channel.invokeMethod<double>('meter#px');
     return result ?? 0.0;
   }
+
+  /// 네이버 지도 SDK의 법적 공지
+  void showLegalNotice() {
+    _channel.invokeMethod('showLegalNotice');
+  }
+
+  /// 네이버 지도 SDK의 오픈소스 라이선스
+  void showOpenSourceLicense() {
+    _channel.invokeMethod('showOpenSourceLicense');
+  }
 }
 
 /// <h2>위치 오버레이</h2>
