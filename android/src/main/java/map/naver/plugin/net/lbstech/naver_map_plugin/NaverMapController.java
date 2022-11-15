@@ -75,6 +75,7 @@ public class NaverMapController implements
     private boolean logoClickEnabled;
     private List<Double> logoMargin;
     private int logoGravity;
+    private boolean scaleBarEnabled;
 
     private final Float density;
 
@@ -700,6 +701,14 @@ public class NaverMapController implements
             convertedGravity = Gravity.BOTTOM | Gravity.START;
         }
         naverMap.getUiSettings().setLogoGravity(convertedGravity);
+    }
+
+    public void setScaleBarEnabled(boolean scaleBarEnabled) {
+        if (naverMap == null) {
+            this.scaleBarEnabled = scaleBarEnabled;
+            return;
+        }
+        naverMap.getUiSettings().setScaleBarEnabled(scaleBarEnabled);
     }
 
 

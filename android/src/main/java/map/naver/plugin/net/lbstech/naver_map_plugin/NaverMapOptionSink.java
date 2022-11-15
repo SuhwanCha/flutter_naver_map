@@ -46,4 +46,6 @@ public interface NaverMapOptionSink {
 
     void setLogoGravity(int logoGravity);
 
+    void setScaleBarEnabled(boolean scaleBarEnabled);
+
 }

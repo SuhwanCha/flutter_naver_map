@@ -234,6 +234,12 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         options.logoGravity(logoGravity);
     }
 
+    @Override
+    public void setScaleBarEnabled(boolean showScaleBar) {
+        options.scaleBarEnabled(showScaleBar);
+    }
+
+
 
     void setInitialCameraPosition(Map<String, Object> cameraPosition) {
         options.camera(Convert.toCameraPosition(cameraPosition));

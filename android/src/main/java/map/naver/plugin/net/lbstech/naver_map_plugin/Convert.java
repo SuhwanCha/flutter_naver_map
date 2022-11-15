@@ -65,6 +65,8 @@ class Convert {
             sink.setLogoMargin(toDoubleList(options.get("logoMargin")));
         if(options.containsKey("logoAlign"))
             sink.setLogoGravity((Integer) options.get("logoAlign"));
+        if(options.containsKey("scaleBarEnabled"))
+            sink.setScaleBarEnabled((Boolean) options.get("scaleBarEnabled"));
     }
 
     @SuppressWarnings("unchecked")
