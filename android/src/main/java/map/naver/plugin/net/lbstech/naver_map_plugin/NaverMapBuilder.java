@@ -224,6 +224,17 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         options.logoClickEnabled(logoClickEnabled);
     }
 
+    @Override
+    public void setLogoMargin(List<Double> logoMargin) {
+        options.logoMargin((int) (double) logoMargin.get(0), (int) (double) logoMargin.get(1), (int) (double) logoMargin.get(2), (int) (double) logoMargin.get(3));
+    }
+
+    @Override
+    public void setLogoGravity(int logoGravity) {
+        options.logoGravity(logoGravity);
+    }
+
+
     void setInitialCameraPosition(Map<String, Object> cameraPosition) {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }

@@ -61,6 +61,10 @@ class Convert {
             sink.setMinZoom((Double) options.get("minZoom"));
         if(options.containsKey("logoClickEnabled"))
             sink.setLogoClickEnabled((Boolean) options.get("logoClickEnabled"));
+        if(options.containsKey("logoMargin"))
+            sink.setLogoMargin(toDoubleList(options.get("logoMargin")));
+        if(options.containsKey("logoAlign"))
+            sink.setLogoGravity((Integer) options.get("logoAlign"));
     }
 
     @SuppressWarnings("unchecked")

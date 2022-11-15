@@ -42,4 +42,8 @@ public interface NaverMapOptionSink {
 
     void setLogoClickEnabled(boolean logoClickEnabled);
 
+    void setLogoMargin(List<Double> logoMargin);
+
+    void setLogoGravity(int logoGravity);
+
 }

@@ -14,6 +14,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Gravity;
+
 
 import androidx.annotation.NonNull;
 
@@ -71,6 +73,8 @@ public class NaverMapController implements
     private double maxZoom;
     private double minZoom;
     private boolean logoClickEnabled;
+    private List<Double> logoMargin;
+    private int logoGravity;
 
     private final Float density;
 
@@ -660,4 +664,43 @@ public class NaverMapController implements
         }
         naverMap.getUiSettings().setLogoClickEnabled(logoClickEnabled);
     }
+
+    public void setLogoMargin(List<Double> logoMargin) {
+        if (naverMap == null) {
+            this.logoMargin = logoMargin;
+            return;
+        }
+        if (logoMargin == null || logoMargin.size() < 2) return;
+        int left = Math.round(Convert.toFloat(logoMargin.get(0)) * density);
+        int top = Math.round(Convert.toFloat(logoMargin.get(1)) * density);
+        int right = Math.round(Convert.toFloat(logoMargin.get(2)) * density);
+        int bottom = Math.round(Convert.toFloat(logoMargin.get(3)) * density);
+        naverMap.getUiSettings().setLogoMargin(left, top, right, bottom);
+    }
+
+    public void setLogoGravity(int gravity) {
+        if (naverMap == null) {
+            this.logoGravity = gravity;
+            return;
+        }
+        int convertedGravity;
+        if(gravity == 0) {
+            // bottom left
+            convertedGravity = Gravity.BOTTOM | Gravity.LEFT;
+        } else if(gravity == 1) {
+            // bottom right
+            convertedGravity = Gravity.BOTTOM | Gravity.RIGHT;
+        } else if(gravity == 2) {
+            // top left
+            convertedGravity = Gravity.TOP | Gravity.LEFT;
+        } else if(gravity == 3) {
+            // top right
+            convertedGravity = Gravity.TOP | Gravity.RIGHT;
+        } else {
+            convertedGravity = Gravity.BOTTOM | Gravity.START;
+        }
+        naverMap.getUiSettings().setLogoGravity(convertedGravity);
+    }
+
+
 }
