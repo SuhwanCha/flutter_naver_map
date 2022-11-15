@@ -28,6 +28,9 @@ protocol NaverMapOptionSink {
     func setZoomGestureEnable(_ zoomGestureEnable: Bool)
     func setLocationTrackingMode(_ locationTrackingMode: UInt)
     func setLocationButtonEnable(_ locationButtonEnable: Bool)
+
+    // Updated
+    func setLogoInteractionEnabled(_ logoInteractionEnabled: Bool)
 }
 
 
@@ -359,6 +362,9 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let minZoom = option["minZoom"] as? Double{
             sink.setMinZoom(minZoom)
         }
+        if let logoInteractionEnabled = option["logoInteractionEnabled"] as? Bool{
+            sink.setLogoInteractionEnabled(logoInteractionEnabled)
+        }
     }
     
     // Naver touch Delegate method
@@ -485,7 +491,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     }
     
     func setLocationButtonEnable(_ locationButtonEnable: Bool) {
-        naverMap!.showLocationButton = locationButtonEnable
+        naverMap!.logoInteractionEnabled = locationButtonEnable
     }
     
     func setMaxZoom(_ maxZoom: Double){
@@ -494,6 +500,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     func setMinZoom(_ minZoom: Double){
         mapView!.minZoomLevel = minZoom
+    }
+
+    func setLogoInteractionEnabled(_ logoInteractionEnabled: Bool) {
+        naverMap!.showZoomControls = logoInteractionEnabled
     }
     
     // ===================== authManagerDelegate ========================
