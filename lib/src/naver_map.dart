@@ -39,6 +39,7 @@ class NaverMap extends StatefulWidget {
     this.logoInteractionEnabled = true,
     this.logoAlign = LogoAlign.BottomLeft,
     this.logoMargin,
+    this.scaleBarEnabled,
   }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
@@ -252,6 +253,10 @@ class NaverMap extends StatefulWidget {
 
   /// Margin of Naver logo
   final EdgeInsets? logoMargin;
+
+  /// 축척바 표시 여부
+  /// default true
+  final bool? scaleBarEnabled;
 
   @override
   _NaverMapState createState() => _NaverMapState();
@@ -479,6 +484,7 @@ class _NaverMapOptions {
     this.logoInteractionEnabled,
     this.logoAlign,
     this.logoMargin,
+    this.scaleBarEnabled,
   });
 
   static _NaverMapOptions fromWidget(NaverMap map) {
@@ -504,6 +510,7 @@ class _NaverMapOptions {
       logoInteractionEnabled: map.logoInteractionEnabled,
       logoAlign: map.logoAlign,
       logoMargin: map.logoMargin,
+      scaleBarEnabled: map.scaleBarEnabled,
     );
   }
 
@@ -528,6 +535,7 @@ class _NaverMapOptions {
   final bool? logoInteractionEnabled;
   final LogoAlign? logoAlign;
   final EdgeInsets? logoMargin;
+  final bool? scaleBarEnabled;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> optionsMap = <String, dynamic>{};
@@ -580,6 +588,7 @@ class _NaverMapOptions {
                 logoMargin!.bottom,
               ]
             : null);
+    addIfNonNull('scaleBarEnabled', scaleBarEnabled);
     return optionsMap;
   }
 

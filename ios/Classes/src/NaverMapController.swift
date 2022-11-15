@@ -33,6 +33,7 @@ protocol NaverMapOptionSink {
     func setLogoInteractionEnabled(_ logoInteractionEnabled: Bool)
     func setLogoAlign(_ logoAlign: Int)
     func setLogoMargin(_ logoMargin: Array<CGFloat>)
+    func setScaleBarEnabled(_ scaleBarEnabled: Bool)
 }
 
 
@@ -384,6 +385,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let logoMargin = option["logoMargin"] as? Array<CGFloat>{
             sink.setLogoMargin(logoMargin)
         }
+        if let scaleBarEnabled = option["scaleBarEnabled"] as? Bool{
+            sink.setScaleBarEnabled(scaleBarEnabled)
+        }
+
     }
     
     // Naver touch Delegate method
@@ -531,6 +536,10 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
 
     func setLogoMargin(_ logoMargin: Array<CGFloat>) {
         mapView!.logoMargin = UIEdgeInsets(top: logoMargin[1], left: logoMargin[0], bottom: logoMargin[3], right: logoMargin[2])
+    }
+
+    func setScaleBarEnabled(_ scaleBarEnabled: Bool) {
+        naverMap!.showScaleBar = scaleBarEnabled
     }
     
     // ===================== authManagerDelegate ========================
