@@ -276,6 +276,17 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
             }
             result(nil)
             break
+        
+        case "showLegalNotice" :
+            mapView!.showLegalNotice()
+            result(nil)
+            break
+        
+        case "showOpenSourceLicense" :
+            mapView!.showOpenSourceLicense()
+            result(nil)
+            break
+
         default:
             print("지정되지 않은 메서드콜 함수명이 들어왔습니다.\n함수명 : \(call.method)")
         }
