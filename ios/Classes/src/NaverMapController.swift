@@ -491,7 +491,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     }
     
     func setLocationButtonEnable(_ locationButtonEnable: Bool) {
-        naverMap!.logoInteractionEnabled = locationButtonEnable
+        naverMap!.showLocationButton = locationButtonEnable
     }
     
     func setMaxZoom(_ maxZoom: Double){
@@ -503,7 +503,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     }
 
     func setLogoInteractionEnabled(_ logoInteractionEnabled: Bool) {
-        naverMap!.showZoomControls = logoInteractionEnabled
+        mapView!.logoInteractionEnabled = logoInteractionEnabled
     }
     
     // ===================== authManagerDelegate ========================
