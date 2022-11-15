@@ -67,6 +67,7 @@ public class NaverMapController implements
     private List<Double> paddingData;
     private double maxZoom;
     private double minZoom;
+    private boolean logoClickEnabled;
 
     private final Float density;
 
@@ -634,5 +635,13 @@ public class NaverMapController implements
             return;
         }
         naverMap.setMinZoom(minZoom);
+    }
+
+    public void setLogoClickEnabled(boolean logoClickEnabled) {
+        if (naverMap == null) {
+            this.logoClickEnabled = logoClickEnabled;
+            return;
+        }
+        naverMap.getUiSettings().setLogoClickEnabled(logoClickEnabled);
     }
 }

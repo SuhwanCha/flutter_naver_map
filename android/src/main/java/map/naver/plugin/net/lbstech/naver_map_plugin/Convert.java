@@ -59,6 +59,8 @@ class Convert {
             sink.setMaxZoom((Double) options.get("maxZoom"));
         if (options.containsKey("minZoom"))
             sink.setMinZoom((Double) options.get("minZoom"));
+        if(options.containsKey("logoClickEnabled"))
+            sink.setLogoClickEnabled((Boolean) options.get("logoClickEnabled"));
     }
 
     @SuppressWarnings("unchecked")

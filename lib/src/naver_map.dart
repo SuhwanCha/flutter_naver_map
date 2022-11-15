@@ -231,6 +231,13 @@ class NaverMap extends StatefulWidget {
 
   /// Enable logo interaction
   /// default true
+  ///
+  /// 네이버 로고 클릭을 활성화할지 여부를 지정합니다. 활성화하면 네이버 로고 클릭시 범례, 법적 공지,
+  /// 오픈소스 라이선스를 보여주는 알림창이 열립니다.
+  /// 이 옵션을 NO로 지정하는 앱은 반드시 앱 내에 네이버 지도 SDK의 법적 공지
+  /// (-showLegalNotice) 및 오픈소스 라이선스(-showOpenSourceLicense)뷰 컨트롤러를 호출하는
+  /// 메뉴를 만들어야 합니다.
+  /// 기본값은 YES입니다.
   final bool logoInteractionEnabled;
 
   @override

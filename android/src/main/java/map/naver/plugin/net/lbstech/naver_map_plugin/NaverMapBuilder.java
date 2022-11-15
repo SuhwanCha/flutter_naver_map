@@ -219,6 +219,11 @@ public class NaverMapBuilder implements NaverMapOptionSink {
         options.minZoom(minZoom);
     }
 
+    @Override
+    public void setLogoClickEnabled(boolean logoClickEnabled) {
+        options.logoClickEnabled(logoClickEnabled);
+    }
+
     void setInitialCameraPosition(Map<String, Object> cameraPosition) {
         options.camera(Convert.toCameraPosition(cameraPosition));
     }

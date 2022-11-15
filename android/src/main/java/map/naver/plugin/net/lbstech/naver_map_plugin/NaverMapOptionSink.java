@@ -40,4 +40,6 @@ public interface NaverMapOptionSink {
 
     void setLocationTrackingMode(int locationTrackingMode);
 
+    void setLogoClickEnabled(boolean logoClickEnabled);
+
 }
