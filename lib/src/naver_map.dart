@@ -39,7 +39,7 @@ class NaverMap extends StatefulWidget {
     this.logoInteractionEnabled = true,
     this.logoAlign = LogoAlign.BottomLeft,
     this.logoMargin,
-    this.scaleBarEnabled,
+    this.scaleBarEnabled = true,
   }) : super(key: key);
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
@@ -289,6 +289,18 @@ class _NaverMapState extends State<NaverMap> {
     );
     if (_controller.isCompleted) _controller = Completer<NaverMapController>();
     _controller.complete(controller);
+
+    // request permission if [locationButtonEnable] is true
+    if (widget.locationButtonEnable ||
+        widget.initLocationTrackingMode != LocationTrackingMode.Face ||
+        widget.initLocationTrackingMode == LocationTrackingMode.Follow) {
+      // await Permission.locationWhenInUse.request().then(
+      //       (value) => {
+      //         if (value.isPermanentlyDenied) {openAppSettings()}
+      //       },
+      //     );
+    }
+
     if (widget.onMapCreated != null) {
       widget.onMapCreated!(controller);
     }

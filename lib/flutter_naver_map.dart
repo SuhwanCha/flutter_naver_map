@@ -38,4 +38,4 @@ part 'src/polygon_overlay.dart';
 
 part 'src/polygon_update.dart';
 
-const String VIEW_TYPE = 'naver_map_plugin';
+const String VIEW_TYPE = 'flutter_naver_map';

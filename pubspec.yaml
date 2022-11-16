@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
@@ -21,4 +22,4 @@ flutter:
         package: map.naver.plugin.net.lbstech.naver_map_plugin
         pluginClass: NaverMapPlugin
       ios:
-        pluginClass: NaverMapPlugin
+        pluginClass: FlutterNaverMap

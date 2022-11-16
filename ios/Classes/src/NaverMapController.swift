@@ -61,7 +61,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         // property set
         naverMap = NMFNaverMapView(frame: frame)
         mapView = naverMap!.mapView
-        channel = FlutterMethodChannel(name: "naver_map_plugin_\(viewId)",
+        channel = FlutterMethodChannel(name: "flutter_naver_map_\(viewId)",
                                        binaryMessenger: registrar.messenger())
         super.init()
         markersController = NaverMarkersController(naverMap: naverMap!,

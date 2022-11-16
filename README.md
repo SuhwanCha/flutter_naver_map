@@ -137,3 +137,35 @@ if (CLLocationManager.locationServicesEnabled()) {
     }
 }       
 ```
+
+## Known Issues
+
+- Follow모드 시 방향 트래킹 잘 안됨
+
+## 위치 사용 설정
+
+이 프로젝트에서는 위치 권한을 사용하기 위해 [permission_handler](https://pub.dev/packages/permission_handler)를 사용하고 있습니다.
+자세한 설정 방법은 <https://pub.dev/packages/permission_handler>를 참고해주세요. 해당 문서에서는 간략한 설정만 다루고 있습니다.
+
+### Android
+
+- `gradle.properties`에 다음 내용을 추가해주세요.
+Add the following to your "gradle.properties" file:
+
+```properties
+android.useAndroidX=true
+android.enableJetifier=true
+```
+
+- "android/app/build.gradle"에서 `compileSdkVersion`를 33으로 설정해주세요.
+Make sure you set the compileSdkVersion in your "android/app/build.gradle" file to 33:
+
+- "AndroidManifest.xml"에 location 권한을 추가해주세요.
+
+```xml
+<manifest>
+...
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+...
+</manifest>
+```
