@@ -3,7 +3,7 @@
 # Run `pod lib lint naver_map_plugin.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'naver_map_plugin'
+  s.name             = 'flutter_naver_map'
   s.version          = '0.9.4'
   s.summary          = 'flutter naver map plugin'
   s.description      = <<-DESC
