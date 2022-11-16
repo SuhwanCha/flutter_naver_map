@@ -95,7 +95,7 @@ class CameraUpdate {
       {
         'scrollTo': latLng._toJson(),
         'animation': curve.index,
-        'duration': (duration.inMilliseconds) / 1000,
+        'duration': duration.inMilliseconds,
       },
     );
   }

@@ -6,6 +6,7 @@ import android.graphics.PointF;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
+import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.overlay.OverlayImage;
@@ -117,13 +118,14 @@ class Convert {
     static CameraUpdate toCameraUpdate(Object o, float density) {
 
         Map<String, Object> map = (HashMap<String, Object>) o;
+        CameraUpdate cameraUpdate = null;
 
         if (map.isEmpty())
             throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
 
         Map<String, Object> position = (Map<String, Object>) map.get("newCameraPosition");
         if (position != null)
-            return CameraUpdate.toCameraPosition(toCameraPosition(position));
+            cameraUpdate = CameraUpdate.toCameraPosition(toCameraPosition(position));
 
         Object scrollTo = map.get("scrollTo");
         if (scrollTo != null) {
@@ -131,32 +133,54 @@ class Convert {
             if (map.containsKey("zoomTo")) {
                 double zoomTo = (double) map.get("zoomTo");
                 if (zoomTo == 0.0)
-                    return CameraUpdate.scrollTo(latLng);
+                    cameraUpdate = CameraUpdate.scrollTo(latLng);
                 else
-                    return CameraUpdate.scrollAndZoomTo(latLng, zoomTo);
+                    cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, zoomTo);
+            } else {
+                cameraUpdate = CameraUpdate.scrollTo(latLng);
             }
         }
 
+        int curve = (int) map.get("animation");
+        CameraAnimation animation;
+        if(curve == 0) {
+            animation = CameraAnimation.None;
+        } else if(curve == 1) {
+            animation = CameraAnimation.Linear;
+        } else if(curve == 3) {
+            animation = CameraAnimation.Easing;
+        } else if(curve == 4) {
+            animation = CameraAnimation.Fly;
+        } else {
+            animation = CameraAnimation.None;
+        }
+        // convert int duration to long
+        long duration = (long) (int) map.get("duration");
+
         if (map.containsKey("zoomIn"))
-            return CameraUpdate.zoomIn();
+            cameraUpdate = CameraUpdate.zoomIn();
 
         if (map.containsKey("zoomOut"))
-            return CameraUpdate.zoomOut();
+            cameraUpdate = CameraUpdate.zoomOut();
 
         if (map.containsKey("zoomBy")) {
             double zoomBy = (double) map.get("zoomBy");
             if (zoomBy != 0.0)
-                return CameraUpdate.zoomBy(zoomBy);
+                cameraUpdate = CameraUpdate.zoomBy(zoomBy);
         }
 
         List fitBounds = (List) map.get("fitBounds");
         if (fitBounds != null) {
             int dp = (int) fitBounds.get(1);
             int px = Math.round(dp * density);
-            return CameraUpdate.fitBounds(toLatLngBounds(fitBounds.get(0)), px);
+            cameraUpdate = CameraUpdate.fitBounds(toLatLngBounds(fitBounds.get(0)), px);
         }
 
-        return null;
+        cameraUpdate.animate(animation, duration);
+        
+
+        return cameraUpdate;
+
     }
 
     static Object cameraPositionToJson(CameraPosition position) {

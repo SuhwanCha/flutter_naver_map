@@ -57,7 +57,7 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     }
 
     if let duration = data["duration"] as? Double {
-        cameraUpdate?.animationDuration = duration
+        cameraUpdate?.animationDuration = duration / 1000
     }
 
     // cameraUpdate?.animation = .easeOut
