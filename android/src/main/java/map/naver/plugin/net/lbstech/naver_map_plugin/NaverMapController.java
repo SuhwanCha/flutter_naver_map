@@ -106,7 +106,7 @@ public class NaverMapController implements
         this.initialCircles = initialCircles;
         this.initialPolygons = initialPolygons;
 
-        methodChannel = new MethodChannel(binaryMessenger, "naver_map_plugin_" + id);
+        methodChannel = new MethodChannel(binaryMessenger, "flutter_naver_map_" + id);
         registrarActivityHashCode = activity.hashCode();
 
         methodChannel.setMethodCallHandler(this);

@@ -50,7 +50,7 @@ public class NaverMapPlugin implements FlutterPlugin, Application.ActivityLifecy
     registrar
             .platformViewRegistry()
             .registerViewFactory(
-                    "naver_map_plugin",
+                    "flutter_naver_map",
                     new NaverMapFactory(
                             plugin.state,
                             registrar.messenger(),
@@ -73,7 +73,7 @@ public class NaverMapPlugin implements FlutterPlugin, Application.ActivityLifecy
     pluginBinding
             .getPlatformViewRegistry()
             .registerViewFactory(
-                    "naver_map_plugin",
+                    "flutter_naver_map",
                     new NaverMapFactory(
                             state,
                             pluginBinding.getBinaryMessenger(),
