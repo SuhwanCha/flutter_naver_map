@@ -1,13 +1,13 @@
 import Flutter
 import UIKit
 
-public class SwiftNaverMapPlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterNaverMap: NSObject, FlutterPlugin {
     var registrar: FlutterPluginRegistrar?
     
     public static func register(with registrar: FlutterPluginRegistrar) {
         let naverMapFactory = NaverMapFactory(registrar: registrar)
         registrar.register(naverMapFactory,
-                           withId: "naver_map_plugin",
+                           withId: "flutter_naver_map",
                            gestureRecognizersBlockingPolicy: FlutterPlatformViewGestureRecognizersBlockingPolicyWaitUntilTouchesEnded)
     }
     
