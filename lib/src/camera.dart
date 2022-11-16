@@ -77,8 +77,27 @@ class CameraUpdate {
 
   /// 카메라의 좌표를 target으로 변경하는 CameraUpdate 객체를 생성합니다.
   /// 줌 레벨, 기울기 각도, 베어링 각도 등 좌표 외의 다른 속성은 변하지 않습니다.
-  static CameraUpdate scrollTo(LatLng latLng) {
-    return CameraUpdate._({'scrollTo': latLng._toJson()});
+  ///
+  /// [latLng]: coordinate of the camera target
+  /// [curve]: animation curve
+  /// [duration]: duration of the animation
+  static CameraUpdate scrollTo(
+    LatLng latLng, {
+    CameraAnimation curve = CameraAnimation.None,
+    Duration duration = Duration.zero,
+  }) {
+    assert(
+      curve != CameraAnimation.EaseIn ||
+          defaultTargetPlatform == TargetPlatform.iOS,
+      'Only iOS supports easeIn animation',
+    );
+    return CameraUpdate._(
+      {
+        'scrollTo': latLng._toJson(),
+        'animation': curve.index,
+        'duration': (duration.inMilliseconds) / 1000,
+      },
+    );
   }
 
   /// 카메라를 position 위치로 이동하는 CameraUpdate 객체를 생성합니다.
@@ -88,6 +107,10 @@ class CameraUpdate {
 
   /// 카메라의 좌표, 줌 레벨, 애니메이션 시간을 이용하여 카메라를 이동하는 CameraUpdate 객체를 생성합니다.
   /// 현재 duration은 안드로이드에서는 지원하지 않습니다(기본 설정으로 작동됩니다)
+  @Deprecated(
+    'Use toCameraPosition() or scrollTo() instead.'
+    'This feature was deprecated in v1.0.0',
+  )
   static CameraUpdate scrollWithOptions(LatLng latLng,
       {double? zoom, double? duration}) {
     Map cameraData = {'scrollTo': latLng._toJson()};

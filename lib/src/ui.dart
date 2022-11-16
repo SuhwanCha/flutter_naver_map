@@ -72,3 +72,22 @@ enum LogoAlign {
   /// Aligns the logo to the top right corner.
   TopRight,
 }
+
+/// 카메라 이동 애니메이션 유형을 정의하는 열거형 클래스. CameraUpdate에서 사용합니다.
+enum CameraAnimation {
+  /// 애니메이션 없이 이동합니다. 기본값입니다.
+  None,
+
+  /// 일정한 속도로 이동합니다.
+  Linear,
+
+  /// 부드럽게 가속하며 이동합니다. 가까운 거리를 이동할 때 적합합니다.
+  /// iOS에서만 지원됩니다.
+  EaseIn,
+
+  /// 부드럽게 가감속하며 이동합니다. 가까운 거리를 이동할 때 적합합니다.
+  Easing,
+
+  /// 부드럽게 축소됐다가 확대되며 이동합니다. 먼 거리를 이동할 때 적합합니다.
+  Fly,
+}

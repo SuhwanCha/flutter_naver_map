@@ -4,10 +4,19 @@
 
 ## 추가된 기능 목록
 
+### 지도 UI 관련
+
 - `logoInteractionEnabled`: 네이버 로고의 클릭 가능 여뷰를 선택할 수 있습니다. 비활성화 한 경우, 네이버 지도 SDK의 **법적 고지** 및 **오픈소스 라이선스**를 보여주는 메뉴를 필수로 만들어야 합니다.
 - `showLegalNotice()`: `logoInteractionEnabled`를 사용하기 위해, 법적 고지 뷰를 여는 메소드입니다.
 - `showOpenSourceLicense`: `logoInteractionEnabled`를 사용하기 위해, 오픈소스 라이센스 뷰를 여는 메소드입니다.
   - `showLegalNotice()`와 `showOpenSourceLicense`는 MapView에 의존성을 가지고 있어, 맵 뷰를 먼저 만들고 사용해야 합니다.
+- `logoAlign`: 네이버 로고의 위치를 조정할 수 있습니다.
+- `logoMargin`: 네이버 로고의 위치를 조정할 수 있습니다.
+- `showScaleBar`: 축척 바의 표시 여부를 설정할 수 있습니다.
+
+### 지도 컨트롤 관련
+
+- 지도 이동시 애니메이션 curve와 duration을 설정할 수 있습니다.
 
 ## Install
 

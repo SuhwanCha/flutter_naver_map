@@ -52,8 +52,16 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
         cameraUpdate = .init(fit: toLatLngBounds(json: fitBounds[0] as Any), padding: CGFloat(pt))
     }
 
-    cameraUpdate?.animation = .easeOut
-    cameraUpdate?.animationDuration = data["duration"] as? Double ?? 0.0
+    if let animation = data["animation"] as? UInt {
+        cameraUpdate?.animation = NMFCameraUpdateAnimation(rawValue: animation)!
+    }
+
+    if let duration = data["duration"] as? Double {
+        cameraUpdate?.animationDuration = duration
+    }
+
+    // cameraUpdate?.animation = .easeOut
+    // cameraUpdate?.animationDuration = data["duration"] as? Double ?? 0.0
 
     return cameraUpdate ?? NMFCameraUpdate()
 }
