@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// [PathOverlay] update events to be applied to the [NaverMap].
 ///

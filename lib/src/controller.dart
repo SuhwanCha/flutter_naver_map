@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 class NaverMapController {
   NaverMapController._(this._channel, CameraPosition? initialCameraPosition,

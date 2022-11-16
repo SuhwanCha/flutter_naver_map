@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// 지도 카에라의 위치를 나타낸다.
 /// [target]에서 보이는 카메라 화면은 가진 위,경도와 [zoom]레벨, [tilt]각도,
@@ -9,7 +9,7 @@ class CameraPosition {
     required this.target,
     this.tilt = 0.0,
     this.zoom = 15.0,
-  }) ;
+  });
 
   /// 카메라 회전 각도. 북쪽에서 시계 방향으로의 회전량.
   ///

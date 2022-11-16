@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// ### 네이버지도
 /// 네이버 지도는 네이버 SDK 를 flutter 에서 사용할 수 있게 하는 주요 widget 이다.

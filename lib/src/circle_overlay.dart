@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// <p>원형 오버레이를 지도 위에 표시하기 위해 사용되는 객체</p>
 class CircleOverlay {

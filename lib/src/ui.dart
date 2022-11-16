@@ -1,5 +1,4 @@
-
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// 지도의 유형을 지정하는 enum.
 /// 네이버 SDK가 지원하는 지도 유형은 5가지 입니다. [MapType.Basic], [MapType.Navi],
@@ -61,7 +60,6 @@ enum MapLayer {
 
 /// Alignment of the Naver logo.
 enum LogoAlign {
-  
   /// Aligns the logo to the bottom left corner.
   BottomLeft,
 

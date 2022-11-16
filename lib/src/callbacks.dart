@@ -1,5 +1,4 @@
-
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 typedef void MapCreateCallback(NaverMapController controller);
 

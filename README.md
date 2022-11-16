@@ -112,10 +112,11 @@ git lfs install
 
 > naver map에서 현위치탐색 기능을 사용하기 위해서는 info.plist에서 권한을 명시한다.
 
-```
+```plist
 <dict>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
     <string>[USAGE PERPOSE]</string>
+    <!-- For apps deployed to targets in iOS 8.0-10.0. -->
     <key>NSLocationAlwaysUsageDescription</key>
     <string>[USAGE PERPOSE]</string>
     <key>NSLocationWhenInUseUsageDescription</key>

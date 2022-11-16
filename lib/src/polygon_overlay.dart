@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// ### 다각형을 면으로 나타내는 오버레이
 /// 외부 링과 내부 링으로 구성되며, 간단한 삼각형이나 사각형을 비롯해 구멍 뚫인 다각형 등
@@ -70,7 +70,7 @@ class PolygonOverlay {
     this.globalZIndex,
     this.holes,
     this.onTap,
-  })  : assert(coordinates.length >= 3);
+  }) : assert(coordinates.length >= 3);
 
   /// 인자로 넘어오는 속성들이 적용된 새로운 [PolygonOverlay]객체를 생성합니다.
   PolygonOverlay copyWith(

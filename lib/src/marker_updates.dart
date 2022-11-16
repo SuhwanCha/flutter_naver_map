@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// build 시에 새로운 마커들은 [NaverMap] 에 적용된다.
 ///

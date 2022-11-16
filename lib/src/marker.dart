@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// 아이콘과 캡션을 이용해 지도 위의 한 지점을 표시하는 오버레이.
 class Marker {

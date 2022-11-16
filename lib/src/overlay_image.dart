@@ -1,4 +1,4 @@
-part of naver_map_plugin;
+part of flutter_naver_map;
 
 /// 마커에 쓰일 비트맵 이미지를 정의한다.
 class OverlayImage {
