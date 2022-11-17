@@ -3,6 +3,7 @@ library flutter_naver_map;
 import 'dart:async';
 import 'dart:io' show Platform;
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,4 +39,4 @@ part 'src/polygon_overlay.dart';
 
 part 'src/polygon_update.dart';
 
-const String VIEW_TYPE = 'flutter_naver_map';
+const String viewType = 'flutter_naver_map';

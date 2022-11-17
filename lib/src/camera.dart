@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_constructors_over_static_methods
+
 part of flutter_naver_map;
 
 /// 지도 카에라의 위치를 나타낸다.
 /// [target]에서 보이는 카메라 화면은 가진 위,경도와 [zoom]레벨, [tilt]각도,
 /// 그리고 [bearing]의 값들을 모두 종합한다.
-class CameraPosition {
+class CameraPosition extends Equatable {
   const CameraPosition({
     this.bearing = 0.0,
     required this.target,
@@ -28,50 +30,46 @@ class CameraPosition {
   /// 지원되는 zoom level 은 장치나 지도 데이터에 따라 다른 범위를 가진다.
   final double zoom;
 
-  dynamic toMap() => <String, dynamic>{
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'bearing': bearing,
         'target': target._toJson(),
         'tilt': tilt,
         'zoom': zoom,
       };
 
-  static CameraPosition? fromMap(dynamic json) {
+  static CameraPosition? fromMap(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return CameraPosition(
-      bearing: json['bearing'],
-      target: LatLng._fromJson(json['target'])!,
-      tilt: json['tilt'],
-      zoom: json['zoom'],
+      bearing: json['bearing'] as double,
+      target: LatLng._fromJson(json['target'] as List<double>?)!,
+      tilt: json['tilt'] as double,
+      zoom: json['zoom'] as double,
     );
   }
 
   @override
-  bool operator ==(dynamic other) {
-    if (identical(this, other)) return true;
-    if (runtimeType != other.runtimeType) return false;
-    final CameraPosition typedOther = other;
-    return bearing == typedOther.bearing &&
-        target == typedOther.target &&
-        tilt == typedOther.tilt &&
-        zoom == typedOther.zoom;
+  String toString() {
+    return 'CameraPosition(bearing: $bearing, target: $target, tilt: $tilt'
+        ' zoom: $zoom)';
   }
 
   @override
-  int get hashCode => hashValues(bearing, target, tilt, zoom);
-
-  @override
-  String toString() =>
-      'CameraPosition(bearing: $bearing, target: $target, tilt: $tilt, zoom: $zoom)';
+  List<Object?> get props => [
+        runtimeType,
+        bearing,
+        target,
+        tilt,
+        zoom,
+      ];
 }
 
 /// 카메라의 동적 움직임을 정의한 클래스입니다.
 /// 현재 위치로 부터의 온전한 움직임을 지원합니다.
 class CameraUpdate {
-  final dynamic _json;
-
   CameraUpdate._(this._json);
+  final dynamic _json;
 
   dynamic _toJson() => _json;
 
@@ -83,11 +81,11 @@ class CameraUpdate {
   /// [duration]: duration of the animation
   static CameraUpdate scrollTo(
     LatLng latLng, {
-    CameraAnimation curve = CameraAnimation.None,
+    CameraAnimation curve = CameraAnimation.none,
     Duration duration = Duration.zero,
   }) {
     assert(
-      curve != CameraAnimation.EaseIn ||
+      curve != CameraAnimation.easeIn ||
           defaultTargetPlatform == TargetPlatform.iOS,
       'Only iOS supports easeIn animation',
     );
@@ -108,12 +106,15 @@ class CameraUpdate {
   /// 카메라의 좌표, 줌 레벨, 애니메이션 시간을 이용하여 카메라를 이동하는 CameraUpdate 객체를 생성합니다.
   /// 현재 duration은 안드로이드에서는 지원하지 않습니다(기본 설정으로 작동됩니다)
   @Deprecated(
-    'Use toCameraPosition() or scrollTo() instead.'
+    'Use toCameraPosition() or scrollTo() instead. '
     'This feature was deprecated in v1.0.0',
   )
-  static CameraUpdate scrollWithOptions(LatLng latLng,
-      {double? zoom, double? duration}) {
-    Map cameraData = {'scrollTo': latLng._toJson()};
+  static CameraUpdate scrollWithOptions(
+    LatLng latLng, {
+    double? zoom,
+    double? duration,
+  }) {
+    final cameraData = <String, dynamic>{'scrollTo': latLng._toJson()};
     if (zoom != null) cameraData['zoomTo'] = zoom;
     if (duration != null) cameraData['duration'] = duration;
 

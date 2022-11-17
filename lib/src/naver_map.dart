@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_constructors_over_static_methods
+
 part of flutter_naver_map;
 
 /// ### 네이버지도
@@ -15,11 +17,11 @@ class NaverMap extends StatefulWidget {
     this.onCameraIdle,
     this.pathOverlays,
     this.initialCameraPosition,
-    this.mapType = MapType.Basic,
+    this.mapType = MapType.basic,
     this.liteModeEnable = false,
     this.nightModeEnable = false,
     this.indoorEnable = false,
-    this.activeLayers = const [MapLayer.LAYER_GROUP_BUILDING],
+    this.activeLayers = const [MapLayer.layerGroupBuilding],
     this.buildingHeight = 1.0,
     this.symbolScale = 1.0,
     this.symbolPerspectiveRatio = 1.0,
@@ -29,7 +31,7 @@ class NaverMap extends StatefulWidget {
     this.zoomGestureEnable = true,
     this.locationButtonEnable = false,
     this.useSurface = false,
-    this.initLocationTrackingMode = LocationTrackingMode.NoFollow,
+    this.initLocationTrackingMode = LocationTrackingMode.noFollow,
     this.contentPadding,
     this.markers = const [],
     this.circles = const [],
@@ -37,7 +39,7 @@ class NaverMap extends StatefulWidget {
     this.minZoom = 0.0,
     this.maxZoom = 21.0,
     this.logoInteractionEnabled = true,
-    this.logoAlign = LogoAlign.BottomLeft,
+    this.logoAlign = LogoAlign.bottomLeft,
     this.logoMargin,
     this.scaleBarEnabled = true,
   }) : super(key: key);
@@ -65,7 +67,7 @@ class NaverMap extends StatefulWidget {
 
   /// 카메라의 최초 포지션.
   /// </br>
-  /// <p>initial tracking mode 가 [LocationTrackingMode.None]이거나 [LocationTrackingMode.NoFollow]인 경우에만 반영된디.</p>
+  /// <p>initial tracking mode 가 [LocationTrackingMode.none]이거나 [LocationTrackingMode.noFollow]인 경우에만 반영된디.</p>
   final CameraPosition? initialCameraPosition;
 
   /// 지도 타입 설정.
@@ -106,7 +108,7 @@ class NaverMap extends StatefulWidget {
   /// 지도의 타입마다 설정가능한 레이어 그룹이 다릅니다.
   ///
   /// ***
-  /// null 인경우 [MapLayer.LAYER_GROUP_BUILDING]이 기본값으로 설정됩니다.
+  /// null 인경우 [MapLayer.layerGroupBuilding]이 기본값으로 설정됩니다.
   ///
   /// 건물레이어를 지우고 싶으면 빈 리스트를 파라미터로 넘겨주세요.
   final List<MapLayer> activeLayers;
@@ -161,7 +163,7 @@ class NaverMap extends StatefulWidget {
 
   /// <h2> Naver Map에서 기본적으로 제공하는 현위치 버튼을 활성화시킨다.</h2>
   /// <br/>
-  /// <p>기본값은 [false]이다.</p>
+  /// <p>기본값은 `false`이다.</p>
   final bool locationButtonEnable;
 
   /// 지도에 표시될 마커의 리스트입니다.
@@ -181,7 +183,7 @@ class NaverMap extends StatefulWidget {
 
   /// 최초 지도 생성시에 위치추적모드를 선택할 수 있습니다.
   ///
-  /// 기본값은 [LocationTrackingMode.NoFollow] 입니다.
+  /// 기본값은 [LocationTrackingMode.noFollow] 입니다.
   final LocationTrackingMode initLocationTrackingMode;
 
   /// 지도가 두 손가락으로 탭 되었을때 호출되는 콜백 메서드. (Android only)
@@ -197,16 +199,16 @@ class NaverMap extends StatefulWidget {
   final EdgeInsets? contentPadding;
 
   /// ## 안드로이드에서 GLSurfaceView 사용 여부
-  /// 값이 true인 경우, 안드로이드에서 naver map을 [GLSurfaceView]를 사용해서 렌더링하고,
-  /// 반대인 경우 [TextureView]를 사용해서 렌더링한다.
-  /// [GLSurfaceView]를 사용할 경우 지도의 속도는 원활해지나, android 기기에서 hot reload시,
+  /// 값이 true인 경우, 안드로이드에서 naver map을 `GLSurfaceView`를 사용해서 렌더링하고,
+  /// 반대인 경우 `TextureView`를 사용해서 렌더링한다.
+  /// `GLSurfaceView`를 사용할 경우 지도의 속도는 원활해지나, android 기기에서 hot reload시,
   /// naver map SDK 내부 binary 에서 발생하는 에러로 app crash 가 발생한다.
   ///
-  /// > 또한 [GLSurfaceView]를 사용하여 지도가 렌더링 되는 동안, [TextField]에 포커스가
+  /// > 또한 `GLSurfaceView`를 사용하여 지도가 렌더링 되는 동안, [TextField]에 포커스가
   /// 이동하면 app crash가 발생한다. Flutter Engine에서 [TextField]의 변화를 업데이트할 때,
-  /// [GLThread]를 사용하는데, 이 과정에서 [DeadObjectException]이 발생한다.
+  /// `GLThread`를 사용하는데, 이 과정에서 `DeadObjectException`이 발생한다.
   ///
-  /// 만약 [GLSurfaceView]를 사용하는 [NaverMap]가 생성된 상태에서 [TextField]를 사용하지
+  /// 만약 `GLSurfaceView`를 사용하는 [NaverMap]가 생성된 상태에서 [TextField]를 사용하지
   /// 않는다면 다음과 같이 사용하면 release mode로 build된 app에서 더 좋은 성능을 기대할 수 있다.
   ///
   /// ```dart
@@ -234,7 +236,8 @@ class NaverMap extends StatefulWidget {
   /// Enable logo interaction
   /// default true
   ///
-  /// You should implement LegalNotice and OpenSourceLicense to use this feature.
+  /// You should implement LegalNotice and OpenSourceLicense to use this
+  /// feature.
   /// It's implemented in [NaverMapController], and you can use it like this:
   /// ```dart
   /// _controller.future.then((value) => value.showLegalNotice());
@@ -259,10 +262,10 @@ class NaverMap extends StatefulWidget {
   final bool? scaleBarEnabled;
 
   @override
-  _NaverMapState createState() => _NaverMapState();
+  NaverMapState createState() => NaverMapState();
 }
 
-class _NaverMapState extends State<NaverMap> {
+class NaverMapState extends State<NaverMap> {
   Completer<NaverMapController> _controller = Completer<NaverMapController>();
   late _NaverMapOptions _naverMapOptions;
 
@@ -282,7 +285,7 @@ class _NaverMapState extends State<NaverMap> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    final NaverMapController controller = await NaverMapController.init(
+    final controller = await NaverMapController.init(
       id,
       widget.initialCameraPosition,
       this,
@@ -292,8 +295,8 @@ class _NaverMapState extends State<NaverMap> {
 
     // request permission if [locationButtonEnable] is true
     if (widget.locationButtonEnable ||
-        widget.initLocationTrackingMode != LocationTrackingMode.Face ||
-        widget.initLocationTrackingMode == LocationTrackingMode.Follow) {
+        widget.initLocationTrackingMode != LocationTrackingMode.face ||
+        widget.initLocationTrackingMode == LocationTrackingMode.follow) {
       // await Permission.locationWhenInUse.request().then(
       //       (value) => {
       //         if (value.isPermanentlyDenied) {openAppSettings()}
@@ -301,14 +304,12 @@ class _NaverMapState extends State<NaverMap> {
       //     );
     }
 
-    if (widget.onMapCreated != null) {
-      widget.onMapCreated!(controller);
-    }
+    widget.onMapCreated?.call(controller);
   }
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> createParams = <String, dynamic>{
+    final createParams = <String, dynamic>{
       'initialCameraPosition': widget.initialCameraPosition?.toMap(),
       'options': _naverMapOptions.toMap(),
       'markers': _serializeMarkerSet(widget.markers) ?? [],
@@ -318,37 +319,16 @@ class _NaverMapState extends State<NaverMap> {
     };
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      AndroidView view = AndroidView(
-        viewType: VIEW_TYPE,
+      final view = AndroidView(
+        viewType: viewType,
         onPlatformViewCreated: onPlatformViewCreated,
         creationParams: createParams,
         creationParamsCodec: const StandardMessageCodec(),
       );
       return view;
-
-      /// todo: waiting for most people use flutter version higher than 1.22.2
-      // return PlatformViewLink(
-      //   viewType: VIEW_TYPE,
-      //   surfaceFactory: (context, controller) => AndroidViewSurface(
-      //     controller: controller,
-      //     hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-      //     gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
-      //   ),
-      //   onCreatePlatformView: (params) {
-      //     return PlatformViewsService.initSurfaceAndroidView(
-      //       id: params.id,
-      //       viewType: params.viewType,
-      //       creationParams: createParams,
-      //       creationParamsCodec: const StandardMessageCodec(),
-      //       layoutDirection: TextDirection.ltr,
-      //     )
-      //       ..addOnPlatformViewCreatedListener(onPlatformViewCreated)
-      //       ..create();
-      //   },
-      // );
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final view = UiKitView(
-        viewType: VIEW_TYPE,
+        viewType: viewType,
         onPlatformViewCreated: onPlatformViewCreated,
         creationParams: createParams,
         creationParamsCodec: const StandardMessageCodec(),
@@ -357,7 +337,8 @@ class _NaverMapState extends State<NaverMap> {
     }
 
     return Text(
-        '$defaultTargetPlatform is not yet supported by the maps plugin');
+      '$defaultTargetPlatform is not yet supported by the maps plugin',
+    );
   }
 
   @override
@@ -370,46 +351,56 @@ class _NaverMapState extends State<NaverMap> {
     _updatePolygonOverlay();
   }
 
-  void _updateOptions() async {
-    final _NaverMapOptions newOption = _NaverMapOptions.fromWidget(widget);
-    final Map<String, dynamic> updates = _naverMapOptions.updatesMap(newOption);
+  Future<void> _updateOptions() async {
+    final newOption = _NaverMapOptions.fromWidget(widget);
+    final updates = _naverMapOptions.updatesMap(newOption);
     if (updates.isEmpty) return;
-    final NaverMapController controller = await _controller.future;
-    controller._updateMapOptions(updates);
+    final controller = await _controller.future;
+    await controller._updateMapOptions(updates);
     _naverMapOptions = newOption;
   }
 
-  void _updateMarkers() async {
-    final NaverMapController controller = await _controller.future;
-    controller._updateMarkers(_MarkerUpdates.from(
-      _markers.values.toSet(),
-      widget.markers.toSet(),
-    ));
+  Future<void> _updateMarkers() async {
+    final controller = await _controller.future;
+    await controller._updateMarkers(
+      _MarkerUpdates.from(
+        _markers.values.toSet(),
+        widget.markers.toSet(),
+      ),
+    );
     _markers = _keyByMarkerId(widget.markers);
   }
 
-  void _updatePathOverlay() async {
-    final NaverMapController controller = await _controller.future;
-    controller._updatePathOverlay(_PathOverlayUpdates.from(
-        _paths.values.toSet(), widget.pathOverlays?.toSet()));
+  Future<void> _updatePathOverlay() async {
+    final controller = await _controller.future;
+    await controller._updatePathOverlay(
+      _PathOverlayUpdates.from(
+        _paths.values.toSet(),
+        widget.pathOverlays?.toSet(),
+      ),
+    );
     _paths = _keyByPathOverlayId(widget.pathOverlays);
   }
 
-  void _updateCircleOverlay() async {
-    final NaverMapController controller = await _controller.future;
-    controller._updateCircleOverlay(_CircleOverlayUpdate.from(
-      _circles.values.toSet(),
-      widget.circles.toSet(),
-    ));
+  Future<void> _updateCircleOverlay() async {
+    final controller = await _controller.future;
+    await controller._updateCircleOverlay(
+      _CircleOverlayUpdate.from(
+        _circles.values.toSet(),
+        widget.circles.toSet(),
+      ),
+    );
     _circles = _keyByCircleId(widget.circles);
   }
 
-  void _updatePolygonOverlay() async {
-    final NaverMapController controller = await _controller.future;
-    controller._updatePolygonOverlay(_PolygonOverlayUpdate.from(
-      _polygons.values.toSet(),
-      widget.polygons.toSet(),
-    ));
+  Future<void> _updatePolygonOverlay() async {
+    final controller = await _controller.future;
+    await controller._updatePolygonOverlay(
+      _PolygonOverlayUpdate.from(
+        _polygons.values.toSet(),
+        widget.polygons.toSet(),
+      ),
+    );
     _polygons = _keyByPolygonId(widget.polygons);
   }
 
@@ -423,7 +414,7 @@ class _NaverMapState extends State<NaverMap> {
   }
 
   void _pathOverlayTapped(String pathId) {
-    PathOverlayId pathOverlayId = PathOverlayId(pathId);
+    final pathOverlayId = PathOverlayId(pathId);
     if (_paths[pathOverlayId]?.onPathOverlayTab != null) {
       _paths[pathOverlayId]!.onPathOverlayTab!(pathOverlayId);
     }
@@ -458,18 +449,23 @@ class _NaverMapState extends State<NaverMap> {
   }
 
   void _symbolTab(LatLng? position, String? caption) {
-    assert(position != null && caption != null);
-    if (widget.onSymbolTap != null) widget.onSymbolTap!(position, caption);
+    assert(
+      position != null && caption != null,
+      'position and caption must not be null',
+    );
+    widget.onSymbolTap?.call(position, caption);
   }
 
   void _cameraMove(
-      LatLng? position, CameraChangeReason reason, bool? isAnimated) {
-    if (widget.onCameraChange != null)
-      widget.onCameraChange!(position, reason, isAnimated);
+    LatLng? position,
+    CameraChangeReason reason,
+    bool? isAnimated,
+  ) {
+    widget.onCameraChange?.call(position, reason, isAnimated);
   }
 
   void _cameraIdle() {
-    if (widget.onCameraIdle != null) widget.onCameraIdle!();
+    widget.onCameraIdle?.call();
   }
 }
 
@@ -550,7 +546,7 @@ class _NaverMapOptions {
   final bool? scaleBarEnabled;
 
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> optionsMap = <String, dynamic>{};
+    final optionsMap = <String, dynamic>{};
 
     void addIfNonNull(String fieldName, dynamic value) {
       if (value != null) {
@@ -558,7 +554,7 @@ class _NaverMapOptions {
       }
     }
 
-    List<int> inactiveLayerIndices = [];
+    final inactiveLayerIndices = <int>[];
     activeLayers?.forEach((layer) => inactiveLayerIndices.add(layer.index));
 
     addIfNonNull('mapType', mapType?.index);
@@ -579,36 +575,39 @@ class _NaverMapOptions {
     addIfNonNull('maxZoom', maxZoom);
     addIfNonNull('minZoom', minZoom);
     addIfNonNull(
-        'contentPadding',
-        contentPadding != null
-            ? [
-                contentPadding!.left,
-                contentPadding!.top,
-                contentPadding!.right,
-                contentPadding!.bottom,
-              ]
-            : null);
+      'contentPadding',
+      contentPadding != null
+          ? [
+              contentPadding!.left,
+              contentPadding!.top,
+              contentPadding!.right,
+              contentPadding!.bottom,
+            ]
+          : null,
+    );
     addIfNonNull('logoInteractionEnabled', logoInteractionEnabled);
     addIfNonNull('logoAlign', logoAlign?.index);
     addIfNonNull(
-        'logoMargin',
-        logoMargin != null
-            ? [
-                logoMargin!.left,
-                logoMargin!.top,
-                logoMargin!.right,
-                logoMargin!.bottom,
-              ]
-            : null);
+      'logoMargin',
+      logoMargin != null
+          ? [
+              logoMargin!.left,
+              logoMargin!.top,
+              logoMargin!.right,
+              logoMargin!.bottom,
+            ]
+          : null,
+    );
     addIfNonNull('scaleBarEnabled', scaleBarEnabled);
     return optionsMap;
   }
 
   Map<String, dynamic> updatesMap(_NaverMapOptions newOptions) {
-    final Map<String, dynamic> prevOptionsMap = toMap();
+    final prevOptionsMap = toMap();
 
     return newOptions.toMap()
       ..removeWhere(
-          (String key, dynamic value) => prevOptionsMap[key] == value);
+        (String key, dynamic value) => prevOptionsMap[key] == value,
+      );
   }
 }

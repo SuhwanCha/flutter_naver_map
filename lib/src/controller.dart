@@ -1,29 +1,33 @@
 part of flutter_naver_map;
 
 class NaverMapController {
-  NaverMapController._(this._channel, CameraPosition? initialCameraPosition,
-      this._naverMapState) {
+  NaverMapController._(
+    this._channel,
+    // CameraPosition? initialCameraPosition,
+    this._naverMapState,
+  ) {
     _channel.setMethodCallHandler(_handleMethodCall);
     locationOverlay = LocationOverlay(this);
   }
 
   static Future<NaverMapController> init(
-      int id,
-      CameraPosition? initialCameraPosition,
-      _NaverMapState naverMapState) async {
-    final MethodChannel channel = MethodChannel(VIEW_TYPE + '_$id');
+    int id,
+    CameraPosition? initialCameraPosition,
+    NaverMapState naverMapState,
+  ) async {
+    final channel = MethodChannel('${viewType}_$id');
 
     await channel.invokeMethod<void>('map#waitForMap');
     return NaverMapController._(
       channel,
-      initialCameraPosition,
+      // initialCameraPosition,
       naverMapState,
     );
   }
 
   final MethodChannel _channel;
 
-  final _NaverMapState _naverMapState;
+  final NaverMapState _naverMapState;
 
   void Function(String? path)? _onSnapShotDone;
 
@@ -32,54 +36,66 @@ class NaverMapController {
   /// 존재합니다. 사용자가 바라보는 방향을 손쉽게 지정할 수 있고 그림자, 강조용 원도 나타낼 수 있습니다.</p>
   LocationOverlay? locationOverlay;
 
-  Future<dynamic> _handleMethodCall(MethodCall call) async {
+  Future<dynamic> _handleMethodCall(MethodCall call) {
+    final arguments = call.arguments as Map<String, dynamic>;
     switch (call.method) {
       case 'map#clearMapView':
         clearMapView();
         break;
       case 'marker#onTap':
-        String markerId = call.arguments['markerId'];
-        int? iconWidth = call.arguments['iconWidth'] as int?;
-        int? iconHeight = call.arguments['iconHeight'] as int?;
+        assert(arguments['markerId'] != null, 'markerId is null');
+        final markerId = arguments['markerId']! as String;
+        final iconWidth = arguments['iconWidth'] as int?;
+        final iconHeight = arguments['iconHeight'] as int?;
         _naverMapState._markerTapped(markerId, iconWidth, iconHeight);
         break;
       case 'path#onTap':
-        String pathId = call.arguments['pathId'];
+        assert(arguments['pathId'] != null, 'pathId is null');
+        final pathId = arguments['pathId']! as String;
         _naverMapState._pathOverlayTapped(pathId);
         break;
       case 'circle#onTap':
-        String overlayId = call.arguments['overlayId'];
+        assert(arguments['circleId'] != null, 'circleId is null');
+        final overlayId = arguments['overlayId']! as String;
         _naverMapState._circleOverlayTapped(overlayId);
         break;
       case 'polygon#onTap':
-        String overlayId = call.arguments['polygonOverlayId'];
+        assert(arguments['polygonId'] != null, 'polygonId is null');
+        final overlayId = arguments['polygonOverlayId']! as String;
         _naverMapState._polygonOverlayTapped(overlayId);
         break;
       case 'map#onTap':
-        LatLng latLng = LatLng._fromJson(call.arguments['position'])!;
+        final latLng =
+            LatLng._fromJson(arguments['position'] as List<double>?)!;
         _naverMapState._mapTap(latLng);
         break;
       case 'map#onLongTap':
-        LatLng latLng = LatLng._fromJson(call.arguments['position'])!;
+        final latLng =
+            LatLng._fromJson(arguments['position'] as List<double>?)!;
         _naverMapState._mapLongTap(latLng);
         break;
       case 'map#onMapDoubleTap':
-        LatLng latLng = LatLng._fromJson(call.arguments['position'])!;
+        final latLng =
+            LatLng._fromJson(arguments['position'] as List<double>?)!;
         _naverMapState._mapDoubleTap(latLng);
         break;
       case 'map#onMapTwoFingerTap':
-        LatLng latLng = LatLng._fromJson(call.arguments['position'])!;
+        final latLng =
+            LatLng._fromJson(arguments['position'] as List<double>?)!;
         _naverMapState._mapTwoFingerTap(latLng);
         break;
       case 'map#onSymbolClick':
-        LatLng? position = LatLng._fromJson(call.arguments['position']);
-        String? caption = call.arguments['caption'];
+        final position =
+            LatLng._fromJson(arguments['position'] as List<double>?);
+        final caption = arguments['caption'] as String?;
         _naverMapState._symbolTab(position, caption);
         break;
       case 'camera#move':
-        LatLng? position = LatLng._fromJson(call.arguments['position']);
-        final reason = CameraChangeReason.values[call.arguments['reason']];
-        final isAnimated = call.arguments['animated'];
+        assert(arguments['reason'] != null, 'reason is null');
+        final position =
+            LatLng._fromJson(arguments['position'] as List<double>?);
+        final reason = CameraChangeReason.values[arguments['reason']! as int];
+        final isAnimated = arguments['animated'] as bool?;
         _naverMapState._cameraMove(position, reason, isAnimated);
         break;
       case 'camera#idle':
@@ -87,11 +103,12 @@ class NaverMapController {
         break;
       case 'snapshot#done':
         if (_onSnapShotDone != null) {
-          _onSnapShotDone!(call.arguments['path']);
+          _onSnapShotDone!(arguments['path'] as String?);
           _onSnapShotDone = null;
         }
         break;
     }
+    return Future<void>.value();
   }
 
   /// 네이버 맵 위젯의 메모리 할당을 해제합니다
@@ -119,7 +136,8 @@ class NaverMapController {
   }
 
   Future<void> _updatePathOverlay(
-      _PathOverlayUpdates pathOverlayUpdates) async {
+    _PathOverlayUpdates pathOverlayUpdates,
+  ) async {
     await _channel.invokeMethod(
       'pathOverlay#update',
       pathOverlayUpdates._toMap(),
@@ -127,7 +145,8 @@ class NaverMapController {
   }
 
   Future<void> _updateCircleOverlay(
-      _CircleOverlayUpdate circleOverlayUpdate) async {
+    _CircleOverlayUpdate circleOverlayUpdate,
+  ) async {
     await _channel.invokeMethod(
       'circleOverlay#update',
       circleOverlayUpdate._toMap(),
@@ -135,7 +154,8 @@ class NaverMapController {
   }
 
   Future<void> _updatePolygonOverlay(
-      _PolygonOverlayUpdate polygonOverlayUpdate) async {
+    _PolygonOverlayUpdate polygonOverlayUpdate,
+  ) async {
     await _channel.invokeMethod(
       'polygonOverlay#update',
       polygonOverlayUpdate._toMap(),
@@ -144,22 +164,25 @@ class NaverMapController {
 
   /// 현재 지도에 보여지는 영역에 대한 [LatLngBounds] 객체를 리턴.
   Future<LatLngBounds> getVisibleRegion() async {
-    final Map<String, dynamic> latLngBounds = (await _channel
+    final latLngBounds = (await _channel
         .invokeMapMethod<String, dynamic>('map#getVisibleRegion'))!;
-    final LatLng southwest = LatLng._fromJson(latLngBounds['southwest'])!;
-    final LatLng northeast = LatLng._fromJson(latLngBounds['northeast'])!;
+    final southwest =
+        LatLng._fromJson(latLngBounds['southwest'] as List<double>?)!;
+    final northeast =
+        LatLng._fromJson(latLngBounds['northeast'] as List<double>?)!;
 
     return LatLngBounds(northeast: northeast, southwest: southwest);
   }
 
   /// 현재 지도의 중심점 좌표에 대한 [CameraPosition] 객체를 리턴.
   Future<CameraPosition> getCameraPosition() async {
-    final Map position = (await _channel.invokeMethod<Map>('map#getPosition'))!;
+    final position =
+        (await _channel.invokeMethod<Map<String, dynamic>>('map#getPosition'))!;
     return CameraPosition(
-      target: LatLng._fromJson(position['target'])!,
-      zoom: position['zoom'],
-      tilt: position['tilt'],
-      bearing: position['bearing'],
+      target: LatLng._fromJson(position['target'] as List<double>?)!,
+      zoom: position['zoom'] as double,
+      tilt: position['tilt'] as double,
+      bearing: position['bearing'] as double,
     );
   }
 
@@ -168,8 +191,12 @@ class NaverMapController {
   ///
   /// ['width' : 가로 pixel, 'height' : 세로 pixel]
   Future<Map<String, int?>> getSize() async {
-    final Map size = (await _channel.invokeMethod<Map>('map#getSize'))!;
-    return <String, int?>{'width': size['width'], 'height': size['height']};
+    final size =
+        (await _channel.invokeMethod<Map<String, dynamic>>('map#getSize'))!;
+    return <String, int?>{
+      'width': size['width'] as int?,
+      'height': size['height'] as int?,
+    };
   }
 
   /// <h2>카메라 이동</h2>
@@ -182,7 +209,7 @@ class NaverMapController {
   }
 
   /// <h2>카메라 추적모드 변경</h2>
-  /// <p>[NaverMap]을 생성할 때 주어진 [initialLocationTrackingMode]의 인자로 전달된 값이
+  /// <p>[NaverMap]을 생성할 때 주어진 [NaverMap.initLocationTrackingMode]의 인자로 전달된 값이
   /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>
   Future<void> setLocationTrackingMode(LocationTrackingMode mode) async {
     await _channel.invokeMethod('tracking#mode', <String, dynamic>{
@@ -199,15 +226,20 @@ class NaverMapController {
   /// <h3>현재 지도의 모습을 캡쳐하여 cache file 에 저장하고 완료되면 [onSnapShotDone]을 통해 파일의 경로를 전달한다.</h3>
   /// <br/>
   /// <p>네이티브에서 실행중 문제가 발생시에 [onSnapShotDone]의 파라미터로 null 이 들어온다</p>
-  void takeSnapshot(void Function(String? path) onSnapShotDone) async {
+  // TODO(suhwancha): make this method to use Future
+  void takeSnapshot(void Function(String? path) onSnapShotDone) {
     _onSnapShotDone = onSnapShotDone;
     _channel.invokeMethod<String>('map#capture');
   }
 
   /// <h3>지도의 content padding 을 설정한다.</h3>
   /// <p>인자로 받는 값의 단위는 DP 단위이다.</p>
-  Future<void> setContentPadding(
-      {double? left, double? right, double? top, double? bottom}) async {
+  Future<void> setContentPadding({
+    double? left,
+    double? right,
+    double? top,
+    double? bottom,
+  }) async {
     await _channel.invokeMethod('map#padding', <String, dynamic>{
       'left': left ?? 0.0,
       'right': right ?? 0.0,
@@ -245,17 +277,17 @@ class NaverMapController {
 /// <p>위치 오버레이는 사용자의 위치를 나타내는 데 특화된 오버레이이로, 지도상에 단 하나만
 /// 존재합니다. 사용자가 바라보는 방향을 손쉽게 지정할 수 있고 그림자, 강조용 원도 나타낼 수 있습니다.</p>
 class LocationOverlay {
-  final MethodChannel _channel;
-
   /// 해당 객체를 참조하기 위햐서 [NaverMapController]의 맵버변수를 참조하거나,
   /// [NaverMapController]객체를 인자로 넘겨서 새롭게 생성하여 참조한다.
   LocationOverlay(NaverMapController controller)
       : _channel = controller._channel;
+  final MethodChannel _channel;
 
   /// 위치 오버레이의 좌표를 변경할 수 있습니다.
   /// 처음 생성된 위치 오버레이는 카메라의 초기 좌표에 위치해 있습니다.
-  Future<void> setPosition(LatLng position) async {
-    _channel.invokeMethod("LO#set#position", {
+  // TODO(suhwancha): make this method to use Future
+  void setPosition(LatLng position) {
+    _channel.invokeMethod('LO#set#position', {
       'position': position._toJson(),
     });
   }
@@ -268,7 +300,8 @@ class LocationOverlay {
   /// ```
   /// locaionOverlay.setBearing(90.0);
   /// ```
-  Future<void> setBearing(double bearing) async {
-    _channel.invokeMethod("LO#set#bearing", {'bearing': bearing});
+  // TODO(suhwancha): make this method to use Future
+  void setBearing(double bearing) {
+    _channel.invokeMethod('LO#set#bearing', {'bearing': bearing});
   }
 }

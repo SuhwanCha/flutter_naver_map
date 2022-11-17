@@ -2,14 +2,13 @@ part of flutter_naver_map;
 
 /// 마커에 쓰일 비트맵 이미지를 정의한다.
 class OverlayImage {
+  const OverlayImage._(this.image, this.key);
   final AssetImage image;
   final AssetBundleImageKey key;
 
-  get assetName => Platform.isIOS ? image.assetName : key.name;
+  String get assetName => Platform.isIOS ? image.assetName : key.name;
 
-  const OverlayImage._(this.image, this.key);
-
-  /// ## [assetName] 이미지 중 [configuration]에 맞는 이미지를 찾아 [OverlayImage]객체를 만든다.
+  /// ## [assetName] 이미지 중 configuration에 맞는 이미지를 찾아 [OverlayImage]객체를 만든다.
   ///
   /// 이 때 [ImageConfiguration.bundle]은 [PlatformAssetBundle]이 된다.
   /// [ImageConfiguration.textDirection]은 null이 된다.
@@ -28,7 +27,7 @@ class OverlayImage {
     Size? size,
     TargetPlatform? platform,
   }) async {
-    final _configuration = ImageConfiguration(
+    final configuration = ImageConfiguration(
       bundle: bundle,
       devicePixelRatio: devicePixelRatio,
       locale: locale,
@@ -37,8 +36,8 @@ class OverlayImage {
       platform: platform ??
           (Platform.isIOS ? TargetPlatform.iOS : TargetPlatform.android),
     );
-    final AssetImage assetImage = AssetImage(assetName);
-    final AssetBundleImageKey key = await assetImage.obtainKey(_configuration);
+    final assetImage = AssetImage(assetName);
+    final key = await assetImage.obtainKey(configuration);
 
     return OverlayImage._(assetImage, key);
   }

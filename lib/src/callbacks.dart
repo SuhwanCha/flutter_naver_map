@@ -1,22 +1,25 @@
 part of flutter_naver_map;
 
-typedef void MapCreateCallback(NaverMapController controller);
+typedef MapCreateCallback = void Function(NaverMapController controller);
 
-typedef void CameraPositionCallback(CameraPosition position);
+typedef CameraPositionCallback = void Function(CameraPosition position);
 
-typedef void OnMarkerTab(Marker? marker, Map<String, int?> iconSize);
+typedef OnMarkerTab = void Function(Marker? marker, Map<String, int?> iconSize);
 
-typedef void OnMapTap(LatLng latLng);
+typedef OnMapTap = void Function(LatLng latLng);
 
-typedef void OnMapLongTap(LatLng latLng);
+typedef OnMapLongTap = void Function(LatLng latLng);
 
-typedef void OnMapDoubleTap(LatLng latLng);
+typedef OnMapDoubleTap = void Function(LatLng latLng);
 
-typedef void OnMapTwoFingerTap(LatLng latLng);
+typedef OnMapTwoFingerTap = void Function(LatLng latLng);
 
-typedef void OnCameraChange(
-    LatLng? latLng, CameraChangeReason reason, bool? isAnimated);
+typedef OnCameraChange = void Function(
+  LatLng? latLng,
+  CameraChangeReason reason,
+  bool? isAnimated,
+);
 
-typedef void OnSymbolTap(LatLng? position, String? caption);
+typedef OnSymbolTap = void Function(LatLng? position, String? caption);
 
-typedef void OnPathOverlayTab(PathOverlayId pathOverlayId);
+typedef OnPathOverlayTab = void Function(PathOverlayId pathOverlayId);

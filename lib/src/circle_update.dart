@@ -1,27 +1,26 @@
 part of flutter_naver_map;
 
-class _CircleOverlayUpdate {
-  Set<CircleOverlay?>? circlesToAdd;
-  Set<String>? circleIdsToRemove;
-  Set<CircleOverlay?>? circlesToChange;
-
+// TODO(suhwancha): make this class not immutable.
+// ignore: must_be_immutable
+class _CircleOverlayUpdate extends Equatable {
   _CircleOverlayUpdate.from(
-      Set<CircleOverlay>? previous, Set<CircleOverlay>? current) {
+    Set<CircleOverlay>? previous,
+    Set<CircleOverlay>? current,
+  ) {
     previous ??= Set<CircleOverlay>.identity();
     current ??= Set<CircleOverlay>.identity();
 
-    final Map<String, CircleOverlay> previousCircles = _keyByCircleId(previous);
-    final Map<String, CircleOverlay> currentCircles = _keyByCircleId(current);
+    final previousCircles = _keyByCircleId(previous);
+    final currentCircles = _keyByCircleId(current);
 
-    final Set<String> prevCircleIds = previousCircles.keys.toSet();
-    final Set<String> currentCirclesIds = currentCircles.keys.toSet();
+    final prevCircleIds = previousCircles.keys.toSet();
+    final currentCirclesIds = currentCircles.keys.toSet();
 
     CircleOverlay? idToCurrentCircle(String id) => currentCircles[id];
 
-    final Set<String> _circleIdsToRemove =
-        prevCircleIds.difference(currentCirclesIds);
+    final circleIdsToRemove = prevCircleIds.difference(currentCirclesIds);
 
-    final Set<CircleOverlay?> _circlesToAdd = currentCirclesIds
+    final circlesToAdd = currentCirclesIds
         .difference(prevCircleIds)
         .map(idToCurrentCircle)
         .toSet();
@@ -29,19 +28,22 @@ class _CircleOverlayUpdate {
     bool hasChanged(CircleOverlay? current) =>
         current != previousCircles[current!.overlayId];
 
-    final Set<CircleOverlay?> _circlesToChange = currentCirclesIds
+    final circlesToChange = currentCirclesIds
         .intersection(prevCircleIds)
         .map(idToCurrentCircle)
         .where(hasChanged)
         .toSet();
 
-    circlesToAdd = _circlesToAdd;
-    circleIdsToRemove = _circleIdsToRemove;
-    circlesToChange = _circlesToChange;
+    _circlesToAdd = circlesToAdd;
+    _circleIdsToRemove = circleIdsToRemove;
+    _circlesToChange = circlesToChange;
   }
+  Set<CircleOverlay?>? _circlesToAdd;
+  Set<String>? _circleIdsToRemove;
+  Set<CircleOverlay?>? _circlesToChange;
 
   Map<String, dynamic> _toMap() {
-    final Map<String, dynamic> updateMap = <String, dynamic>{};
+    final updateMap = <String, dynamic>{};
 
     void addIfNonNull(String fieldName, dynamic value) {
       if (value != null) {
@@ -49,31 +51,26 @@ class _CircleOverlayUpdate {
       }
     }
 
-    addIfNonNull('circlesToAdd', _serializeCircleSet(circlesToAdd));
-    addIfNonNull('circlesToChange', _serializeCircleSet(circlesToChange));
-    addIfNonNull('circleIdsToRemove',
-        circleIdsToRemove!.map((e) => e.toString()).toList());
+    addIfNonNull('circlesToAdd', _serializeCircleSet(_circlesToAdd));
+    addIfNonNull('circlesToChange', _serializeCircleSet(_circlesToChange));
+    addIfNonNull(
+      'circleIdsToRemove',
+      _circleIdsToRemove!.map((e) => e).toList(),
+    );
     return updateMap;
   }
 
   @override
-  bool operator ==(other) {
-    if (identical(this, other)) return true;
-    return other is _CircleOverlayUpdate
-        ? setEquals(circlesToAdd, other.circlesToAdd) &&
-            setEquals(circlesToChange, other.circlesToChange) &&
-            setEquals(circleIdsToRemove, other.circleIdsToRemove)
-        : false;
-  }
-
-  @override
-  int get hashCode =>
-      hashValues(circlesToAdd, circlesToChange, circleIdsToRemove);
-
-  @override
   String toString() {
-    return '_CircleOverlayUpdates{circlesToAdd: $circlesToAdd, '
-        'circleIdsToRemove: $circleIdsToRemove, '
-        'circlesToChange: $circlesToChange}';
+    return '_CircleOverlayUpdates{circlesToAdd: $_circlesToAdd, '
+        'circleIdsToRemove: $_circleIdsToRemove, '
+        'circlesToChange: $_circlesToChange}';
   }
+
+  @override
+  List<Object?> get props => [
+        _circlesToAdd,
+        _circleIdsToRemove,
+        _circlesToChange,
+      ];
 }
