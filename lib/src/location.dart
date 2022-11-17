@@ -32,7 +32,7 @@ class LatLng {
   }
 
   @override
-  int get hashCode => hashValues(latitude, longitude);
+  int get hashCode => Object.hash(latitude, longitude);
 }
 
 /// 북동쪽 위, 경도와 남서쪽 위,경도로 만들어진 사각형 영역이다.
@@ -116,7 +116,7 @@ class LatLngBounds {
   }
 
   @override
-  int get hashCode => hashValues(southwest, northeast);
+  int get hashCode => Object.hash(southwest, northeast);
 }
 //
 //List<Map<String, double>> _serializeLatLngList(List<LatLng> locations) {

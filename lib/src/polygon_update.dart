@@ -66,7 +66,7 @@ class _PolygonOverlayUpdate {
   }
 
   @override
-  int get hashCode => hashValues(polygonToAdd, polygonToChange, idToRemove);
+  int get hashCode => Object.hash(polygonToAdd, polygonToChange, idToRemove);
 
   @override
   String toString() {

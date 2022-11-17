@@ -67,7 +67,7 @@ class _PathOverlayUpdates {
 
   @override
   int get hashCode =>
-      hashValues(pathOverlaysToAddOrUpdate, pathOverlayIdsToRemove);
+      Object.hash(pathOverlaysToAddOrUpdate, pathOverlayIdsToRemove);
 
   @override
   String toString() {
