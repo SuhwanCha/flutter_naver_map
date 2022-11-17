@@ -203,8 +203,9 @@ class NaverMapController {
   /// <p>카메라를 이동시키는 가장 주요 메서드이다. [CameraUpdate]의 static 생성자를 이용해서
   /// 인자를 전달한다.</p>
   Future<void> moveCamera(CameraUpdate cameraUpdate) async {
+    print(cameraUpdate.toJson());
     await _channel.invokeMethod<void>('camera#move', <String, dynamic>{
-      'cameraUpdate': cameraUpdate._toJson(),
+      'cameraUpdate': cameraUpdate.toJson(),
     });
   }
 

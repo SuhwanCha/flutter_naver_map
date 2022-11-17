@@ -75,10 +75,6 @@ class LatLngBounds extends Equatable {
 
   List<List<double>> get json => [southwest.json, northeast.json];
 
-  dynamic _toList() {
-    return <dynamic>[southwest._toJson(), northeast._toJson()];
-  }
-
   /// Returns whether this rectangle contains the given [LatLng].
   bool contains(LatLng point) {
     return _containsLatitude(point.latitude) &&
