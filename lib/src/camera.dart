@@ -136,8 +136,8 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
     this.zoomOut,
     this.tiltTo,
     this.tiltBy,
-    this.bearingTo,
-    this.bearingBy,
+    this.rotateTo,
+    this.rotateBy,
   })  : assert(
           scrollTo == null || scrollBy == null,
           'scrollTo and scrollBy cannot be set at the same time',
@@ -155,7 +155,7 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
           'tiltTo and tiltBy cannot be set at the same time',
         ),
         assert(
-          bearingTo == null || bearingBy == null,
+          rotateTo == null || rotateBy == null,
           'bearingTo and bearingBy cannot be set at the same time',
         );
 
@@ -197,11 +197,11 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
   final double? tiltBy;
 
   /// 카메라의 헤딩 각도를 heading으로 변경하도록 지정합니다.
-  final double? bearingTo;
+  final double? rotateTo;
 
   /// 카메라의 헤딩 각도를 delta만큼 변경하도록 지정합니다. 양수로 지정하면 시계방향으로 회전하고 음수로 지정하면 반시계방향으로
   /// 회전합니다.
-  final double? bearingBy;
+  final double? rotateBy;
 
   @override
   List<Object?> get props => [
@@ -213,8 +213,8 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
         zoomOut,
         tiltTo,
         tiltBy,
-        bearingTo,
-        bearingBy,
+        rotateTo,
+        rotateBy,
       ];
 }
 

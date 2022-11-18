@@ -56,8 +56,8 @@ CameraUpdateWithParams _$CameraUpdateWithParamsFromJson(
       zoomOut: json['zoomOut'] as bool?,
       tiltTo: (json['tiltTo'] as num?)?.toDouble(),
       tiltBy: (json['tiltBy'] as num?)?.toDouble(),
-      bearingTo: (json['bearingTo'] as num?)?.toDouble(),
-      bearingBy: (json['bearingBy'] as num?)?.toDouble(),
+      rotateTo: (json['rotateTo'] as num?)?.toDouble(),
+      rotateBy: (json['rotateBy'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$CameraUpdateWithParamsToJson(
@@ -73,8 +73,8 @@ Map<String, dynamic> _$CameraUpdateWithParamsToJson(
       'zoomOut': instance.zoomOut,
       'tiltTo': instance.tiltTo,
       'tiltBy': instance.tiltBy,
-      'bearingTo': instance.bearingTo,
-      'bearingBy': instance.bearingBy,
+      'rotateTo': instance.rotateTo,
+      'rotateBy': instance.rotateBy,
     };
 
 CameraUpdateWithFitBounds _$CameraUpdateWithFitBoundsFromJson(
