@@ -77,7 +77,15 @@ class CameraUpdate<T extends CameraUpdateOptions> {
   }) : assert(
           pivot == null || options is CameraUpdateWithParams,
           "pivot can't be set when using CameraUpdateWithFitBounds",
-        );
+        ) {
+    if (options is CameraUpdateWithParams) {
+      type = 'CameraUpdateWithParams';
+    } else if (options is CameraUpdateWithFitBounds) {
+      type = 'CameraUpdateWithFitBounds';
+    }
+  }
+
+  late final String? type;
 
   // json serialization
   factory CameraUpdate.fromJson(Map<String, dynamic> json) =>

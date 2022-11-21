@@ -19,11 +19,12 @@ CameraUpdate<T> _$CameraUpdateFromJson<T extends CameraUpdateOptions>(
       duration: json['duration'] == null
           ? Duration.zero
           : const DurationConverter().fromJson(json['duration'] as int),
-    );
+    )..type = json['type'] as String?;
 
 Map<String, dynamic> _$CameraUpdateToJson<T extends CameraUpdateOptions>(
         CameraUpdate<T> instance) =>
     <String, dynamic>{
+      'type': instance.type,
       'options': CameraUpdateOptionsConverter<T>().toJson(instance.options),
       'pivot': _$JsonConverterToJson<List<double>, Offset>(
           instance.pivot, const OffsetConverter().toJson),

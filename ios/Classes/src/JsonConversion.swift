@@ -84,29 +84,28 @@ public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     print(data)
     var cameraUpdate: NMFCameraUpdate?
 
-    if let options = data["options"] as? NSDictionary {
-        cameraUpdate = withParams(json: options)
-    }
-    
-    if let position = data["newCameraPosition"] as? Array<Double>{
-        cameraUpdate = .init(position: toCameraPosition(json: position))
-    }
+    if let type = data["type"] as? String {
+        let options = data["options"] as! NSDictionary
 
-    if let scrollTo = data["scrollTo"] as? Array<Double>{
-        if let zoomTo = data["zoomTo"] as? Double{
-            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo), zoomTo: zoomTo)
-        } else {
-            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo))
+        if(type == "CameraUpdateWithParams"){
+            cameraUpdate = withParams(json: options)
+        } else if (type == "CameraUpdateWithFitBounds"){
+            let bounds = options["bounds"] as! Array<Any>
+            if let padding = options["padding"] as? Array<CGFloat> {
+                cameraUpdate = NMFCameraUpdate(fit: toLatLngBounds(json: bounds), 
+                    paddingInsets: UIEdgeInsets(top: padding[1], left: padding[0], bottom: padding[3], right: padding[2]))
+            } else {
+                cameraUpdate = NMFCameraUpdate(fit: toLatLngBounds(json: bounds))
+            }
+
         }
     }
 
-    if data["zoomIn"] != nil{ cameraUpdate = .withZoomIn() }
-    if data["zoomOut"] != nil{ cameraUpdate = .withZoomOut() }
-
-    if let fitBounds = data["fitBounds"] as? Array<Any>{
-        let pt = fitBounds[1] as! Int
-        cameraUpdate = .init(fit: toLatLngBounds(json: fitBounds[0] as Any), padding: CGFloat(pt))
-    }
+    
+    // if let fitBounds = data["fitBounds"] as? Array<Any>{
+    //     let pt = fitBounds[1] as! Int
+    //     cameraUpdate = .init(fit: toLatLngBounds(json: fitBounds[0] as Any), padding: CGFloat(pt))
+    // }
 
     if let animation = data["curve"] as? UInt {
         cameraUpdate?.animation = NMFCameraUpdateAnimation(rawValue: animation)!
