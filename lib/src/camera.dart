@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_constructors_over_static_methods
-
 part of flutter_naver_map;
 
 /// 지도 카에라의 위치를 나타낸다.
@@ -85,11 +83,11 @@ class CameraUpdate<T extends CameraUpdateOptions> {
     }
   }
 
-  late final String? type;
-
   // json serialization
   factory CameraUpdate.fromJson(Map<String, dynamic> json) =>
       _$CameraUpdateFromJson(json);
+
+  late final String? type;
 
   Map<String, dynamic> toJson() => _$CameraUpdateToJson(this);
 
@@ -239,6 +237,7 @@ class CameraUpdateWithFitBounds extends CameraUpdateOptions {
   factory CameraUpdateWithFitBounds.fromJson(Map<String, dynamic> json) =>
       _$CameraUpdateWithFitBoundsFromJson(json);
 
+  @override
   Map<String, dynamic> toJson() => _$CameraUpdateWithFitBoundsToJson(this);
 
   /// 카메라로 볼 영역.
