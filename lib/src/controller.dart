@@ -204,7 +204,7 @@ class NaverMapController {
   /// 인자를 전달한다.</p>
   Future<void> moveCamera(CameraUpdate cameraUpdate) async {
     await _channel.invokeMethod<void>('camera#move', <String, dynamic>{
-      'cameraUpdate': cameraUpdate._toJson(),
+      'cameraUpdate': cameraUpdate.toJson(),
     });
   }
 

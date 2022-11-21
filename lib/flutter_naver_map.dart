@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:json_annotation/json_annotation.dart';
 // import 'package:flutter/gestures.dart';
 
 part 'src/callbacks.dart';
@@ -38,5 +39,9 @@ part 'src/ui.dart';
 part 'src/polygon_overlay.dart';
 
 part 'src/polygon_update.dart';
+
+part 'src/json_converter.dart';
+
+part 'flutter_naver_map.g.dart';
 
 const String viewType = 'flutter_naver_map';

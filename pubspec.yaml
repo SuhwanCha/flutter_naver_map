@@ -10,13 +10,15 @@ dependencies:
   equatable: ^2.0.5
   flutter:
     sdk: flutter
+  json_annotation: ^4.7.0
   permission_handler: ^10.2.0
   very_good_analysis: ^3.1.0
 
 dev_dependencies:
+  build_runner: ^2.3.2
   flutter_test:
     sdk: flutter
-
+  json_serializable: ^6.5.4
 flutter:
   plugin:
     platforms:

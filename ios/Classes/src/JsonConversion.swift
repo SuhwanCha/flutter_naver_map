@@ -27,32 +27,87 @@ public func toCameraPosition(json: Any) -> NMFCameraPosition{
                              heading: data["bearing"] as! Double)
 }
 
+public func withParams(json: Any) -> NMFCameraUpdate{
+    let data = json as! NSDictionary
+    var cameraUpdate: NMFCameraUpdate?
+    var cameraUpdateParams: NMFCameraUpdateParams
+
+    cameraUpdateParams = .init()
+
+
+    if let scrollTo = data["scrollTo"] as? Array<Double>{
+        cameraUpdateParams.scroll(to: toLatLng(json: scrollTo));
+    }
+
+    if let scrollBy = data["scrollBy"] as? Array<Double> {
+        cameraUpdateParams.scroll(by: CGPoint(x: scrollBy[0], y: scrollBy[1]));
+        // cameraUpdateParams?.scrollBy = CGPoint(x: scrollBy[0], y: scrollBy[1])
+    }
+
+    if let zoomTo = data["zoomTo"] as? Double {
+        cameraUpdateParams.zoom(to: zoomTo as! Double);
+    }
+
+    if let zoomBy = data["zoomBy"] as? Double {
+        cameraUpdateParams.zoom(by: zoomBy as! Double);
+    }
+
+    if let zoomIn = data["zoomIn"] as? Bool{
+        cameraUpdateParams.zoomIn();
+    }
+
+    if let zoomOut = data["zoomOut"] as? Bool{
+        cameraUpdateParams.zoomOut();
+    }
+
+    if let tiltTo = data["tiltTo"] as? Double {
+        cameraUpdateParams.tilt(to: tiltTo as! Double);
+    }
+
+    if let tiltBy = data["tiltBy"] as? Double {
+        cameraUpdateParams.tilt(by: tiltBy as! Double);
+    }
+
+    if let rotateTo = data["rotateTo"] as? Double {
+        cameraUpdateParams.rotate(to: rotateTo as! Double);
+    }
+
+    if let rotateBy = data["rotateBy"] as? Double {
+        cameraUpdateParams.rotate(by: rotateBy as! Double);
+    }
+
+    return NMFCameraUpdate(params: cameraUpdateParams)
+}
+
 public func toCameraUpdate(json: Any) -> NMFCameraUpdate{
     let data = json as! NSDictionary
     print(data)
     var cameraUpdate: NMFCameraUpdate?
-    
-    if let position = data["newCameraPosition"] as? Array<Double>{
-        cameraUpdate = .init(position: toCameraPosition(json: position))
-    }
 
-    if let scrollTo = data["scrollTo"] as? Array<Double>{
-        if let zoomTo = data["zoomTo"] as? Double{
-            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo), zoomTo: zoomTo)
-        } else {
-            cameraUpdate = .init(scrollTo: toLatLng(json: scrollTo))
+    if let type = data["type"] as? String {
+        let options = data["options"] as! NSDictionary
+
+        if(type == "CameraUpdateWithParams"){
+            cameraUpdate = withParams(json: options)
+        } else if (type == "CameraUpdateWithFitBounds"){
+            let bounds = options["bounds"] as! Array<Any>
+            if let padding = options["padding"] as? Array<CGFloat> {
+                cameraUpdate = NMFCameraUpdate(fit: toLatLngBounds(json: bounds), 
+                    paddingInsets: UIEdgeInsets(top: padding[1], left: padding[0], bottom: padding[3], right: padding[2]))
+            } else {
+                cameraUpdate = NMFCameraUpdate(fit: toLatLngBounds(json: bounds))
+            }
+
         }
     }
 
-    if data["zoomIn"] != nil{ cameraUpdate = .withZoomIn() }
-    if data["zoomOut"] != nil{ cameraUpdate = .withZoomOut() }
+    
+    // if let fitBounds = data["fitBounds"] as? Array<Any>{
+    //     let pt = fitBounds[1] as! Int
+    //     cameraUpdate = .init(fit: toLatLngBounds(json: fitBounds[0] as Any), padding: CGFloat(pt))
+    // }
 
-    if let fitBounds = data["fitBounds"] as? Array<Any>{
-        let pt = fitBounds[1] as! Int
-        cameraUpdate = .init(fit: toLatLngBounds(json: fitBounds[0] as Any), padding: CGFloat(pt))
-    }
-
-    if let animation = data["animation"] as? UInt {
+    if let animation = data["curve"] as? UInt {
         cameraUpdate?.animation = NMFCameraUpdateAnimation(rawValue: animation)!
     }
 

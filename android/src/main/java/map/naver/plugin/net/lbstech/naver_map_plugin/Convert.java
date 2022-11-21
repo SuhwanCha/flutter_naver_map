@@ -10,6 +10,7 @@ import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.overlay.OverlayImage;
+import com.naver.maps.map.CameraUpdateParams;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -114,6 +115,52 @@ class Convert {
         return new CameraPosition(new LatLng(lat, lng), zoom, tilt, bearing);
     }
 
+    static CameraUpdateParams withParams(Map<String, Object> options) {
+        CameraUpdateParams cameraUpdateParams = new CameraUpdateParams();
+
+        if(options.containsKey("scrollTo") && options.get("scrollTo") != null) {
+            cameraUpdateParams.scrollTo(toLatLng(options.get("scrollTo")));
+        }
+
+        if(options.containsKey("scrollBy") && options.get("scrollBy") != null) {
+            cameraUpdateParams.scrollBy(toPoint(options.get("scrollBy")));
+        }
+        // if options contains zoomTo and zoomTo is not null
+        if(options.containsKey("zoomTo") && options.get("zoomTo") != null) {
+            cameraUpdateParams.zoomTo((double) options.get("zoomTo"));
+        }
+
+        if(options.containsKey("zoomBy") && options.get("zoomBy") != null) {
+            cameraUpdateParams.zoomBy((double) options.get("zoomBy"));
+        }
+
+        if(options.containsKey("zoomIn") && options.get("zoomIn") != null) {
+            cameraUpdateParams.zoomIn();
+        }
+
+        if(options.containsKey("zoomOut") && options.get("zoomOut") != null) {
+            cameraUpdateParams.zoomOut();
+        }
+
+        if(options.containsKey("tiltBy") && options.get("tiltBy") != null) {
+            cameraUpdateParams.tiltBy((double) options.get("tiltBy"));
+        }
+
+        if(options.containsKey("tiltTo") && options.get("tiltTo") != null) {
+            cameraUpdateParams.tiltTo((double) options.get("tiltTo"));
+        }
+
+        if(options.containsKey("rotateBy") && options.get("rotateBy") != null) {
+            cameraUpdateParams.rotateBy((double) options.get("rotateBy"));
+        }
+
+        if(options.containsKey("rotateTo") && options.get("rotateTo") != null) {
+            cameraUpdateParams.rotateTo((double) options.get("rotateTo"));
+        }
+
+        return cameraUpdateParams;
+    }
+
     @SuppressWarnings("unchecked")
     static CameraUpdate toCameraUpdate(Object o, float density) {
 
@@ -123,25 +170,45 @@ class Convert {
         if (map.isEmpty())
             throw new IllegalArgumentException("Cannot interpret " + o + " as CameraUpdate");
 
-        Map<String, Object> position = (Map<String, Object>) map.get("newCameraPosition");
-        if (position != null)
-            cameraUpdate = CameraUpdate.toCameraPosition(toCameraPosition(position));
-
-        Object scrollTo = map.get("scrollTo");
-        if (scrollTo != null) {
-            LatLng latLng = toLatLng(scrollTo);
-            if (map.containsKey("zoomTo")) {
-                double zoomTo = (double) map.get("zoomTo");
-                if (zoomTo == 0.0)
-                    cameraUpdate = CameraUpdate.scrollTo(latLng);
-                else
-                    cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, zoomTo);
-            } else {
-                cameraUpdate = CameraUpdate.scrollTo(latLng);
+        String type = (String) map.get("type");
+        if (type.equals("CameraUpdateWithParams")) {
+            Map<String, Object> options = (Map<String, Object>) map.get("options");
+            cameraUpdate = CameraUpdate.withParams(Convert.withParams(options));
+        } else if (type.equals("CameraUpdateWithFitBounds")) {
+            Map<String, Object> options = (Map<String, Object>) map.get("options");
+            List fitBounds = (List) options.get("bounds");
+            if (fitBounds != null) {
+                cameraUpdate = CameraUpdate.fitBounds(toLatLngBounds(fitBounds));
             }
+
+            List padding = (List) options.get("padding");
+            if (padding != null) {
+                int left = Math.round(Convert.toFloat(padding.get(0)) * density);
+                int top = Math.round(Convert.toFloat(padding.get(1)) * density);
+                int right = Math.round(Convert.toFloat(padding.get(2)) * density);
+                int bottom = Math.round(Convert.toFloat(padding.get(3)) * density);
+                cameraUpdate = CameraUpdate.fitBounds(toLatLngBounds(fitBounds), left, top, right, bottom);
+            }
+        } else {
+            throw new IllegalArgumentException("Cannot interpret " + type + " as CameraUpdate");
         }
 
-        int curve = (int) map.get("animation");
+
+        // Object scrollTo = map.get("scrollTo");
+        // if (scrollTo != null) {
+        //     LatLng latLng = toLatLng(scrollTo);
+        //     if (map.containsKey("zoomTo")) {
+        //         double zoomTo = (double) map.get("zoomTo");
+        //         if (zoomTo == 0.0)
+        //             cameraUpdate = CameraUpdate.scrollTo(latLng);
+        //         else
+        //             cameraUpdate = CameraUpdate.scrollAndZoomTo(latLng, zoomTo);
+        //     } else {
+        //         cameraUpdate = CameraUpdate.scrollTo(latLng);
+        //     }
+        // }
+
+        int curve = (int) map.get("curve");
         CameraAnimation animation;
         if(curve == 0) {
             animation = CameraAnimation.None;
@@ -157,27 +224,7 @@ class Convert {
         // convert int duration to long
         long duration = (long) (int) map.get("duration");
 
-        if (map.containsKey("zoomIn"))
-            cameraUpdate = CameraUpdate.zoomIn();
-
-        if (map.containsKey("zoomOut"))
-            cameraUpdate = CameraUpdate.zoomOut();
-
-        if (map.containsKey("zoomBy")) {
-            double zoomBy = (double) map.get("zoomBy");
-            if (zoomBy != 0.0)
-                cameraUpdate = CameraUpdate.zoomBy(zoomBy);
-        }
-
-        List fitBounds = (List) map.get("fitBounds");
-        if (fitBounds != null) {
-            int dp = (int) fitBounds.get(1);
-            int px = Math.round(dp * density);
-            cameraUpdate = CameraUpdate.fitBounds(toLatLngBounds(fitBounds.get(0)), px);
-        }
-
         cameraUpdate.animate(animation, duration);
-        
 
         return cameraUpdate;
 
