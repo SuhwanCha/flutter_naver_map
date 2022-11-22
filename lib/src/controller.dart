@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use_from_same_package
+
 part of flutter_naver_map;
 
 class NaverMapController {
@@ -13,20 +15,38 @@ class NaverMapController {
 
   bool get isInitialized => _channel != null;
 
+  /// [StreamController] to emit events from the native side.
+  final cameraStreamController =
+      StreamController<CameraChangeReason>.broadcast();
+
   Future<void> init(int id, NaverMapState naverMapState) async {
     _channel = MethodChannel('${viewType}_$id');
     _naverMapState = naverMapState;
     await _channel?.invokeMethod<void>('map#waitForMap');
-    print(_channel);
     _channel?.setMethodCallHandler(_handleMethodCall);
     locationOverlay = LocationOverlay(this);
   }
 
   Future<void> moveCamera(CameraUpdate cameraUpdate) async {
-    // TODO(suhwancha): implement future
-    return _channel?.invokeMethod<void>('camera#move', <String, dynamic>{
+    // Native method doens't implemented asynchoronously, so we need to wait for
+    // the result with a completer and Subscription.
+
+    await _channel?.invokeMethod<void>('camera#move', <String, dynamic>{
       'cameraUpdate': cameraUpdate.toJson(),
     });
+
+    final complete = Completer<void>();
+
+    StreamSubscription<CameraChangeReason>? subscription;
+
+    subscription = cameraStreamController.stream.listen((reason) {
+      if (reason == CameraChangeReason.developer) {
+        subscription?.cancel();
+        complete.complete();
+      }
+    });
+
+    return complete.future;
   }
 
   Future<void> _updateMapOptions(Map<String, dynamic> optionsUpdate) async {
@@ -40,15 +60,13 @@ class NaverMapController {
 
   Future<dynamic> _handleMethodCall(MethodCall call) {
     // TODO(suhwancha): implement arguments to dart object
-    // try to convert call.arguments to Map
-
     Map<String, dynamic>? arguments;
 
     try {
       arguments =
           Map<String, dynamic>.from(call.arguments as Map<Object?, Object?>);
     } catch (e) {
-      print(e);
+      arguments = null;
     }
 
     switch (call.method) {
@@ -106,8 +124,9 @@ class NaverMapController {
       case 'camera#move':
         assert(arguments!['reason'] != null, 'reason is null');
         final position =
-            LatLng._fromJson(arguments!['position'] as List<double>?);
+            LatLng.fromList(arguments!['position'] as List<Object?>);
         final reason = CameraChangeReason.values[arguments['reason']! as int];
+        cameraStreamController.add(reason);
         final isAnimated = arguments['animated'] as bool?;
         _naverMapState._cameraMove(position, reason, isAnimated);
         break;
