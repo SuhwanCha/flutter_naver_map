@@ -45,7 +45,7 @@ class NaverMap extends StatefulWidget {
     this.scaleBarEnabled = true,
   }) : super(key: key);
 
-  final NaverMapController2 controller;
+  final NaverMapController controller;
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
   /// 해당 콜백이 호출되기 전에는 지도가 만들어지는 중이다.
@@ -287,7 +287,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    widget.controller.init(id, this);
+    await widget.controller.init(id, this);
 
     // request permission if [locationButtonEnable] is true
     if (widget.locationButtonEnable ||
@@ -368,7 +368,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updatePathOverlay() async {
-    final controller = await widget.controller;
+    final controller = widget.controller;
     await controller._updatePathOverlay(
       _PathOverlayUpdates.from(
         _paths.values.toSet(),
@@ -379,7 +379,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updateCircleOverlay() async {
-    final controller = await widget.controller;
+    final controller = widget.controller;
     await controller._updateCircleOverlay(
       _CircleOverlayUpdate.from(
         _circles.values.toSet(),

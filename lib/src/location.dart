@@ -1,21 +1,37 @@
 part of flutter_naver_map;
 
 /// 위도와 경도가 한 쌍을 이루어서 저장되는 class.
+///
+@JsonSerializable()
 class LatLng extends Equatable {
   const LatLng(double latitude, double longitude)
       : latitude =
             latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude),
         longitude = (longitude + 180.0) % 360.0 - 180.0;
 
+  factory LatLng.fromJson(Map<String, dynamic> json) => _$LatLngFromJson(json);
+
+  factory LatLng.fromList(List<Object?> list) {
+    return LatLng(list[0]! as double, list[1]! as double);
+  }
+
+  /// Latitude
   final double latitude;
+
+  /// Longitude
   final double longitude;
 
+  Map<String, dynamic> toJson() => _$LatLngToJson(this);
+
+  @Deprecated('Use toJson instead')
   List<double> get json => [latitude, longitude];
 
+  @Deprecated('Use fromList instead')
   List<double> _toJson() {
     return <double>[latitude, longitude];
   }
 
+  @Deprecated('Use fromList instead')
   static LatLng? _fromJson(List<double>? json) {
     if (json == null) {
       return null;

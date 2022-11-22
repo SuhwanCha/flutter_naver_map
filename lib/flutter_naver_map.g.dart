@@ -94,3 +94,13 @@ Map<String, dynamic> _$CameraUpdateWithFitBoundsToJson(
       'padding': _$JsonConverterToJson<List<double>, EdgeInsets>(
           instance.padding, const EdgeInsetsConverter().toJson),
     };
+
+LatLng _$LatLngFromJson(Map<String, dynamic> json) => LatLng(
+      (json['latitude'] as num).toDouble(),
+      (json['longitude'] as num).toDouble(),
+    );
+
+Map<String, dynamic> _$LatLngToJson(LatLng instance) => <String, dynamic>{
+      'latitude': instance.latitude,
+      'longitude': instance.longitude,
+    };

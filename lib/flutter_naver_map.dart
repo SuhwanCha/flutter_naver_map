@@ -1,6 +1,7 @@
 library flutter_naver_map;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:equatable/equatable.dart';
