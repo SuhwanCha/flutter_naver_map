@@ -5,7 +5,8 @@ part of flutter_naver_map;
 /// ### 네이버지도
 /// 네이버 지도는 네이버 SDK 를 flutter 에서 사용할 수 있게 하는 주요 widget 이다.
 class NaverMap extends StatefulWidget {
-  const NaverMap({
+  const NaverMap(
+    this.controller, {
     Key? key,
     this.onMapCreated,
     this.onMapTap,
@@ -43,6 +44,8 @@ class NaverMap extends StatefulWidget {
     this.logoMargin,
     this.scaleBarEnabled = true,
   }) : super(key: key);
+
+  final NaverMapController2 controller;
 
   /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
   /// 해당 콜백이 호출되기 전에는 지도가 만들어지는 중이다.
@@ -240,8 +243,8 @@ class NaverMap extends StatefulWidget {
   /// feature.
   /// It's implemented in [NaverMapController], and you can use it like this:
   /// ```dart
-  /// _controller.future.then((value) => value.showLegalNotice());
-  /// _controller.future.then((value) => value.showOpenSourceLicense());
+  /// widget.controller.future.then((value) => value.showLegalNotice());
+  /// widget.controller.future.then((value) => value.showOpenSourceLicense());
   /// ```
   /// 네이버 로고 클릭을 활성화할지 여부를 지정합니다. 활성화하면 네이버 로고 클릭시 범례, 법적 공지,
   /// 오픈소스 라이선스를 보여주는 알림창이 열립니다.
@@ -266,7 +269,6 @@ class NaverMap extends StatefulWidget {
 }
 
 class NaverMapState extends State<NaverMap> {
-  Completer<NaverMapController> _controller = Completer<NaverMapController>();
   late _NaverMapOptions _naverMapOptions;
 
   Map<String, Marker> _markers = <String, Marker>{};
@@ -285,13 +287,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    final controller = await NaverMapController.init(
-      id,
-      widget.initialCameraPosition,
-      this,
-    );
-    if (_controller.isCompleted) _controller = Completer<NaverMapController>();
-    _controller.complete(controller);
+    widget.controller.init(id, this);
 
     // request permission if [locationButtonEnable] is true
     if (widget.locationButtonEnable ||
@@ -304,7 +300,7 @@ class NaverMapState extends State<NaverMap> {
       //     );
     }
 
-    widget.onMapCreated?.call(controller);
+    widget.onMapCreated?.call();
   }
 
   @override
@@ -355,13 +351,13 @@ class NaverMapState extends State<NaverMap> {
     final newOption = _NaverMapOptions.fromWidget(widget);
     final updates = _naverMapOptions.updatesMap(newOption);
     if (updates.isEmpty) return;
-    final controller = await _controller.future;
+    final controller = widget.controller;
     await controller._updateMapOptions(updates);
     _naverMapOptions = newOption;
   }
 
   Future<void> _updateMarkers() async {
-    final controller = await _controller.future;
+    final controller = widget.controller;
     await controller._updateMarkers(
       _MarkerUpdates.from(
         _markers.values.toSet(),
@@ -372,7 +368,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updatePathOverlay() async {
-    final controller = await _controller.future;
+    final controller = await widget.controller;
     await controller._updatePathOverlay(
       _PathOverlayUpdates.from(
         _paths.values.toSet(),
@@ -383,7 +379,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updateCircleOverlay() async {
-    final controller = await _controller.future;
+    final controller = await widget.controller;
     await controller._updateCircleOverlay(
       _CircleOverlayUpdate.from(
         _circles.values.toSet(),
@@ -394,7 +390,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updatePolygonOverlay() async {
-    final controller = await _controller.future;
+    final controller = widget.controller;
     await controller._updatePolygonOverlay(
       _PolygonOverlayUpdate.from(
         _polygons.values.toSet(),
