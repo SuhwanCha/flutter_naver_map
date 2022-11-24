@@ -96,7 +96,7 @@ class CircleOverlay extends Equatable {
     }
 
     addIfPresent('overlayId', overlayId);
-    addIfPresent('center', center?._toJson());
+    addIfPresent('center', center?.toJson());
     addIfPresent('radius', radius);
     addIfPresent('color', color?.value);
     addIfPresent('outlineColor', outlineColor?.value);

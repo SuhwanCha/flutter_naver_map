@@ -28,11 +28,11 @@ class Convert {
         if (options.containsKey("mapType"))
             sink.setMapType((Integer) options.get("mapType"));
         if (options.containsKey("liteModeEnable"))
-            sink.setLiteModeEnable((Boolean) options.get("liteModeEnable"));
+            sink.setLiteModeEnable((Boolean) options.get("liteModeEnabled"));
         if (options.containsKey("nightModeEnable"))
-            sink.setNightModeEnable((Boolean) options.get("nightModeEnable"));
+            sink.setNightModeEnable((Boolean) options.get("nightModeEnabled"));
         if (options.containsKey("indoorEnable"))
-            sink.setIndoorEnable((Boolean) options.get("indoorEnable"));
+            sink.setIndoorEnable((Boolean) options.get("indoorEnabled"));
         if (options.containsKey("buildingHeight"))
             sink.setBuildingHeight((Double) options.get("buildingHeight"));
         if (options.containsKey("symbolScale"))
@@ -40,19 +40,19 @@ class Convert {
         if (options.containsKey("symbolPerspectiveRatio"))
             sink.setSymbolPerspectiveRatio((Double) options.get("symbolPerspectiveRatio"));
         if (options.containsKey("activeLayers"))
-            sink.setActiveLayers((List) options.get("activeLayers"));
+            sink.setActiveLayers((List) options.get("layers"));
         if (options.containsKey("locationButtonEnable"))
-            sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnable"));
+            sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnabled"));
         if (options.containsKey("scrollGestureEnable"))
-            sink.setScrollGestureEnable((Boolean) options.get("scrollGestureEnable"));
+            sink.setScrollGestureEnable((Boolean) options.get("scrollGestureEnabled"));
         if (options.containsKey("zoomGestureEnable"))
-            sink.setZoomGestureEnable((Boolean) options.get("zoomGestureEnable"));
+            sink.setZoomGestureEnable((Boolean) options.get("zoomGestureEnabled"));
         if (options.containsKey("rotationGestureEnable"))
-            sink.setRotationGestureEnable((Boolean) options.get("rotationGestureEnable"));
+            sink.setRotationGestureEnable((Boolean) options.get("rotationGestureEnabled"));
         if (options.containsKey("tiltGestureEnable"))
-            sink.setTiltGestureEnable((Boolean) options.get("tiltGestureEnable"));
+            sink.setTiltGestureEnable((Boolean) options.get("tiltGestureEnabled"));
         if (options.containsKey("locationButtonEnable"))
-            sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnable"));
+            sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnabled"));
         if (options.containsKey("locationTrackingMode"))
             sink.setLocationTrackingMode((Integer) options.get("locationTrackingMode"));
         if (options.containsKey("contentPadding"))

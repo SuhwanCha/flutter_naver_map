@@ -228,7 +228,7 @@ class Marker extends Equatable {
     addIfPresent('markerId', markerId);
     addIfPresent('alpha', alpha);
     addIfPresent('flat', flat);
-    addIfPresent('position', position?._toJson());
+    addIfPresent('position', position?.toJson());
     addIfPresent('captionText', captionText);
     addIfPresent('captionTextSize', captionTextSize);
     addIfPresent('captionColor', captionColor?.value);

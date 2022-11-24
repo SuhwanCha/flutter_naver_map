@@ -2,42 +2,22 @@ part of flutter_naver_map;
 
 /// 위도와 경도가 한 쌍을 이루어서 저장되는 class.
 ///
-@JsonSerializable()
 class LatLng extends Equatable {
   const LatLng(double latitude, double longitude)
       : latitude =
             latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude),
         longitude = (longitude + 180.0) % 360.0 - 180.0;
 
-  factory LatLng.fromJson(Map<String, dynamic> json) => _$LatLngFromJson(json);
+  factory LatLng.fromJson(List<double> json) =>
+      const LatLngConverter().fromJson(json);
 
-  factory LatLng.fromList(List<Object?> list) {
-    return LatLng(list[0]! as double, list[1]! as double);
-  }
+  List<double> toJson() => const LatLngConverter().toJson(this);
 
   /// Latitude
   final double latitude;
 
   /// Longitude
   final double longitude;
-
-  Map<String, dynamic> toJson() => _$LatLngToJson(this);
-
-  @Deprecated('Use toJson instead')
-  List<double> get json => [latitude, longitude];
-
-  @Deprecated('Use fromList instead')
-  List<double> _toJson() {
-    return <double>[latitude, longitude];
-  }
-
-  @Deprecated('Use fromList instead')
-  static LatLng? _fromJson(List<double>? json) {
-    if (json == null) {
-      return null;
-    }
-    return LatLng(json[0], json[1]);
-  }
 
   @override
   String toString() => '$latitude, $longitude';
@@ -89,7 +69,8 @@ class LatLngBounds extends Equatable {
   /// The northeast corner of the rectangle.
   final LatLng northeast;
 
-  List<List<double>> get json => [southwest.json, northeast.json];
+  @Deprecated('Use toJson instead')
+  List<List<double>> get json => [southwest.toJson(), northeast.toJson()];
 
   /// Returns whether this rectangle contains the given [LatLng].
   bool contains(LatLng point) {
@@ -115,8 +96,8 @@ class LatLngBounds extends Equatable {
       return null;
     }
     return LatLngBounds(
-      southwest: LatLng._fromJson(json[0])!,
-      northeast: LatLng._fromJson(json[1])!,
+      southwest: LatLng.fromJson(json[0]),
+      northeast: LatLng.fromJson(json[1]),
     );
   }
 

@@ -47,11 +47,12 @@ class NaverMapController {
     return complete.future;
   }
 
-  Future<void> _updateMapOptions(Map<String, dynamic> optionsUpdate) async {
-    await _channel?.invokeMethod(
+  /// Updates the options on the map.
+  Future<void> update(NaverMapOptions options) async {
+    return _channel?.invokeMethod(
       'map#update',
       <String, dynamic>{
-        'options': optionsUpdate,
+        'options': options.toJson(),
       },
     );
   }
@@ -94,32 +95,32 @@ class NaverMapController {
         _naverMapState._polygonOverlayTapped(overlayId);
         break;
       case 'map#onTap':
-        final latLng = LatLng.fromList(arguments!['position'] as List<Object?>);
+        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
         _naverMapState._mapTap(latLng);
 
         break;
       case 'map#onLongTap':
-        final latLng = LatLng.fromList(arguments!['position'] as List<Object?>);
+        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
         _naverMapState._mapLongTap(latLng);
         break;
       case 'map#onMapDoubleTap':
-        final latLng = LatLng.fromList(arguments!['position'] as List<Object?>);
+        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
         _naverMapState._mapDoubleTap(latLng);
         break;
       case 'map#onMapTwoFingerTap':
-        final latLng = LatLng.fromList(arguments!['position'] as List<Object?>);
+        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
         _naverMapState._mapTwoFingerTap(latLng);
         break;
       case 'map#onSymbolClick':
         final position =
-            LatLng.fromList(arguments!['position'] as List<Object?>);
+            LatLng.fromJson(arguments!['position'] as List<double>);
         final caption = arguments['caption'] as String?;
         _naverMapState._symbolTab(position, caption);
         break;
       case 'camera#move':
         assert(arguments!['reason'] != null, 'reason is null');
         final position =
-            LatLng.fromList(arguments!['position'] as List<Object?>);
+            LatLng.fromJson(arguments!['position'] as List<double>);
         final reason = CameraChangeReason.values[arguments['reason']! as int];
         cameraStreamController.add(reason);
         final isAnimated = arguments['animated'] as bool?;
@@ -185,9 +186,9 @@ class NaverMapController {
     final latLngBounds = (await _channel
         ?.invokeMapMethod<String, dynamic>('map#getVisibleRegion'))!;
     final southwest =
-        LatLng._fromJson(latLngBounds['southwest'] as List<double>?)!;
+        LatLng.fromJson(latLngBounds['southwest'] as List<double>);
     final northeast =
-        LatLng._fromJson(latLngBounds['northeast'] as List<double>?)!;
+        LatLng.fromJson(latLngBounds['northeast'] as List<double>);
 
     return LatLngBounds(northeast: northeast, southwest: southwest);
   }
@@ -197,7 +198,7 @@ class NaverMapController {
     final position = (await _channel
         ?.invokeMethod<Map<String, dynamic>>('map#getPosition'))!;
     return CameraPosition(
-      target: LatLng._fromJson(position['target'] as List<double>?)!,
+      target: LatLng.fromJson(position['target'] as List<double>),
       zoom: position['zoom'] as double,
       tilt: position['tilt'] as double,
       bearing: position['bearing'] as double,
@@ -217,9 +218,6 @@ class NaverMapController {
     };
   }
 
-  /// <h2>카메라 추적모드 변경</h2>
-  /// <p>[NaverMap]을 생성할 때 주어진 [NaverMap.initLocationTrackingMode]의 인자로 전달된 값이
-  /// 기본값으로 설정되어 있으며, 이후 controller 를 이용해서 변경하는 메서드이다.</p>
   Future<void> setLocationTrackingMode(LocationTrackingMode mode) async {
     await _channel?.invokeMethod('tracking#mode', <String, dynamic>{
       'locationTrackingMode': mode.index,
@@ -297,7 +295,7 @@ class LocationOverlay {
   // TODO(suhwancha): make this method to use Future
   void setPosition(LatLng position) {
     _channel?.invokeMethod('LO#set#position', {
-      'position': position._toJson(),
+      'position': position.toJson(),
     });
   }
 

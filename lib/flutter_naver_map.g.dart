@@ -9,7 +9,9 @@ part of flutter_naver_map;
 CameraPosition _$CameraPositionFromJson(Map<String, dynamic> json) =>
     CameraPosition(
       bearing: (json['bearing'] as num?)?.toDouble() ?? 0.0,
-      target: LatLng.fromJson(json['target'] as Map<String, dynamic>),
+      target: LatLng.fromJson((json['target'] as List<dynamic>)
+          .map((e) => (e as num).toDouble())
+          .toList()),
       tilt: (json['tilt'] as num?)?.toDouble() ?? 0.0,
       zoom: (json['zoom'] as num?)?.toDouble() ?? 15.0,
     );
@@ -109,16 +111,6 @@ Map<String, dynamic> _$CameraUpdateWithFitBoundsToJson(
       'bounds': const LatLngBoundsConverter().toJson(instance.bounds),
       'padding': _$JsonConverterToJson<List<double>, EdgeInsets>(
           instance.padding, const EdgeInsetsConverter().toJson),
-    };
-
-LatLng _$LatLngFromJson(Map<String, dynamic> json) => LatLng(
-      (json['latitude'] as num).toDouble(),
-      (json['longitude'] as num).toDouble(),
-    );
-
-Map<String, dynamic> _$LatLngToJson(LatLng instance) => <String, dynamic>{
-      'latitude': instance.latitude,
-      'longitude': instance.longitude,
     };
 
 NaverMapOptions _$NaverMapOptionsFromJson(Map<String, dynamic> json) =>

@@ -115,7 +115,7 @@ class PolygonOverlay extends Equatable {
     }
 
     List<List<double>> serializeLatLngList(List<LatLng> list) =>
-        list.map<List<double>>((e) => e._toJson()).toList();
+        list.map<List<double>>((e) => e.toJson()).toList();
 
     addIfPresent('polygonOverlayId', polygonOverlayId);
     addIfPresent('coords', serializeLatLngList(coordinates));

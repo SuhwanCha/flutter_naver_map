@@ -41,7 +41,7 @@ class CameraPosition extends Equatable {
     }
     return CameraPosition(
       bearing: json['bearing'] as double,
-      target: LatLng.fromList(json['target'] as List<Object?>),
+      target: LatLng.fromJson(json['target'] as List<double>),
       tilt: json['tilt'] as double,
       zoom: json['zoom'] as double,
     );

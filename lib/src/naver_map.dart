@@ -106,7 +106,6 @@ class NaverMapState extends State<NaverMap> {
   @override
   Widget build(BuildContext context) {
     final createParams = <String, dynamic>{
-      // TODO(suhwancha): integrate initial camera position to options
       'initialCameraPosition': widget.options.initialCameraPosition?.toJson(),
       'options': widget.options.toJson(),
       'markers': _serializeMarkerSet(widget.markers) ?? [],
