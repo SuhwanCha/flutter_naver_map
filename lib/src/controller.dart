@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 part of flutter_naver_map;
 
 class NaverMapController {
@@ -101,23 +99,20 @@ class NaverMapController {
 
         break;
       case 'map#onLongTap':
-        final latLng =
-            LatLng._fromJson(arguments!['position'] as List<double>?)!;
+        final latLng = LatLng.fromList(arguments!['position'] as List<Object?>);
         _naverMapState._mapLongTap(latLng);
         break;
       case 'map#onMapDoubleTap':
-        final latLng =
-            LatLng._fromJson(arguments!['position'] as List<double>?)!;
+        final latLng = LatLng.fromList(arguments!['position'] as List<Object?>);
         _naverMapState._mapDoubleTap(latLng);
         break;
       case 'map#onMapTwoFingerTap':
-        final latLng =
-            LatLng._fromJson(arguments!['position'] as List<double>?)!;
+        final latLng = LatLng.fromList(arguments!['position'] as List<Object?>);
         _naverMapState._mapTwoFingerTap(latLng);
         break;
       case 'map#onSymbolClick':
         final position =
-            LatLng._fromJson(arguments!['position'] as List<double>?);
+            LatLng.fromList(arguments!['position'] as List<Object?>);
         final caption = arguments['caption'] as String?;
         _naverMapState._symbolTab(position, caption);
         break;

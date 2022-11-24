@@ -119,3 +119,32 @@ class CameraUpdateOptionsConverter<T extends CameraUpdateOptions>
     return (object as T).toJson();
   }
 }
+
+class MapTypeConverter implements JsonConverter<MapType, int> {
+  const MapTypeConverter();
+
+  @override
+  MapType fromJson(int json) {
+    return MapType.values[json];
+  }
+
+  @override
+  int toJson(MapType object) {
+    return object.index;
+  }
+}
+
+class LocationTrackingModeConverter
+    implements JsonConverter<LocationTrackingMode, int> {
+  const LocationTrackingModeConverter();
+
+  @override
+  LocationTrackingMode fromJson(int json) {
+    return LocationTrackingMode.values[json];
+  }
+
+  @override
+  int toJson(LocationTrackingMode object) {
+    return object.index;
+  }
+}

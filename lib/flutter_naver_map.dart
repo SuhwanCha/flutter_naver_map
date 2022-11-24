@@ -1,7 +1,6 @@
 library flutter_naver_map;
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:equatable/equatable.dart';
@@ -42,6 +41,8 @@ part 'src/polygon_overlay.dart';
 part 'src/polygon_update.dart';
 
 part 'src/json_converter.dart';
+
+part 'src/options.dart';
 
 part 'flutter_naver_map.g.dart';
 

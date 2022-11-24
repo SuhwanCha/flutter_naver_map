@@ -3,6 +3,7 @@ part of flutter_naver_map;
 /// 지도 카에라의 위치를 나타낸다.
 /// [target]에서 보이는 카메라 화면은 가진 위,경도와 [zoom]레벨, [tilt]각도,
 /// 그리고 [bearing]의 값들을 모두 종합한다.
+@JsonSerializable()
 class CameraPosition extends Equatable {
   const CameraPosition({
     this.bearing = 0.0,
@@ -10,6 +11,11 @@ class CameraPosition extends Equatable {
     this.tilt = 0.0,
     this.zoom = 15.0,
   });
+
+  factory CameraPosition.fromJson(Map<String, dynamic> json) =>
+      _$CameraPositionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CameraPositionToJson(this);
 
   /// 카메라 회전 각도. 북쪽에서 시계 방향으로의 회전량.
   ///
@@ -28,20 +34,14 @@ class CameraPosition extends Equatable {
   /// 지원되는 zoom level 은 장치나 지도 데이터에 따라 다른 범위를 가진다.
   final double zoom;
 
-  Map<String, dynamic> toMap() => <String, dynamic>{
-        'bearing': bearing,
-        'target': target._toJson(),
-        'tilt': tilt,
-        'zoom': zoom,
-      };
-
+  @Deprecated('Use fromJson instead')
   static CameraPosition? fromMap(Map<String, dynamic>? json) {
     if (json == null) {
       return null;
     }
     return CameraPosition(
       bearing: json['bearing'] as double,
-      target: LatLng._fromJson(json['target'] as List<double>?)!,
+      target: LatLng.fromList(json['target'] as List<Object?>),
       tilt: json['tilt'] as double,
       zoom: json['zoom'] as double,
     );
