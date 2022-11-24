@@ -101,21 +101,21 @@ class DurationConverter implements JsonConverter<Duration, int> {
   }
 }
 
-class CameraUpdateOptionsConverter<T extends CameraUpdateOptions>
+class CameraUpdateOptionsConverter<T extends AbstractCameraUpdateOptions>
     implements JsonConverter<T, Map<String, dynamic>> {
   const CameraUpdateOptionsConverter();
 
   @override
   T fromJson(Map<String, dynamic> json) {
-    if (T is CameraUpdateWithParams) {
-      return CameraUpdateWithParams.fromJson(json) as T;
+    if (T is CameraUpdateOptions) {
+      return CameraUpdateOptions.fromJson(json) as T;
     } else {
-      return CameraUpdateWithFitBounds.fromJson(json) as T;
+      return CameraUpdateFitBounds.fromJson(json) as T;
     }
   }
 
   @override
-  Map<String, dynamic> toJson(CameraUpdateOptions object) {
+  Map<String, dynamic> toJson(AbstractCameraUpdateOptions object) {
     return (object as T).toJson();
   }
 }

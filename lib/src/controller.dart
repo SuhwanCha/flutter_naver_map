@@ -29,6 +29,7 @@ class NaverMapController {
     // Native method doens't implemented asynchoronously, so we need to wait for
     // the result with a completer and Subscription.
 
+    print(cameraUpdate.toJson());
     await _channel?.invokeMethod<void>('camera#move', <String, dynamic>{
       'cameraUpdate': cameraUpdate.toJson(),
     });

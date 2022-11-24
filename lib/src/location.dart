@@ -2,6 +2,7 @@ part of flutter_naver_map;
 
 /// 위도와 경도가 한 쌍을 이루어서 저장되는 class.
 ///
+@LatLngConverter()
 class LatLng extends Equatable {
   const LatLng(double latitude, double longitude)
       : latitude =

@@ -6,8 +6,8 @@ part of flutter_naver_map;
 @JsonSerializable()
 class CameraPosition extends Equatable {
   const CameraPosition({
-    this.bearing = 0.0,
     required this.target,
+    this.bearing = 0.0,
     this.tilt = 0.0,
     this.zoom = 15.0,
   });
@@ -66,19 +66,19 @@ class CameraPosition extends Equatable {
 /// 카메라의 동적 움직임을 정의한 클래스입니다.
 /// 현재 위치로 부터의 온전한 움직임을 지원합니다.
 @JsonSerializable()
-class CameraUpdate<T extends CameraUpdateOptions> {
+class CameraUpdate<T extends AbstractCameraUpdateOptions> {
   CameraUpdate({
     required this.options,
     this.pivot,
     this.curve = CameraAnimation.none,
     this.duration = Duration.zero,
   }) : assert(
-          pivot == null || options is CameraUpdateWithParams,
+          pivot == null || options is CameraUpdateOptions,
           "pivot can't be set when using CameraUpdateWithFitBounds",
         ) {
-    if (options is CameraUpdateWithParams) {
+    if (options is CameraUpdateOptions) {
       type = 'CameraUpdateWithParams';
-    } else if (options is CameraUpdateWithFitBounds) {
+    } else if (options is CameraUpdateFitBounds) {
       type = 'CameraUpdateWithFitBounds';
     }
   }
@@ -114,14 +114,15 @@ class CameraUpdate<T extends CameraUpdateOptions> {
   final Duration duration;
 }
 
-abstract class CameraUpdateOptions extends Equatable {
-  const CameraUpdateOptions();
+abstract class AbstractCameraUpdateOptions extends Equatable {
+  const AbstractCameraUpdateOptions();
 
-  factory CameraUpdateOptions.fromJson(_) => const CameraUpdateWithParams();
+  factory AbstractCameraUpdateOptions.fromJson(_) =>
+      const CameraUpdateOptions();
   Map<String, dynamic> toJson();
 }
 
-/// [CameraUpdateOptions] that updates the camera position.
+/// [AbstractCameraUpdateOptions] that updates the camera position.
 ///
 ///
 /// 카메라를 이동할 지점에 관한 다양한 정보를 나타내는 클래스. 주로 NMFCameraUpdate를 만들기 위한 파라미터로 사용됩니다.
@@ -132,24 +133,24 @@ abstract class CameraUpdateOptions extends Equatable {
 ///
 /// 동일한 속성에 대해 xxxTo: 계열의 메서드와 xxxBy: 계열의 메서드를 모두 호출하면 앞선 호출은 무시됩니다.
 @JsonSerializable()
-class CameraUpdateWithParams extends CameraUpdateOptions {
-  const CameraUpdateWithParams({
-    this.scrollTo,
+class CameraUpdateOptions extends AbstractCameraUpdateOptions {
+  const CameraUpdateOptions({
+    this.position,
     this.scrollBy,
-    this.zoomTo,
+    this.zoom,
     this.zoomBy,
     this.zoomIn,
     this.zoomOut,
-    this.tiltTo,
+    this.tilt,
     this.tiltBy,
-    this.rotateTo,
+    this.rotate,
     this.rotateBy,
   })  : assert(
-          scrollTo == null || scrollBy == null,
+          position == null || scrollBy == null,
           'scrollTo and scrollBy cannot be set at the same time',
         ),
         assert(
-          (zoomTo != null ? 1 : 0) +
+          (zoom != null ? 1 : 0) +
                   (zoomBy != null ? 1 : 0) +
                   (zoomIn != null ? 1 : 0) +
                   (zoomOut != null ? 1 : 0) <=
@@ -157,31 +158,41 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
           'zoomTo, zoomBy, zoomIn, zoomOut cannot be set at the same time',
         ),
         assert(
-          tiltTo == null || tiltBy == null,
+          tilt == null || tiltBy == null,
           'tiltTo and tiltBy cannot be set at the same time',
         ),
         assert(
-          rotateTo == null || rotateBy == null,
+          rotate == null || rotateBy == null,
           'bearingTo and bearingBy cannot be set at the same time',
+        ),
+        assert(
+          tilt == null || tilt >= 0 && tilt <= 70,
+          'tilt must be between 0 and 70',
+        ),
+        assert(
+          zoom == null || zoom >= 0 && zoom <= 21,
+          'zoom must be between 0 and 21',
         );
 
   // json serialization
-  factory CameraUpdateWithParams.fromJson(Map<String, dynamic> json) =>
-      _$CameraUpdateWithParamsFromJson(json);
+  factory CameraUpdateOptions.fromJson(Map<String, dynamic> json) =>
+      _$CameraUpdateOptionsFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$CameraUpdateWithParamsToJson(this);
+  Map<String, dynamic> toJson() => _$CameraUpdateOptionsToJson(this);
 
-  /// 카메라의 좌표를 target으로 변경하도록 지정합니다.
+  /// Position to move the camera to.
+  @JsonKey(name: 'scrollTo')
   @LatLngConverter()
-  final LatLng? scrollTo;
+  final LatLng? position;
 
   /// 카메라를 현재 위치에서 `delta` pt만큼 이동하도록 지정합니다.
   @OffsetConverter()
   final Offset? scrollBy;
 
-  /// 카메라의 줌을 zoom으로 변경하도록 지정합니다.
-  final double? zoomTo;
+  /// Zoom level to move the camera to.
+  @JsonKey(name: 'zoomTo')
+  final double? zoom;
 
   /// 카메라의 즘 레벨을 delta만큼 변경하도록 지정합니다. 양수로 지정할 경우 확대, 음수로 지정할 경우 축소됩니다.
   final double? zoomBy;
@@ -197,13 +208,15 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
   final bool? zoomOut;
 
   /// 카메라의 기울기 각도를 tilt로 변경하도록 지정합니다.
-  final double? tiltTo;
+  @JsonKey(name: 'tiltTo')
+  final double? tilt;
 
   /// 카메라의 기울기 각도를 delta만큼 변경하도록 지정합니다. 양수로 지정하면 지도가 기울어지고 음수로 지정하면 수직에 가까워집니다.
   final double? tiltBy;
 
   /// 카메라의 헤딩 각도를 heading으로 변경하도록 지정합니다.
-  final double? rotateTo;
+  @JsonKey(name: 'rotateTo')
+  final double? rotate;
 
   /// 카메라의 헤딩 각도를 delta만큼 변경하도록 지정합니다. 양수로 지정하면 시계방향으로 회전하고 음수로 지정하면 반시계방향으로
   /// 회전합니다.
@@ -211,15 +224,15 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
 
   @override
   List<Object?> get props => [
-        scrollTo,
+        position,
         scrollBy,
-        zoomTo,
+        zoom,
         zoomBy,
         zoomIn,
         zoomOut,
-        tiltTo,
+        tilt,
         tiltBy,
-        rotateTo,
+        rotate,
         rotateBy,
       ];
 }
@@ -227,18 +240,18 @@ class CameraUpdateWithParams extends CameraUpdateOptions {
 /// bounds가 화면에 온전히 보이는 좌표와 최대 줌 레벨로 카메라의 위치를 변경하는 [CameraUpdate] 객체를 생성합니다.
 /// 기울기 각도와 베어링 각도는 0으로 변경되며, 피봇 지점은 무시됩니다.
 @JsonSerializable()
-class CameraUpdateWithFitBounds extends CameraUpdateOptions {
-  const CameraUpdateWithFitBounds({
+class CameraUpdateFitBounds extends AbstractCameraUpdateOptions {
+  const CameraUpdateFitBounds({
     required this.bounds,
     this.padding,
   });
 
   // json serialization
-  factory CameraUpdateWithFitBounds.fromJson(Map<String, dynamic> json) =>
-      _$CameraUpdateWithFitBoundsFromJson(json);
+  factory CameraUpdateFitBounds.fromJson(Map<String, dynamic> json) =>
+      _$CameraUpdateFitBoundsFromJson(json);
 
   @override
-  Map<String, dynamic> toJson() => _$CameraUpdateWithFitBoundsToJson(this);
+  Map<String, dynamic> toJson() => _$CameraUpdateFitBoundsToJson(this);
 
   /// 카메라로 볼 영역.
   @LatLngBoundsConverter()

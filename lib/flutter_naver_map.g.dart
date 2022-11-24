@@ -8,10 +8,10 @@ part of flutter_naver_map;
 
 CameraPosition _$CameraPositionFromJson(Map<String, dynamic> json) =>
     CameraPosition(
-      bearing: (json['bearing'] as num?)?.toDouble() ?? 0.0,
       target: LatLng.fromJson((json['target'] as List<dynamic>)
           .map((e) => (e as num).toDouble())
           .toList()),
+      bearing: (json['bearing'] as num?)?.toDouble() ?? 0.0,
       tilt: (json['tilt'] as num?)?.toDouble() ?? 0.0,
       zoom: (json['zoom'] as num?)?.toDouble() ?? 15.0,
     );
@@ -24,10 +24,10 @@ Map<String, dynamic> _$CameraPositionToJson(CameraPosition instance) =>
       'zoom': instance.zoom,
     };
 
-CameraUpdate<T> _$CameraUpdateFromJson<T extends CameraUpdateOptions>(
+CameraUpdate<T> _$CameraUpdateFromJson<T extends AbstractCameraUpdateOptions>(
         Map<String, dynamic> json) =>
     CameraUpdate<T>(
-      CameraUpdateOptionsConverter<T>()
+      options: CameraUpdateOptionsConverter<T>()
           .fromJson(json['options'] as Map<String, dynamic>),
       pivot: _$JsonConverterFromJson<List<double>, Offset>(
           json['pivot'], const OffsetConverter().fromJson),
@@ -39,16 +39,17 @@ CameraUpdate<T> _$CameraUpdateFromJson<T extends CameraUpdateOptions>(
           : const DurationConverter().fromJson(json['duration'] as int),
     )..type = json['type'] as String?;
 
-Map<String, dynamic> _$CameraUpdateToJson<T extends CameraUpdateOptions>(
-        CameraUpdate<T> instance) =>
-    <String, dynamic>{
-      'type': instance.type,
-      'options': CameraUpdateOptionsConverter<T>().toJson(instance.options),
-      'pivot': _$JsonConverterToJson<List<double>, Offset>(
-          instance.pivot, const OffsetConverter().toJson),
-      'curve': const CameraAnimationConverter().toJson(instance.curve),
-      'duration': const DurationConverter().toJson(instance.duration),
-    };
+Map<String, dynamic>
+    _$CameraUpdateToJson<T extends AbstractCameraUpdateOptions>(
+            CameraUpdate<T> instance) =>
+        <String, dynamic>{
+          'type': instance.type,
+          'options': CameraUpdateOptionsConverter<T>().toJson(instance.options),
+          'pivot': _$JsonConverterToJson<List<double>, Offset>(
+              instance.pivot, const OffsetConverter().toJson),
+          'curve': const CameraAnimationConverter().toJson(instance.curve),
+          'duration': const DurationConverter().toJson(instance.duration),
+        };
 
 Value? _$JsonConverterFromJson<Json, Value>(
   Object? json,
@@ -62,51 +63,50 @@ Json? _$JsonConverterToJson<Json, Value>(
 ) =>
     value == null ? null : toJson(value);
 
-CameraUpdateWithParams _$CameraUpdateWithParamsFromJson(
-        Map<String, dynamic> json) =>
-    CameraUpdateWithParams(
-      scrollTo: _$JsonConverterFromJson<List<double>, LatLng>(
+CameraUpdateOptions _$CameraUpdateOptionsFromJson(Map<String, dynamic> json) =>
+    CameraUpdateOptions(
+      position: _$JsonConverterFromJson<List<double>, LatLng>(
           json['scrollTo'], const LatLngConverter().fromJson),
       scrollBy: _$JsonConverterFromJson<List<double>, Offset>(
           json['scrollBy'], const OffsetConverter().fromJson),
-      zoomTo: (json['zoomTo'] as num?)?.toDouble(),
+      zoom: (json['zoomTo'] as num?)?.toDouble(),
       zoomBy: (json['zoomBy'] as num?)?.toDouble(),
       zoomIn: json['zoomIn'] as bool?,
       zoomOut: json['zoomOut'] as bool?,
-      tiltTo: (json['tiltTo'] as num?)?.toDouble(),
+      tilt: (json['tiltTo'] as num?)?.toDouble(),
       tiltBy: (json['tiltBy'] as num?)?.toDouble(),
-      rotateTo: (json['rotateTo'] as num?)?.toDouble(),
+      rotate: (json['rotateTo'] as num?)?.toDouble(),
       rotateBy: (json['rotateBy'] as num?)?.toDouble(),
     );
 
-Map<String, dynamic> _$CameraUpdateWithParamsToJson(
-        CameraUpdateWithParams instance) =>
+Map<String, dynamic> _$CameraUpdateOptionsToJson(
+        CameraUpdateOptions instance) =>
     <String, dynamic>{
       'scrollTo': _$JsonConverterToJson<List<double>, LatLng>(
-          instance.scrollTo, const LatLngConverter().toJson),
+          instance.position, const LatLngConverter().toJson),
       'scrollBy': _$JsonConverterToJson<List<double>, Offset>(
           instance.scrollBy, const OffsetConverter().toJson),
-      'zoomTo': instance.zoomTo,
+      'zoomTo': instance.zoom,
       'zoomBy': instance.zoomBy,
       'zoomIn': instance.zoomIn,
       'zoomOut': instance.zoomOut,
-      'tiltTo': instance.tiltTo,
+      'tiltTo': instance.tilt,
       'tiltBy': instance.tiltBy,
-      'rotateTo': instance.rotateTo,
+      'rotateTo': instance.rotate,
       'rotateBy': instance.rotateBy,
     };
 
-CameraUpdateWithFitBounds _$CameraUpdateWithFitBoundsFromJson(
+CameraUpdateFitBounds _$CameraUpdateFitBoundsFromJson(
         Map<String, dynamic> json) =>
-    CameraUpdateWithFitBounds(
+    CameraUpdateFitBounds(
       bounds: const LatLngBoundsConverter()
           .fromJson(json['bounds'] as List<List<double>>),
       padding: _$JsonConverterFromJson<List<double>, EdgeInsets>(
           json['padding'], const EdgeInsetsConverter().fromJson),
     );
 
-Map<String, dynamic> _$CameraUpdateWithFitBoundsToJson(
-        CameraUpdateWithFitBounds instance) =>
+Map<String, dynamic> _$CameraUpdateFitBoundsToJson(
+        CameraUpdateFitBounds instance) =>
     <String, dynamic>{
       'bounds': const LatLngBoundsConverter().toJson(instance.bounds),
       'padding': _$JsonConverterToJson<List<double>, EdgeInsets>(
