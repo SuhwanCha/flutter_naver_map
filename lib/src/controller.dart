@@ -15,7 +15,7 @@ class NaverMapController {
 
   /// [StreamController] to emit events from the native side.
   final cameraStreamController =
-      StreamController<CameraChangeReason>.broadcast();
+      StreamController<CameraUpdatedReason>.broadcast();
 
   Future<void> init(int id, NaverMapState naverMapState) async {
     _channel = MethodChannel('${viewType}_$id');
@@ -35,10 +35,10 @@ class NaverMapController {
 
     final complete = Completer<void>();
 
-    StreamSubscription<CameraChangeReason>? subscription;
+    StreamSubscription<CameraUpdatedReason>? subscription;
 
     subscription = cameraStreamController.stream.listen((reason) {
-      if (reason == CameraChangeReason.developer) {
+      if (reason == CameraUpdatedReason.programmatically) {
         subscription?.cancel();
         complete.complete();
       }
@@ -121,7 +121,7 @@ class NaverMapController {
         assert(arguments!['reason'] != null, 'reason is null');
         final position =
             LatLng.fromJson(arguments!['position'] as List<double>);
-        final reason = CameraChangeReason.values[arguments['reason']! as int];
+        final reason = CameraUpdatedReason.values[arguments['reason']! as int];
         cameraStreamController.add(reason);
         final isAnimated = arguments['animated'] as bool?;
         _naverMapState._cameraMove(position, reason, isAnimated);

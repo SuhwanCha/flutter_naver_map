@@ -16,7 +16,7 @@ typedef OnMapTwoFingerTap = void Function(LatLng latLng);
 
 typedef OnCameraChange = void Function(
   LatLng? latLng,
-  CameraChangeReason reason,
+  CameraUpdatedReason reason,
   bool? isAnimated,
 );
 

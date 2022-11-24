@@ -254,7 +254,7 @@ class NaverMapState extends State<NaverMap> {
 
   void _cameraMove(
     LatLng? position,
-    CameraChangeReason reason,
+    CameraUpdatedReason reason,
     bool? isAnimated,
   ) {
     widget.onCameraChange?.call(position, reason, isAnimated);
