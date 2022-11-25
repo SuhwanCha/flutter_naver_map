@@ -42,6 +42,8 @@ part 'src/polygon_update.dart';
 
 part 'src/json_converter.dart';
 
+part 'src/options.dart';
+
 part 'flutter_naver_map.g.dart';
 
 const String viewType = 'flutter_naver_map';

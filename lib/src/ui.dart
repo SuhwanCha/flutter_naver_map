@@ -39,37 +39,62 @@ enum MapType {
 ///
 /// 지적편집도 - BASIC, SATELLITE, HYBRID, TERRAIN
 enum MapLayer {
-  /// 건물 그룹입니다. 활성화할 경우 건물 형상, 주소 심벌 등 건물과 관련된 요소가 노출됩니다. 기본적으로 활성화됩니다.
-  layerGroupBuilding,
+  /// Displays buildings
+  ///
+  /// ![building](https://navermaps.github.io/android-map-sdk/assets/2-3-building.png)
+  @JsonValue(0)
+  building,
 
-  /// 실시간 교통정보 그룹입니다. 활성화할 경우 실시간 교통정보가 노출됩니다.
-  layerGroupTraffic,
+  /// Displays live traffic
+  ///
+  /// ![traffic](https://navermaps.github.io/android-map-sdk/assets/2-3-traffic.png)
+  @JsonValue(1)
+  traffic,
 
-  /// 대중교통 그룹입니다. 활성화할 경우 철도, 지하철 노선, 버스정류장 등 대중교통과 관련된 요소가 노출됩니다.
-  layerGroupTransit,
+  /// Displays public transit elements including trains, subway line maps, and
+  /// bus stops
+  ///
+  /// ![transit](https://navermaps.github.io/android-map-sdk/assets/2-3-transit.png)
+  @JsonValue(2)
+  transit,
 
-  /// 자전거 그룹입니다. 활성화할 경우 자전거 도로, 자전거 주차대 등 자전거와 관련된 요소가 노출됩니다.
-  layerGroupBicycle,
+  /// Displays elements associated with bicycles, including bicycle lanes and
+  /// bicycle parking spaces
+  ///
+  /// ![bike](https://navermaps.github.io/android-map-sdk/assets/2-3-bicycle.png)
+  @JsonValue(3)
+  bicycle,
 
-  /// 등산로 그룹입니다. 활성화할 경우 등산로, 등고선 등 등산과 관련된 요소가 노출됩니다.
-  layerGroupMountain,
+  /// Displays elements associated with mountain climbing, including trails and
+  /// contours
+  ///
+  /// ![hiking](https://navermaps.github.io/android-map-sdk/assets/2-3-hiking.png)
+  @JsonValue(4)
+  mountain,
 
-  /// 지적편집도 그룹입니다. 활성화할 경우 지적편집도가 노출됩니다.
-  layerGroupCadastral,
+  /// Displays cadastral map
+  ///
+  /// ![cadastral](https://navermaps.github.io/android-map-sdk/assets/2-3-cadastral.png)
+  @JsonValue(5)
+  cadastral,
 }
 
 /// Alignment of the Naver logo.
 enum LogoAlign {
   /// Aligns the logo to the bottom left corner.
+  @JsonValue(0)
   bottomLeft,
 
   /// Aligns the logo to the bottom right corner.
+  @JsonValue(1)
   bottomRight,
 
   /// Aligns the logo to the top left corner.
+  @JsonValue(2)
   topLeft,
 
   /// Aligns the logo to the top right corner.
+  @JsonValue(3)
   topRight,
 }
 

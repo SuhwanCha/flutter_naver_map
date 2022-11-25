@@ -157,7 +157,7 @@ class PathOverlay extends Equatable {
 
   Map<String, dynamic> get json => {
         'pathOverlayId': pathOverlayId.value,
-        'coords': coords.map<List<double>>((coord) => coord.json).toList(),
+        'coords': coords.map<List<double>>((coord) => coord.toJson()).toList(),
         'globalZIndex': globalZIndex,
         'hideCollidedCaptions': hideCollidedCaptions,
         'hideCollidedMarkers': hideCollidedMarkers,

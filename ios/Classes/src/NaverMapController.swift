@@ -325,13 +325,13 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
     
     // ========================== About Map Option ==============================
     func interpretMapOption(option: NSDictionary, sink: NaverMapOptionSink){
-        if let indoorEnable = option["indoorEnable"] as? Bool {
+        if let indoorEnable = option["indoorEnabled"] as? Bool {
             sink.setIndoorEnable(indoorEnable)
         }
-        if let nightModeEnable = option["nightModeEnable"] as? Bool {
+        if let nightModeEnable = option["nightModeEnabled"] as? Bool {
             sink.setNightModeEnable(nightModeEnable)
         }
-        if let liteModeEnable = option["liteModeEnable"] as? Bool {
+        if let liteModeEnable = option["liteModeEnabled"] as? Bool {
             sink.setLiteModeEnable(liteModeEnable)
         }
         if let mapType = option["mapType"] as? Int {
@@ -346,25 +346,25 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let ratio = option["symbolPerspectiveRatio"] as? CGFloat{
             sink.setSymbolPerspectiveRatio(ratio)
         }
-        if let layers = option["activeLayers"] as? Array<Any> {
+        if let layers = option["layers"] as? Array<Any> {
             sink.setActiveLayers(layers)
         }
-        if let rotationGestureEnable = option["rotationGestureEnable"] as? Bool {
+        if let rotationGestureEnable = option["rotationGestureEnabled"] as? Bool {
             sink.setRotationGestureEnable(rotationGestureEnable)
         }
-        if let scrollGestureEnable = option["scrollGestureEnable"] as? Bool {
+        if let scrollGestureEnable = option["scrollGestureEnabled"] as? Bool {
             sink.setScrollGestureEnable(scrollGestureEnable)
         }
-        if let tiltGestureEnable = option["tiltGestureEnable"] as? Bool {
+        if let tiltGestureEnable = option["tiltGestureEnabled"] as? Bool {
             sink.setTiltGestureEnable(tiltGestureEnable)
         }
-        if let zoomGestureEnable = option["zoomGestureEnable"] as? Bool{
+        if let zoomGestureEnable = option["zoomGestureEnabled"] as? Bool{
             sink.setZoomGestureEnable(zoomGestureEnable)
         }
-        if let locationTrackingMode = option["locationTrackingMode"] as? UInt {
+        if let locationTrackingMode = option["locationTrackingModed"] as? UInt {
             sink.setLocationTrackingMode(locationTrackingMode)
         }
-        if let locationButtonEnable = option["locationButtonEnable"] as? Bool{
+        if let locationButtonEnable = option["locationButtonEnabled"] as? Bool{
            sink.setLocationButtonEnable(locationButtonEnable)
         }
         if let paddingData = option["contentPadding"] as? Array<CGFloat> {
