@@ -21,14 +21,18 @@ dependencies:
 1. Sign up for a Naver Cloud Platform account and create a new project.
 
 <https://auth.ncloud.com/login/>
+![Screenshot 2022-11-25 at 6 12 29 PM](https://user-images.githubusercontent.com/16171447/203960360-0003da6f-185b-4931-b642-4dd07e29a75b.png)
 
 1. Issue a new client ID and secret key in [AI/Naver API]
 
 <https://console.ncloud.com/naver-service/application>
+![Screenshot 2022-11-25 at 6 14 10 PM](https://user-images.githubusercontent.com/16171447/203960450-75c17cec-204e-4bf2-aff6-96b2b623c502.png)
 
 - You should enable `Mobile Dynamic Map` API
 - Enter your package ID in `Android Package Name` field
 - Enter your bundle ID in `iOS Bundle ID` field
+
+![Screenshot 2022-11-25 at 6 15 18 PM](https://user-images.githubusercontent.com/16171447/203960543-b28abc7a-edd9-4a6e-ba44-1aed2553321e.png)
 
 You can find your package ID in `build.gradle` file.
 
@@ -53,7 +57,13 @@ You can find your bundle ID in `Info.plist` file.
 <string>com.example.naver_map_plugin_example</string> <!-- <- this -->
 ```
 
+or you can find it in XCode
+
+![Screenshot 2022-11-25 at 6 43 51 PM](https://user-images.githubusercontent.com/16171447/203960991-8df1ee9d-1f77-4cc2-a968-9c45f5550966.png)
+
 1. Copy `Client ID`
+
+![Screenshot 2022-11-25 at 6 22 13 PM](https://user-images.githubusercontent.com/16171447/203961030-ca512112-2179-4633-b4c1-9239b095c9d4.png)
 
 ### Android
 
