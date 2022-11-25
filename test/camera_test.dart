@@ -51,4 +51,28 @@ void main() {
       );
     },
   );
+
+  // group('move camera', () {
+  //   testWidgets('move CameraOptions', (tester) async {
+  //     final controller = NaverMapController();
+
+  //     await tester.pumpWidget(
+  //       Directionality(
+  //         textDirection: TextDirection.ltr,
+  //         child: FakeNaverMap(controller: controller),
+  //       ),
+  //     );
+
+  //     expect(controller.isInitialized, isTrue);
+
+  //     await controller.moveCamera(
+  //       CameraUpdate(
+  //         options: const CameraUpdateOptions(
+  //           tilt: 10,
+  //           zoom: 10,
+  //         ),
+  //       ),
+  //     );
+  //   });
+  // });
 }
