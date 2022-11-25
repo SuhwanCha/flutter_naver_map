@@ -81,6 +81,7 @@ class NaverMap extends StatefulWidget {
 }
 
 class NaverMapState extends State<NaverMap> {
+  late int viewId;
   Map<String, Marker> _markers = <String, Marker>{};
   Map<String, CircleOverlay> _circles = <String, CircleOverlay>{};
   Map<PathOverlayId, PathOverlay> _paths = <PathOverlayId, PathOverlay>{};
@@ -96,8 +97,8 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
+    viewId = id;
     await widget.controller.init(id, this);
-
     // TODO(suhwancha): request permission if needed
 
     widget.onMapCreated?.call();
@@ -140,6 +141,7 @@ class NaverMapState extends State<NaverMap> {
   @override
   void didUpdateWidget(NaverMap oldWidget) {
     super.didUpdateWidget(oldWidget);
+    widget.controller.init(viewId, this);
     // _updateOptions();
     _updateMarkers();
     _updatePathOverlay();

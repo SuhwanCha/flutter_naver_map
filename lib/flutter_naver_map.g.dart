@@ -8,9 +8,7 @@ part of flutter_naver_map;
 
 CameraPosition _$CameraPositionFromJson(Map<String, dynamic> json) =>
     CameraPosition(
-      target: LatLng.fromJson((json['target'] as List<dynamic>)
-          .map((e) => (e as num).toDouble())
-          .toList()),
+      target: const LatLngConverter().fromJson(json['target'] as List<double>),
       bearing: (json['bearing'] as num?)?.toDouble() ?? 0.0,
       tilt: (json['tilt'] as num?)?.toDouble() ?? 0.0,
       zoom: (json['zoom'] as num?)?.toDouble() ?? 15.0,
@@ -19,7 +17,7 @@ CameraPosition _$CameraPositionFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CameraPositionToJson(CameraPosition instance) =>
     <String, dynamic>{
       'bearing': instance.bearing,
-      'target': instance.target,
+      'target': const LatLngConverter().toJson(instance.target),
       'tilt': instance.tilt,
       'zoom': instance.zoom,
     };
@@ -157,7 +155,7 @@ NaverMapOptions _$NaverMapOptionsFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$NaverMapOptionsToJson(NaverMapOptions instance) =>
     <String, dynamic>{
-      'initialCameraPosition': instance.initialCameraPosition,
+      'initialCameraPosition': instance.initialCameraPosition?.toJson(),
       'mapType': const MapTypeConverter().toJson(instance.mapType),
       'initLocationTrackingMode': const LocationTrackingModeConverter()
           .toJson(instance.initLocationTrackingMode),

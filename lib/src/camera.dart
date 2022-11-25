@@ -24,6 +24,7 @@ class CameraPosition extends Equatable {
   final double bearing;
 
   /// 카메라가 가르키는 위치의 위,경도값
+  @LatLngConverter()
   final LatLng target;
 
   /// 기본값으로 최소값인 0.0을 가진다. 지도의 기울기 값.

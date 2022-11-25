@@ -1,6 +1,6 @@
 part of flutter_naver_map;
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class NaverMapOptions {
   const NaverMapOptions({
     this.mapType = MapType.basic,
