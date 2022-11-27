@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_constructors_over_static_methods
-
 part of flutter_naver_map;
 
 /// ### 네이버지도
@@ -12,8 +10,8 @@ class NaverMap extends StatefulWidget {
     this.onMapCreated,
     this.onTap,
     this.onLongPress,
-    this.onMapDoubleTap,
-    this.onMapTwoFingerTap,
+    this.onDoubleTap,
+    this.onTwoFingerTap,
     this.onSymbolTap,
     this.onCameraChange,
     this.onCameraChangeStop,
@@ -22,9 +20,7 @@ class NaverMap extends StatefulWidget {
     this.markers = const [],
     this.circles = const [],
     this.polygons = const [],
-  }) {}
-
-  late final MethodChannel _channel;
+  });
 
   /// [NaverMapController] for controlling the [NaverMap].
   final NaverMapController controller;
@@ -41,13 +37,12 @@ class NaverMap extends StatefulWidget {
   /// [LatLng].
   final void Function(LatLng latLng)? onTap;
 
-  // TODO(suhwancha): check it can be implemented in iOS
-
   /// Called when a long press gesture is detected.
+  ///
+  /// This callback is available only for Android.
   ///
   /// Triggered when a pointer has remained in contact with the screen at the
   /// same location for a long period of time.
-  ///
   ///
   /// The position at which the pointer contacted the screen is available in the
   /// [LatLng].
@@ -70,13 +65,16 @@ class NaverMap extends StatefulWidget {
   /// Called when a double tap gesture is detected.
   ///
   /// Only available on Android.
-  final void Function(LatLng latlng)? onMapDoubleTap;
+  final void Function(LatLng latlng)? onDoubleTap;
 
-  /// 지도가 두 손가락으로 탭 되었을때 호출되는 콜백 메서드. (Android only)
-  final void Function(LatLng latLng)? onMapTwoFingerTap;
+  /// Called when a two finger tap gesture is detected.
+  ///
+  /// Only available on Android.
+  final void Function(LatLng latLng)? onTwoFingerTap;
 
-  /// <h2>심볼 탭 이벤트</h2>
-  /// <p>빌딩을 나타내는 심볼이나, 공공시설을 표시하는 심볼등을 선택했을 경우 호출된다.</p>
+  /// Called when a symbol is tapped.
+  ///
+  /// It is called when building or something is tapped.
   final void Function(LatLng? position, String? caption)? onSymbolTap;
 
   /// Options to configure the [NaverMap].
@@ -99,6 +97,8 @@ class NaverMap extends StatefulWidget {
   /// 뷰의 중심에 위치하므로 실제 보이는 지도의 중심과 카메라의 위치가 불일치하게 됩니다.
   final EdgeInsets? contentPadding;
 
+  final _cameraStreamController = StreamController<bool>.broadcast();
+
   @override
   NaverMapState createState() => NaverMapState();
 }
@@ -108,6 +108,7 @@ class NaverMapState extends State<NaverMap> {
   Map<String, CircleOverlay> _circles = <String, CircleOverlay>{};
   Map<PathOverlayId, PathOverlay> _paths = <PathOverlayId, PathOverlay>{};
   Map<String, PolygonOverlay> _polygons = <String, PolygonOverlay>{};
+  late MethodChannel _channel;
 
   @override
   void initState() {
@@ -119,11 +120,11 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    widget._channel = MethodChannel('${viewType}_$id');
-    await widget._channel.invokeMethod<void>('map#waitForMap');
-    widget._channel.setMethodCallHandler(_handleMethodCall);
+    _channel = MethodChannel('${viewType}_$id');
+    await _channel.invokeMethod<void>('map#waitForMap');
+    _channel.setMethodCallHandler(_handleMethodCall);
 
-    await widget.controller.init(id, this);
+    await widget.controller.init(_channel, widget._cameraStreamController);
     // TODO(suhwancha): request permission if needed
 
     widget.onMapCreated?.call();
@@ -143,28 +144,28 @@ class NaverMapState extends State<NaverMap> {
       case 'map#clearMapView':
         clearMapView();
         break;
-      // case 'marker#onTap':
-      //   assert(arguments!['markerId'] != null, 'markerId is null');
-      //   final markerId = arguments!['markerId']! as String;
-      //   final iconWidth = arguments['iconWidth'] as int?;
-      //   final iconHeight = arguments['iconHeight'] as int?;
-      //   _naverMapState._markerTapped(markerId, iconWidth, iconHeight);
-      //   break;
-      // case 'path#onTap':
-      //   assert(arguments!['pathId'] != null, 'pathId is null');
-      //   final pathId = arguments!['pathId']! as String;
-      //   _naverMapState._pathOverlayTapped(pathId);
-      //   break;
-      // case 'circle#onTap':
-      //   assert(arguments!['circleId'] != null, 'circleId is null');
-      //   final overlayId = arguments!['overlayId']! as String;
-      //   _naverMapState._circleOverlayTapped(overlayId);
-      //   break;
-      // case 'polygon#onTap':
-      //   assert(arguments!['polygonId'] != null, 'polygonId is null');
-      //   final overlayId = arguments!['polygonOverlayId']! as String;
-      //   _naverMapState._polygonOverlayTapped(overlayId);
-      //   break;
+      case 'marker#onTap':
+        assert(arguments!['markerId'] != null, 'markerId is null');
+        final markerId = arguments!['markerId']! as String;
+        final iconWidth = arguments['iconWidth'] as int?;
+        final iconHeight = arguments['iconHeight'] as int?;
+        _markerTapped(markerId, iconWidth, iconHeight);
+        break;
+      case 'path#onTap':
+        assert(arguments!['pathId'] != null, 'pathId is null');
+        final pathId = arguments!['pathId']! as String;
+        _pathOverlayTapped(pathId);
+        break;
+      case 'circle#onTap':
+        assert(arguments!['circleId'] != null, 'circleId is null');
+        final overlayId = arguments!['overlayId']! as String;
+        _circleOverlayTapped(overlayId);
+        break;
+      case 'polygon#onTap':
+        assert(arguments!['polygonId'] != null, 'polygonId is null');
+        final overlayId = arguments!['polygonOverlayId']! as String;
+        _polygonOverlayTapped(overlayId);
+        break;
       case 'map#onTap':
         final latLng = LatLng.fromArguments(arguments!);
         widget.onTap?.call(latLng);
@@ -175,11 +176,11 @@ class NaverMapState extends State<NaverMap> {
         break;
       case 'map#onMapDoubleTap':
         final latLng = LatLng.fromArguments(arguments!);
-        widget.onMapDoubleTap?.call(latLng);
+        widget.onDoubleTap?.call(latLng);
         break;
       case 'map#onMapTwoFingerTap':
         final latLng = LatLng.fromArguments(arguments!);
-        widget.onMapTwoFingerTap?.call(latLng);
+        widget.onTwoFingerTap?.call(latLng);
         break;
       case 'map#onSymbolClick':
         final latLng = LatLng.fromArguments(arguments!);
@@ -187,17 +188,14 @@ class NaverMapState extends State<NaverMap> {
         widget.onSymbolTap?.call(latLng, caption);
         break;
       case 'camera#move':
-        // TODO(suhwancha): this method isn't work
         assert(arguments!['reason'] != null, 'reason is null');
-        final position =
-            LatLng.fromJson(arguments!['position'] as List<double>);
+        final position = LatLng.fromArguments(arguments!);
         final reason = CameraUpdatedReason.values[arguments['reason']! as int];
-        // TODO(suhwancha): implement stream
-        // cameraStreamController.add(reason);
         final isAnimated = arguments['animated'] as bool?;
         widget.onCameraChange?.call(position, reason, isAnimated);
         break;
       case 'camera#idle':
+        widget._cameraStreamController.add(true);
         widget.onCameraChangeStop?.call();
         break;
       case 'snapshot#done':
@@ -211,7 +209,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> clearMapView() async {
-    await widget._channel.invokeMethod<List<dynamic>>('map#clearMapView');
+    await _channel.invokeMethod<List<dynamic>>('map#clearMapView');
   }
 
   @override
@@ -251,7 +249,9 @@ class NaverMapState extends State<NaverMap> {
   @override
   void didUpdateWidget(NaverMap oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // TODO(suhwancha): we need to check [NaverMapOptions] cloud be changed
+    if (!widget.controller.isInitialized) {
+      widget.controller.init(_channel, widget._cameraStreamController);
+    }
     _updateOptions();
     _updateMarkers();
     _updatePathOverlay();
@@ -341,11 +341,11 @@ class NaverMapState extends State<NaverMap> {
   }
 
   void _mapDoubleTap(LatLng position) {
-    widget.onMapDoubleTap?.call(position);
+    widget.onDoubleTap?.call(position);
   }
 
   void _mapTwoFingerTap(LatLng position) {
-    widget.onMapTwoFingerTap?.call(position);
+    widget.onTwoFingerTap?.call(position);
   }
 
   void _symbolTab(LatLng? position, String? caption) {

@@ -3,29 +3,27 @@ part of flutter_naver_map;
 class NaverMapController {
   NaverMapController();
 
-  late final MethodChannel? _channel;
-
-  late final NaverMapState _naverMapState;
-
-  void Function(String? path)? _onSnapShotDone;
+  MethodChannel? _channel;
 
   LocationOverlay? locationOverlay;
 
   bool get isInitialized => _channel != null;
 
   /// [StreamController] to emit events from the native side.
-  final cameraStreamController =
-      StreamController<CameraUpdatedReason>.broadcast();
+  late final StreamController<bool> _cameraStreamController;
 
-  Future<void> init(int id, NaverMapState naverMapState) async {
-    _channel = MethodChannel('${viewType}_$id');
-    _naverMapState = naverMapState;
-    // await _channel?.invokeMethod<void>('map#waitForMap');
-    // _channel?.setMethodCallHandler(_handleMethodCall);
+  Future<void> init(
+    MethodChannel channel,
+    StreamController<bool> streamController,
+  ) async {
+    _channel = channel;
+    _cameraStreamController = streamController;
     locationOverlay = LocationOverlay(this);
   }
 
-  Future<void> moveCamera(CameraUpdate cameraUpdate) async {
+  Future<void> moveCamera(
+    CameraUpdate cameraUpdate,
+  ) async {
     // Native method doens't implemented asynchoronously, so we need to wait for
     // the result with a completer and Subscription.
 
@@ -35,10 +33,10 @@ class NaverMapController {
 
     final complete = Completer<void>();
 
-    StreamSubscription<CameraUpdatedReason>? subscription;
+    StreamSubscription<bool>? subscription;
 
-    subscription = cameraStreamController.stream.listen((reason) {
-      if (reason == CameraUpdatedReason.programmatically) {
+    subscription = _cameraStreamController.stream.listen((isFinished) {
+      if (isFinished) {
         subscription?.cancel();
         complete.complete();
       }
@@ -157,14 +155,13 @@ class NaverMapController {
     await _channel?.invokeMethod('map#type', {'mapType': type.index});
   }
 
-  /// <h3>현재 지도의 모습을 캡쳐하여 cache file 에 저장하고 완료되면 [onSnapShotDone]을 통해 파일의 경로를 전달한다.</h3>
-  /// <br/>
-  /// <p>네이티브에서 실행중 문제가 발생시에 [onSnapShotDone]의 파라미터로 null 이 들어온다</p>
-  // TODO(suhwancha): make this method to use Future
-  void takeSnapshot(void Function(String? path) onSnapShotDone) {
-    _onSnapShotDone = onSnapShotDone;
-    _channel?.invokeMethod<String>('map#capture');
-  }
+  // /// <h3>현재 지도의 모습을 캡쳐하여 cache file 에 저장하고 완료되면 [onSnapShotDone]을 통해 파일의 경로를 전달한다.</h3>
+  // /// <br/>
+  // /// <p>네이티브에서 실행중 문제가 발생시에 [onSnapShotDone]의 파라미터로 null 이 들어온다</p>
+  // void takeSnapshot(void Function(String? path) onSnapShotDone) {
+  //   _onSnapShotDone = onSnapShotDone;
+  //   _channel?.invokeMethod<String>('map#capture');
+  // }
 
   /// <h3>지도의 content padding 을 설정한다.</h3>
   /// <p>인자로 받는 값의 단위는 DP 단위이다.</p>
@@ -219,7 +216,6 @@ class LocationOverlay {
 
   /// 위치 오버레이의 좌표를 변경할 수 있습니다.
   /// 처음 생성된 위치 오버레이는 카메라의 초기 좌표에 위치해 있습니다.
-  // TODO(suhwancha): make this method to use Future
   void setPosition(LatLng position) {
     _channel?.invokeMethod('LO#set#position', {
       'position': position.toJson(),
@@ -234,7 +230,6 @@ class LocationOverlay {
   /// ```
   /// locaionOverlay.setBearing(90.0);
   /// ```
-  // TODO(suhwancha): make this method to use Future
   void setBearing(double bearing) {
     _channel?.invokeMethod('LO#set#bearing', {'bearing': bearing});
   }
