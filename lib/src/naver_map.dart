@@ -131,7 +131,6 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<dynamic> _handleMethodCall(MethodCall call) {
-    // TODO(suhwancha): implement arguments to dart object
     Map<String, dynamic>? arguments;
     try {
       arguments =
@@ -261,7 +260,7 @@ class NaverMapState extends State<NaverMap> {
 
   Future<void> _updateOptions() async {
     final controller = widget.controller;
-    await controller._updateOptions(widget.options);
+    await controller.update(widget.options);
   }
 
   Future<void> _updateMarkers() async {
@@ -334,37 +333,5 @@ class NaverMapState extends State<NaverMap> {
     if (_polygons[overlayId]?.onTap != null) {
       _polygons[overlayId]!.onTap!(overlayId);
     }
-  }
-
-  void _mapLongTap(LatLng position) {
-    widget.onLongPress?.call(position);
-  }
-
-  void _mapDoubleTap(LatLng position) {
-    widget.onDoubleTap?.call(position);
-  }
-
-  void _mapTwoFingerTap(LatLng position) {
-    widget.onTwoFingerTap?.call(position);
-  }
-
-  void _symbolTab(LatLng? position, String? caption) {
-    assert(
-      position != null && caption != null,
-      'position and caption must not be null',
-    );
-    widget.onSymbolTap?.call(position, caption);
-  }
-
-  void _cameraMove(
-    LatLng? position,
-    CameraUpdatedReason reason,
-    bool? isAnimated,
-  ) {
-    widget.onCameraChange?.call(position, reason, isAnimated);
-  }
-
-  void _cameraIdle() {
-    widget.onCameraChangeStop?.call();
   }
 }
