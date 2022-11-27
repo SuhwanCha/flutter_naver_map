@@ -63,40 +63,6 @@ class NaverMapController {
     await _channel?.invokeMethod<List<dynamic>>('map#clearMapView');
   }
 
-  Future<void> _updateMarkers(_MarkerUpdates markerUpdate) async {
-    await _channel?.invokeMethod<void>(
-      'markers#update',
-      markerUpdate._toMap(),
-    );
-  }
-
-  Future<void> _updatePathOverlay(
-    _PathOverlayUpdates pathOverlayUpdates,
-  ) async {
-    await _channel?.invokeMethod(
-      'pathOverlay#update',
-      pathOverlayUpdates._toMap(),
-    );
-  }
-
-  Future<void> _updateCircleOverlay(
-    _CircleOverlayUpdate circleOverlayUpdate,
-  ) async {
-    await _channel?.invokeMethod(
-      'circleOverlay#update',
-      circleOverlayUpdate._toMap(),
-    );
-  }
-
-  Future<void> _updatePolygonOverlay(
-    _PolygonOverlayUpdate polygonOverlayUpdate,
-  ) async {
-    await _channel?.invokeMethod(
-      'polygonOverlay#update',
-      polygonOverlayUpdate._toMap(),
-    );
-  }
-
   /// 현재 지도에 보여지는 영역에 대한 [LatLngBounds] 객체를 리턴.
   Future<LatLngBounds> getVisibleRegion() async {
     final latLngBounds = (await _channel

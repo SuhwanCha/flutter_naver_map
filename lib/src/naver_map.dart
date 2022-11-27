@@ -264,45 +264,45 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updateMarkers() async {
-    final controller = widget.controller;
-    await controller._updateMarkers(
+    await _channel.invokeMethod<void>(
+      'markers#update',
       _MarkerUpdates.from(
         _markers.values.toSet(),
         widget.markers.toSet(),
-      ),
+      )._toMap(),
     );
     _markers = _keyByMarkerId(widget.markers);
   }
 
   Future<void> _updatePathOverlay() async {
-    final controller = widget.controller;
-    await controller._updatePathOverlay(
+    await _channel.invokeMethod(
+      'pathOverlay#update',
       _PathOverlayUpdates.from(
         _paths.values.toSet(),
         widget.pathOverlays?.toSet(),
-      ),
+      )._toMap(),
     );
     _paths = _keyByPathOverlayId(widget.pathOverlays);
   }
 
   Future<void> _updateCircleOverlay() async {
-    final controller = widget.controller;
-    await controller._updateCircleOverlay(
+    await _channel.invokeMethod(
+      'circleOverlay#update',
       _CircleOverlayUpdate.from(
         _circles.values.toSet(),
         widget.circles.toSet(),
-      ),
+      )._toMap(),
     );
     _circles = _keyByCircleId(widget.circles);
   }
 
   Future<void> _updatePolygonOverlay() async {
-    final controller = widget.controller;
-    await controller._updatePolygonOverlay(
+    await _channel.invokeMethod(
+      'polygonOverlay#update',
       _PolygonOverlayUpdate.from(
         _polygons.values.toSet(),
         widget.polygons.toSet(),
-      ),
+      )._toMap(),
     );
     _polygons = _keyByPolygonId(widget.polygons);
   }
