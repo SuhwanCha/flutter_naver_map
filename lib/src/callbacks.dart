@@ -1,5 +1,6 @@
 part of flutter_naver_map;
 
+// TODO(suhwancha): pruning this file
 typedef MapCreateCallback = void Function();
 
 typedef CameraPositionCallback = void Function(CameraPosition position);
