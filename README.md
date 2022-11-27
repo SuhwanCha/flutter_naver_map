@@ -1,9 +1,14 @@
 # flutter_naver_map
 
+## Please Note
+
+**This project is not published yet.**
+
 This package is a Flutter plugin for Naver Map.
 
-Original project is [here](<https://github.com/LBSTECH/naver_map_plugin>), but it is not maintained anymore.
-So I forked and fully rewrote it to support latest Flutter and Naver Map SDK and **dart friendly**.
+Original project is [here](<https://github.com/LBSTECH/naver_map_plugin>), but it is not maintained anymore. There are a lot of bugs, typo, and deprecated code.
+
+So I forked and **fully rewrote** it to support latest Flutter and Naver Map SDK and **dart friendly**.
 
 ## Getting Started
 
@@ -77,6 +82,14 @@ or you can find it in XCode
             android:value="YOUR_CLIENT_ID" /> <!-- <- this -->
     </application>
 </manifest>
+```
+
+1. compileSdkVersion should be 33 or higher.
+
+```groovy
+android {
+    compileSdkVersion 33
+}
 ```
 
 ### iOS
