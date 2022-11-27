@@ -8,7 +8,7 @@ class Marker extends Equatable {
     this.infoWindow,
     this.alpha,
     this.flat,
-    this.onMarkerTab,
+    this.onMarkerTap,
     this.icon,
     this.captionText,
     this.captionTextSize,
@@ -62,7 +62,7 @@ class Marker extends Equatable {
   ///
   ///
   /// iconSize 는 'width' 와 'height'의 key값을 가지고 있다.
-  final OnMarkerTab? onMarkerTab;
+  final void Function(Marker? marker, Map<String, int?> iconSize)? onMarkerTap;
 
   /// 좌표를 지정합니다.
   /// -
@@ -281,7 +281,7 @@ class Marker extends Equatable {
       iconTintColor: iconTintColor,
       maxZoom: maxZoom,
       minZoom: minZoom,
-      onMarkerTab: onMarkerTab,
+      onMarkerTap: onMarkerTap,
       subCaptionColor: subCaptionColor,
       subCaptionHaloColor: subCaptionHaloColor,
       subCaptionRequestedWidth: subCaptionRequestedWidth,
@@ -298,7 +298,7 @@ class Marker extends Equatable {
   String toString() {
     return 'Marker{markerId: $markerId, alpha: $alpha, '
         'flat: $flat, position: $position, zIndex: $zIndex, '
-        'onMarkerTab: $onMarkerTab, infowindow : $infoWindow}';
+        'onMarkerTab: $onMarkerTap, infowindow : $infoWindow}';
   }
 
   @override
@@ -307,7 +307,7 @@ class Marker extends Equatable {
         infoWindow,
         alpha,
         flat,
-        onMarkerTab,
+        onMarkerTap,
         position,
         captionText,
         captionTextSize,

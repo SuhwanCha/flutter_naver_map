@@ -20,8 +20,8 @@ class NaverMapController {
   Future<void> init(int id, NaverMapState naverMapState) async {
     _channel = MethodChannel('${viewType}_$id');
     _naverMapState = naverMapState;
-    await _channel?.invokeMethod<void>('map#waitForMap');
-    _channel?.setMethodCallHandler(_handleMethodCall);
+    // await _channel?.invokeMethod<void>('map#waitForMap');
+    // _channel?.setMethodCallHandler(_handleMethodCall);
     locationOverlay = LocationOverlay(this);
   }
 
@@ -57,86 +57,13 @@ class NaverMapController {
     );
   }
 
-  Future<dynamic> _handleMethodCall(MethodCall call) {
-    // TODO(suhwancha): implement arguments to dart object
-    Map<String, dynamic>? arguments;
-
-    try {
-      arguments =
-          Map<String, dynamic>.from(call.arguments as Map<Object?, Object?>);
-    } catch (e) {
-      arguments = null;
-    }
-
-    switch (call.method) {
-      case 'map#clearMapView':
-        clearMapView();
-        break;
-      case 'marker#onTap':
-        assert(arguments!['markerId'] != null, 'markerId is null');
-        final markerId = arguments!['markerId']! as String;
-        final iconWidth = arguments['iconWidth'] as int?;
-        final iconHeight = arguments['iconHeight'] as int?;
-        _naverMapState._markerTapped(markerId, iconWidth, iconHeight);
-        break;
-      case 'path#onTap':
-        assert(arguments!['pathId'] != null, 'pathId is null');
-        final pathId = arguments!['pathId']! as String;
-        _naverMapState._pathOverlayTapped(pathId);
-        break;
-      case 'circle#onTap':
-        assert(arguments!['circleId'] != null, 'circleId is null');
-        final overlayId = arguments!['overlayId']! as String;
-        _naverMapState._circleOverlayTapped(overlayId);
-        break;
-      case 'polygon#onTap':
-        assert(arguments!['polygonId'] != null, 'polygonId is null');
-        final overlayId = arguments!['polygonOverlayId']! as String;
-        _naverMapState._polygonOverlayTapped(overlayId);
-        break;
-      case 'map#onTap':
-        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
-        _naverMapState._mapTap(latLng);
-
-        break;
-      case 'map#onLongTap':
-        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
-        _naverMapState._mapLongTap(latLng);
-        break;
-      case 'map#onMapDoubleTap':
-        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
-        _naverMapState._mapDoubleTap(latLng);
-        break;
-      case 'map#onMapTwoFingerTap':
-        final latLng = LatLng.fromJson(arguments!['position'] as List<double>);
-        _naverMapState._mapTwoFingerTap(latLng);
-        break;
-      case 'map#onSymbolClick':
-        final position =
-            LatLng.fromJson(arguments!['position'] as List<double>);
-        final caption = arguments['caption'] as String?;
-        _naverMapState._symbolTab(position, caption);
-        break;
-      case 'camera#move':
-        assert(arguments!['reason'] != null, 'reason is null');
-        final position =
-            LatLng.fromJson(arguments!['position'] as List<double>);
-        final reason = CameraUpdatedReason.values[arguments['reason']! as int];
-        cameraStreamController.add(reason);
-        final isAnimated = arguments['animated'] as bool?;
-        _naverMapState._cameraMove(position, reason, isAnimated);
-        break;
-      case 'camera#idle':
-        _naverMapState._cameraIdle();
-        break;
-      case 'snapshot#done':
-        if (_onSnapShotDone != null) {
-          _onSnapShotDone!(arguments!['path'] as String?);
-          _onSnapShotDone = null;
-        }
-        break;
-    }
-    return Future<void>.value();
+  Future<void> _updateOptions(NaverMapOptions options) async {
+    return _channel?.invokeMethod<void>(
+      'map#update',
+      <String, dynamic>{
+        'options': options.toJson(),
+      },
+    );
   }
 
   /// 네이버 맵 위젯의 메모리 할당을 해제합니다

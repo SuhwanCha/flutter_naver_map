@@ -10,8 +10,6 @@ import 'package:flutter/services.dart';
 import 'package:json_annotation/json_annotation.dart';
 // import 'package:flutter/gestures.dart';
 
-part 'src/callbacks.dart';
-
 part 'src/camera.dart';
 
 part 'src/circle_overlay.dart';
