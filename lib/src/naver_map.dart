@@ -308,8 +308,8 @@ class NaverMapState extends State<NaverMap> {
   }
 
   void _markerTapped(String markerId, int? iconWidth, int? iconHeight) {
-    if (_markers[markerId]?.onMarkerTap != null) {
-      _markers[markerId]!.onMarkerTap!(
+    if (_markers[markerId]?.onTap != null) {
+      _markers[markerId]!.onTap!(
         _markers[markerId],
         <String, int?>{'width': iconWidth, 'height': iconHeight},
       );
