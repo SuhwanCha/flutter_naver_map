@@ -21,11 +21,21 @@ class NaverMapController {
     locationOverlay = LocationOverlay(this);
   }
 
-  Future<void> moveCamera(
-    CameraUpdate cameraUpdate,
-  ) async {
+  Future<void> moveCamera({
+    required AbstractCameraUpdateOptions options,
+    Offset? pivot,
+    CameraAnimation curve = CameraAnimation.none,
+    Duration duration = Duration.zero,
+  }) async {
     // Native method doens't implemented asynchoronously, so we need to wait for
     // the result with a completer and Subscription.
+
+    final cameraUpdate = CameraUpdate(
+      options: options,
+      pivot: pivot,
+      curve: curve,
+      duration: duration,
+    );
 
     await _channel?.invokeMethod<void>('camera#move', <String, dynamic>{
       'cameraUpdate': cameraUpdate.toJson(),
@@ -100,14 +110,15 @@ class NaverMapController {
     };
   }
 
+  /// Update [LocationTrackingMode] of the map.
+  @Deprecated('Use [update] instead')
   Future<void> setLocationTrackingMode(LocationTrackingMode mode) async {
     await _channel?.invokeMethod('tracking#mode', <String, dynamic>{
       'locationTrackingMode': mode.index,
     });
   }
 
-  /// ### 지도의 유형 변경
-  /// [MapType]을 전달하면 해당 유형으로 지도의 타일 유형이 변경된다.
+  @Deprecated('Use [update] instead')
   Future<void> setMapType(MapType type) async {
     await _channel?.invokeMethod('map#type', {'mapType': type.index});
   }
