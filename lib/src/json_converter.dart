@@ -162,3 +162,31 @@ class SizeConverter implements JsonConverter<Size, List<double>> {
     return [object.width, object.height];
   }
 }
+
+class AnchorPointConverter implements JsonConverter<AnchorPoint, List<double>> {
+  const AnchorPointConverter();
+
+  @override
+  AnchorPoint fromJson(List<double> json) {
+    return AnchorPoint(json[0], json[1]);
+  }
+
+  @override
+  List<double> toJson(AnchorPoint object) {
+    return [object.x, object.y];
+  }
+}
+
+class ColorConverter implements JsonConverter<Color, int> {
+  const ColorConverter();
+
+  @override
+  Color fromJson(int json) {
+    return Color(json);
+  }
+
+  @override
+  int toJson(Color object) {
+    return object.value;
+  }
+}

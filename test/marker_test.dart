@@ -5,11 +5,12 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   test('marker to json', () {
     final markerMap = <String, dynamic>{
-      'markerId': 1,
+      'markerId': '1',
       'alpha': 0.5,
       'flat': true,
       'position': [37.52504866440145, 127.03169168035947],
       'captionText': 'caption Text',
+      'infoWindow': 'info Window',
       'captionTextSize': 30.0,
       'captionHaloColor': 4294198070,
       'width': 50,
@@ -21,6 +22,7 @@ void main() {
       'captionMaxZoom': 16.0,
       'captionMinZoom': 5.0,
       'captionOffset': 30,
+      'captionColor': 4294198070,
       'captionPerspectiveEnabled': true,
       'zIndex': 5,
       'globalZIndex': 5,
@@ -39,10 +41,12 @@ void main() {
       iconTintColor: Colors.blue,
       opacity: 0.5,
       flatten: true,
+      size: const Size(50, 50),
       onTap: (marker, iconSize) => print('marker tapped'),
       captionText: 'caption Text',
       captionTextSize: 30,
       captionStrokeColor: Colors.red,
+      captionColor: Colors.red,
       maxZoom: 16,
       minZoom: 5,
       angle: 30,
@@ -50,6 +54,7 @@ void main() {
       captionMaxWidth: 5,
       captionMaxZoom: 16,
       captionMinZoom: 5,
+      infoWindow: 'info Window',
       captionOffset: 30,
       captionPerspectiveEnabled: true,
       zIndex: 5,
@@ -60,5 +65,7 @@ void main() {
       subCaptionStrokeColor: Colors.black,
       subCaptionMaxWidth: 5,
     );
+
+    expect(marker.toJson(), markerMap);
   });
 }
