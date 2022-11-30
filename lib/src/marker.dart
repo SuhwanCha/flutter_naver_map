@@ -1,26 +1,26 @@
 part of flutter_naver_map;
 
-/// 아이콘과 캡션을 이용해 지도 위의 한 지점을 표시하는 오버레이.
+/// Marker class for [NaverMap].
+// @JsonSerializable(explicitToJson: true)
 class Marker extends Equatable {
   const Marker({
-    required this.markerId,
+    required this.id,
     required this.position,
     this.infoWindow,
-    this.alpha,
-    this.flat,
-    this.onMarkerTap,
+    this.opacity,
+    this.size,
+    this.flatten,
+    this.onTap,
     this.icon,
     this.captionText,
     this.captionTextSize,
     this.captionColor,
-    this.captionHaloColor,
-    this.width,
-    this.height,
+    this.captionStrokeColor,
     this.maxZoom,
     this.minZoom,
     this.angle,
     this.anchor,
-    this.captionRequestedWidth,
+    this.captionMaxWidth,
     this.captionMaxZoom,
     this.captionMinZoom,
     this.captionOffset,
@@ -31,52 +31,180 @@ class Marker extends Equatable {
     this.subCaptionText,
     this.subCaptionTextSize,
     this.subCaptionColor,
-    this.subCaptionHaloColor,
-    this.subCaptionRequestedWidth,
+    this.subCaptionStrokeColor,
+    this.subCaptionMaxWidth,
   });
 
-  /// 마커의 고유 식별자로 사용되는 값입니다.
-  ///
-  /// 또한 마커들의 클릭이벤트에서 여러 마커들을 구분하는데에 사용됩니다.
-  final String markerId;
+  // json serialization
+  factory Marker.fromJson(Map<String, dynamic> json) => _$MarkerFromJson(json);
 
-  /// 마커를 클릭했을 때 인포윈도우를 보이게 할 수 있습니다.
-  /// null 일 경우 마커를 클릭해도 윈도우가 보이지 않습니다.
+  /// Converts this object to the JSON representation.
+  Map<String, dynamic> toJson() => _$MarkerToJson(this);
+
+  /// A unique identifier for a [Marker].
+  @JsonKey(name: 'markerId')
+  final String id;
+
+  /// Is an overlay that displays additional information over a marker or at a
+  /// specified location on the map
+  ///
+  /// It is usually in the form of a speech bubble displaying text. As the
+  /// information to be displayed in an info window is specified by an adapter,
+  /// it can be dynamically updated by using the marker at which an info window
+  /// will open.
+  ///
+  /// ![infowindow](https://navermaps.github.io/ios-map-sdk/assets/5-3-open-in-marker.png)
   final String? infoWindow;
 
-  /// 마커의 불투명도를 조절하는 값입니다.
-  /// 유효한 값의 범위는 0.0 ~ 1.0 까지이며 1.0일떄 완전 붏투명입니다.
-  final double? alpha;
-
-  /// 마커를 평평하게 설정할지 여부를 지정합니다.
+  /// Adds a color to an icon image
   ///
-  /// 마커가 평평할 경우 지도가 회전하거나 기울어지면 마커 이미지도 함께 회전하거나
-  /// 기울어집니다. 단, 마커가 평평하더라도 이미지의 크기는 항상 동일하게 유지됩니다.
-  final bool? flat;
+  /// The color you specified is (additive-mixed)[https://en.wikipedia.org/wiki/Additive_color] with the color of an icon image.
+  /// Note that the alpha of the additive color is ignored and only the alpha of
+  /// the icon image color is used.
+  @ColorConverter()
+  final Color? iconTintColor;
 
-  /// 오직 클릭 이벤트 리스너가 지정된 오버레이만이 클릭 이벤트를 받을 수 있습니다.
-  ///
-  /// 예를 들어 마커와 지상 오버레이가 겹쳐져 있고 지상 오버레이에만 클릭 이벤트
-  /// 리스너가 지정된 경우, 사용자가 마커를 클릭하더라도 지상 오버레이가 클릭 이벤트를
-  /// 받습니다.
-  ///
-  ///
-  /// iconSize 는 'width' 와 'height'의 key값을 가지고 있다.
-  final void Function(Marker? marker, Map<String, int?> iconSize)? onMarkerTap;
+  /// Specifies an icon for the marker.
+  // TODO(suhwancha): rename [OverlayImage]
+  @JsonKey(ignore: true)
+  final OverlayImage? icon;
 
-  /// 좌표를 지정합니다.
-  /// -
-  /// 만약 position이 유효하지 않은(LatLng.isValid()가 false인) 좌표라면
-  /// InvalidCoordinateException이 발생합니다.
-  final LatLng? position;
+  /// Specify the size of an icon
+  ///
+  /// If you do not specify the size, the width or height of the icon is
+  /// adjusted to the size of the image.
+  ///
+  /// Example: `Size(25, 40)`
+  /// ![size](https://navermaps.github.io/ios-map-sdk/assets/5-2-resize.png)
+  // TODO(suhwancha): implement json converter and prune wid and height
+  @SizeConverter()
+  final Size? size;
 
-  /// 캡션의 텍스트를 지정합니다. 빈 문자열일 경우 캡션이 그려지지 않습니다.
-  /// -
-  /// 기본값은 빈 문자열입니다.
+  /// The fraction to scale the marker's alpha value.
+  ///
+  /// An opacity of 1.0 is fully opaque. An opacity of 0.0 is fully transparent
+  /// (i.e., invisible).
+  @JsonKey(name: 'alpha')
+  final double? opacity;
+
+  /// Whether the marker is flat against the map
+  ///
+  /// ![flat](https://navermaps.github.io/ios-map-sdk/assets/5-2-flat.png)
+  @JsonKey(name: 'flat')
+  final bool? flatten;
+
+  /// The point on the icon image that will be placed at the coordinates of the
+  /// marker
+  ///
+  /// An anchor point is a proportion value where the top left is `(0, 0)`, and
+  /// the bottom right is `(1, 1)`.
+  ///
+  /// This property is useful when the default marker image is not used.
+  /// For example, if you specify an image that has a tail at the bottom right
+  /// as a marker’s icon as shown below, the image points to the bottom right
+  /// but the marker is anchored to the map based on the point at the bottom of
+  /// the middle of the image, which makes a gap between the coordinates of the
+  /// image and those of the marker.
+  /// ![anchor](https://navermaps.github.io/ios-map-sdk/assets/5-2-distance.png)
+  @AnchorPointConverter()
+  final AnchorPoint? anchor;
+
+  /// The angle of the marker in degrees clockwise from north.
+  /// The direction is up for 0 degree, right for 90 degrees, and down for 180
+  /// degrees.
+  ///
+  /// Example: `90`
+  ///
+  /// ![angle](https://navermaps.github.io/ios-map-sdk/assets/5-2-angle.png)
+  final double? angle;
+
+  /// Text to be displayed as a caption
+  ///
+  /// The caption is displayed in a box below the marker icon.
+  ///
+  /// ![caption](https://navermaps.github.io/ios-map-sdk/assets/5-2-caption.png)
   final String? captionText;
 
-  /// 캡션의 크기를 지정합니다.
+  /// The limit of the width of the caption box
+  ///
+  ///
+  /// If a line of caption text is too long to fit the specified width, it
+  /// automatically wraps. Note that if text is written without spaces, it may
+  /// not wrap.
+  ///
+  /// ![caption](https://navermaps.github.io/ios-map-sdk/assets/5-2-caption-width.png)
+  @JsonKey(name: 'captionRequestedWidth')
+  final double? captionMaxWidth;
+
+  /// The distance between the icon and the caption
+  ///
+  /// ![caption](https://navermaps.github.io/ios-map-sdk/assets/5-2-offset.png)
+  final double? captionOffset;
+
+  /// Called when the marker is tapped.
+  ///
+  /// The [Marker] that was tapped and the [Size] of the marker icon are passed
+  @JsonKey(ignore: true)
+  final void Function(Marker? marker, Map<String, int?> iconSize)? onTap;
+
+  /// The color of the caption text
+  @ColorConverter()
+  final Color? captionColor;
+
+  /// The stroke color of the caption text
+  ///
+  /// ![caption](https://navermaps.github.io/ios-map-sdk/assets/5-2-color.png)
+  @JsonKey(name: 'captionHaloColor')
+  @ColorConverter()
+  final Color? captionStrokeColor;
+
+  /// Size of the caption text
   final double? captionTextSize;
+
+  /// Position of the marker on the map
+  final LatLng position;
+
+  /// Text to be displayed as a subcaption
+  ///
+  /// {@template subcaption}
+  /// Allowing you to specify its text, color and size, separate from the main
+  /// caption’s, sub captions are useful to provide addition information.
+  ///
+  /// Note that the alignment and offset of a sub caption cannot be specified;
+  /// it is unconditionally placed beneath the main caption.
+  ///
+  /// ![caption](https://navermaps.github.io/ios-map-sdk/assets/5-2-sub-caption.png)
+  /// {@endtemplate}
+
+  final String? subCaptionText;
+
+  /// The color of the subcaption text
+  ///
+  /// {@macro subcaption}
+  final double? subCaptionTextSize;
+
+  /// The limit of the width of the subcaption box
+  ///
+  /// If a line of subcaption text is too long to fit the specified width, it
+  /// automatically wraps. Note that if text is written without spaces, it may
+  /// not wrap.
+  ///
+  /// {@macro subcaption}
+  @JsonKey(name: 'subCaptionRequestedWidth')
+  final double? subCaptionMaxWidth;
+
+  /// The color of the subcaption text
+  ///
+  /// {@macro subcaption}
+  @ColorConverter()
+  final Color? subCaptionColor;
+
+  /// The stroke color of the subcaption text
+  ///
+  /// {@macro subcaption}
+  @JsonKey(name: 'subCaptionHaloColor')
+  @ColorConverter()
+  final Color? subCaptionStrokeColor;
 
   /// 캡션이 보이는 최대 줌 레벨을 지정합니다.
   ///
@@ -92,77 +220,6 @@ class Marker extends Equatable {
   /// 캡션은 화면에 나타나지 않으며 이벤트도 받지 못합니다.
   final double? captionMinZoom;
 
-  /// 캡션의 색상을 지정합니다. RGB CODE를 필요로 합니다.
-  ///
-  ///
-  /// 기본값은 [Colors.black]입니다.
-  final Color? captionColor;
-
-  /// 캡션의 테두리색을 지정합니다. RGB Code를 필요로합니다.
-  ///
-  ///
-  /// 기본값은 [Colors.white] 입니다.
-  final Color? captionHaloColor;
-
-  /// 캡션의 희망 너비를 지정합니다.
-  ///
-  ///
-  /// 지정할 경우 한 줄의 너비가 희망 너비를 초과하는 캡션 텍스트가 자동으로
-  /// 개행됩니다. 자동 개행은 어절 단위로 이루어지므로,
-  ///
-  /// 하나의 어절이 길 경우 캡션의 너비가 희망 너비를 초과할 수 있습니다.
-  /// 0일 경우 너비를 제한하지 않습니다.
-  final int? captionRequestedWidth;
-
-  /// 아이콘과 캡션 간의 여백을 지정합니다.
-  /// </br>
-  /// 단위 >> Android: DP, iOS: PT, 기본값은 0입니다.
-  final int? captionOffset;
-
-  /// 보조 캡션의 텍스트를 지정합니다. 보조 캡션은 주 캡션의 하단에 나타납니다.
-  /// 빈 문자열일 경우 보조 캡션이 그려지지 않습니다.
-  ///
-  ///
-  /// 기본값은 빈 문자열입니다.
-  final String? subCaptionText;
-
-  /// 보조 캡션의 텍스트 크기를 지정합니다.
-  final double? subCaptionTextSize;
-
-  /// 보조 캡션의 너비를 지정합니다. 지정할 경우 한 줄의 너비가 희망 너비를 초과하는
-  /// 캡션 텍스트는 자동으로 개행됩니다. 자동 개행은 어절 단위로 이루어지므로,
-  /// 하나의 어절이 길 경우 캡션의 너비가 희망 너비를 초과할 수 있습니다.
-  ///
-  ///
-  /// 0일 경우 너비를 제한하지 않습니다.
-  final int? subCaptionRequestedWidth;
-
-  /// 보조 캡션의 색상을 지정합니다.
-  ///
-  ///
-  /// 기본값은 [Colors.black]입니다.
-  final Color? subCaptionColor;
-
-  /// 보조 캡션의 테두리 색상을 지정합니다.
-  ///
-  ///
-  /// 기본값은 [Colors.white]입니다.
-  final Color? subCaptionHaloColor;
-
-  /// 아이콘의 너비, 높이를 지정합니다.
-  /// <br/>
-  /// 단위 >> android : dp, iOS: pt
-  /// <br/>
-  /// 값이 없는 경우 이미지의 너비를 따릅니다.
-  final int? width;
-
-  /// 아이콘의 너비, 높이를 지정합니다.
-  /// <br/>
-  /// 단위 >> android : dp, iOS: pt
-  /// <br/>
-  /// 값이 없는 경우 이미지의 높이를 따릅니다.
-  final int? height;
-
   /// 오버레이가 보이는 최대, 최소 줌 레벨을 지정합니다. 지도의 줌 레벨이
   /// 오버레이의 최대 줌 레벨보다 크거나 지도의 줌 레벨이 오보레이의
   /// 줌 레벨보다 작은 경우 오버레이는 화면에 나타나지 않으며
@@ -175,26 +232,12 @@ class Marker extends Equatable {
   /// 이벤트도 받지 못합니다.
   final double? minZoom;
 
-  /// 아이콘의 각도를 지정합니다. 각도를 지정하면 아이콘이 해당 각도만큼
-  /// 시계 방향으로 회전합니다
-  final double? angle;
-
-  /// 아이콘을 지정합니다.
-  final OverlayImage? icon;
-
   /// 캡션에 원근 효과를 적용할지 여부를 반환합니다.
   /// 원근 효과를 적용할 경우 가까운 캡션은 크게, 먼 캡션은 작게 표시됩니다.
   ///
   ///
   /// 기본값은 false입니다.
   final bool? captionPerspectiveEnabled;
-
-  /// 아이콘에 덧입힐 색상을 지정합니다. 덧입힐 색상을 지정하면 덧입힐 색상이
-  /// 아이콘 이미지의 색상과 가산 혼합됩니다. 단, 덧입힐 색상의 알파는 무시됩니다.
-  ///
-  ///
-  /// 기본값은 Color.TRANSPARENT입니다.
-  final Color? iconTintColor;
 
   /// 보조 Z 인덱스를 지정합니다. 전역 Z 인덱스가 동일한 여러 오버레이가 화면에서
   /// 겹쳐지면 보조 Z 인덱스가 큰 오버레이가 작은 오버레이를 덮습니다.
@@ -209,82 +252,71 @@ class Marker extends Equatable {
   /// 기본값은 DEFAULT_GLOBAL_Z_INDEX입니다
   final int? globalZIndex;
 
-  /// ## 마커 아이콘의 앵커를 지정합니다.
-  /// 앵커로 지정된 지점이 정보창의 좌표에 위치합니다.
-  /// 값의 범위는 x, y 각각 0 ~ 1 이며, (0,0)일 경우 좌상단, (1,1)일 경우 우츨 하단을 의미합니다.
-  /// 기본값은 중앙 하단인 (0.5, 1)입니다.
-  /// > 앵커는 아이콘 이미지에서 기준이 되는 지점을 의미하는 값으로, 아이콘에서 앵커로 지정된 지점이 마커의 좌표에 위치하게 됩니다.
-  final AnchorPoint? anchor;
+  // Map<String, dynamic> _toJson() {
+  //   final json = <String, dynamic>{};
 
-  Map<String, dynamic> _toJson() {
-    final json = <String, dynamic>{};
+  //   void addIfPresent(String fieldName, dynamic value) {
+  //     if (value != null) {
+  //       json[fieldName] = value;
+  //     }
+  //   }
 
-    void addIfPresent(String fieldName, dynamic value) {
-      if (value != null) {
-        json[fieldName] = value;
-      }
-    }
-
-    addIfPresent('markerId', markerId);
-    addIfPresent('alpha', alpha);
-    addIfPresent('flat', flat);
-    addIfPresent('position', position?.toJson());
-    addIfPresent('captionText', captionText);
-    addIfPresent('captionTextSize', captionTextSize);
-    addIfPresent('captionColor', captionColor?.value);
-    addIfPresent('captionHaloColor', captionHaloColor?.value);
-    addIfPresent('width', width);
-    addIfPresent('height', height);
-    addIfPresent('maxZoom', maxZoom);
-    addIfPresent('minZoom', minZoom);
-    addIfPresent('angle', angle);
-    addIfPresent('captionRequestedWidth', captionRequestedWidth);
-    addIfPresent('captionMaxZoom', captionMaxZoom);
-    addIfPresent('captionMinZoom', captionMinZoom);
-    addIfPresent('captionOffset', captionOffset);
-    addIfPresent('captionPerspectiveEnabled', captionPerspectiveEnabled);
-    addIfPresent('zIndex', zIndex);
-    addIfPresent('globalZIndex', globalZIndex);
-    addIfPresent('iconTintColor', iconTintColor?.value);
-    addIfPresent('subCaptionText', subCaptionText);
-    addIfPresent('subCaptionTextSize', subCaptionTextSize);
-    addIfPresent('subCaptionColor', subCaptionColor?.value);
-    addIfPresent('subCaptionHaloColor', subCaptionHaloColor?.value);
-    addIfPresent('subCaptionRequestedWidth', subCaptionRequestedWidth);
-    addIfPresent('icon', icon?.key.name);
-    addIfPresent('infoWindow', infoWindow);
-    addIfPresent('anchor', anchor?._json);
-
-    return json;
-  }
+  //   addIfPresent('markerId', id);
+  //   addIfPresent('alpha', opacity);
+  //   addIfPresent('flat', flatten);
+  //   addIfPresent('position', position.toJson());
+  //   addIfPresent('captionText', captionText);
+  //   addIfPresent('captionTextSize', captionTextSize);
+  //   addIfPresent('captionColor', captionColor?.value);
+  //   addIfPresent('captionHaloColor', captionStrokeColor?.value);
+  //   addIfPresent('maxZoom', maxZoom);
+  //   addIfPresent('minZoom', minZoom);
+  //   addIfPresent('angle', angle);
+  //   addIfPresent('captionRequestedWidth', captionMaxWidth);
+  //   addIfPresent('captionMaxZoom', captionMaxZoom);
+  //   addIfPresent('captionMinZoom', captionMinZoom);
+  //   addIfPresent('captionOffset', captionOffset);
+  //   addIfPresent('captionPerspectiveEnabled', captionPerspectiveEnabled);
+  //   addIfPresent('zIndex', zIndex);
+  //   addIfPresent('globalZIndex', globalZIndex);
+  //   addIfPresent('iconTintColor', iconTintColor?.value);
+  //   addIfPresent('subCaptionText', subCaptionText);
+  //   addIfPresent('subCaptionTextSize', subCaptionTextSize);
+  //   addIfPresent('subCaptionColor', subCaptionColor?.value);
+  //   addIfPresent('subCaptionHaloColor', subCaptionStrokeColor?.value);
+  //   addIfPresent('subCaptionRequestedWidth', subCaptionMaxWidth);
+  //   addIfPresent('icon', icon?.key.name);
+  //   addIfPresent('infoWindow', infoWindow);
+  //   addIfPresent('anchor', anchor?._json);
+  //   print(json);
+  //   return json;
+  // }
 
   /// 같은 값을 가진 새로운 Maker 객체를 반환한다.
   Marker clone() {
     return Marker(
       position: position,
-      markerId: markerId,
-      width: width,
-      height: height,
-      alpha: alpha,
+      id: id,
+      opacity: opacity,
       angle: angle,
       captionColor: captionColor,
-      captionHaloColor: captionHaloColor,
+      captionStrokeColor: captionStrokeColor,
       captionMaxZoom: captionMaxZoom,
       captionMinZoom: captionMinZoom,
       captionOffset: captionOffset,
       captionPerspectiveEnabled: captionPerspectiveEnabled,
-      captionRequestedWidth: captionRequestedWidth,
+      captionMaxWidth: captionMaxWidth,
       captionText: captionText,
       captionTextSize: captionTextSize,
-      flat: flat,
+      flatten: flatten,
       globalZIndex: globalZIndex,
       iconTintColor: iconTintColor,
       maxZoom: maxZoom,
       minZoom: minZoom,
-      onMarkerTap: onMarkerTap,
+      onTap: onTap,
       subCaptionColor: subCaptionColor,
-      subCaptionHaloColor: subCaptionHaloColor,
-      subCaptionRequestedWidth: subCaptionRequestedWidth,
+      subCaptionStrokeColor: subCaptionStrokeColor,
+      subCaptionMaxWidth: subCaptionMaxWidth,
       subCaptionText: subCaptionText,
       subCaptionTextSize: subCaptionTextSize,
       zIndex: zIndex,
@@ -296,42 +328,39 @@ class Marker extends Equatable {
 
   @override
   String toString() {
-    return 'Marker{markerId: $markerId, alpha: $alpha, '
-        'flat: $flat, position: $position, zIndex: $zIndex, '
-        'onMarkerTab: $onMarkerTap, infowindow : $infoWindow}';
+    return 'Marker{markerId: $id, alpha: $opacity, '
+        'flat: $flatten, position: $position, zIndex: $zIndex, '
+        'onMarkerTab: $onTap, infowindow : $infoWindow}';
   }
 
   @override
   List<Object?> get props => [
-        markerId,
-        infoWindow,
-        alpha,
-        flat,
-        onMarkerTap,
+        id,
+        opacity,
+        flatten,
         position,
         captionText,
         captionTextSize,
-        captionMaxZoom,
-        captionMinZoom,
         captionColor,
-        captionHaloColor,
-        captionRequestedWidth,
-        captionOffset,
-        subCaptionText,
-        subCaptionTextSize,
-        subCaptionRequestedWidth,
-        subCaptionColor,
-        subCaptionHaloColor,
-        width,
-        height,
+        captionStrokeColor,
         maxZoom,
         minZoom,
         angle,
-        icon,
+        captionMaxWidth,
+        captionMaxZoom,
+        captionMinZoom,
+        captionOffset,
         captionPerspectiveEnabled,
-        iconTintColor,
         zIndex,
         globalZIndex,
+        iconTintColor,
+        subCaptionText,
+        subCaptionTextSize,
+        subCaptionColor,
+        subCaptionStrokeColor,
+        subCaptionMaxWidth,
+        icon,
+        infoWindow,
         anchor,
       ];
 }
@@ -340,16 +369,16 @@ List<Map<String, dynamic>>? _serializeMarkerSet(Iterable<Marker?>? markers) {
   if (markers == null) {
     return null;
   }
-  return markers
-      .map<Map<String, dynamic>>((Marker? m) => m!._toJson())
-      .toList();
+  return null;
+  // return markers
+  //     .map<Map<String, dynamic>>((Marker? m) => m!.to())
+  //     .toList();
 }
 
 Map<String, Marker> _keyByMarkerId(Iterable<Marker> markers) {
   return Map<String, Marker>.fromEntries(
     markers.map(
-      (Marker marker) =>
-          MapEntry<String, Marker>(marker.markerId, marker.clone()),
+      (Marker marker) => MapEntry<String, Marker>(marker.id, marker.clone()),
     ),
   );
 }
@@ -368,8 +397,6 @@ class AnchorPoint extends Equatable {
         assert(y >= 0 && y <= 1, 'y must be between 0 and 1');
   final double x;
   final double y;
-
-  List<double> get _json => [x, y];
 
   @override
   List<Object?> get props => [

@@ -29,8 +29,11 @@ class _MarkerUpdates extends Equatable {
 
     /// 새로운 마커의 아이디가 기존의 것과 다른 경우 true 리턴.
     bool hasChanged(Marker? current) {
-      final previous = previousMarkers[current!.markerId];
-      return current != previous;
+      if (current != null) {
+        final previous = previousMarkers[current.id];
+        return current != previous;
+      }
+      return false;
     }
 
     final markersToChange = currentMarkerIds
