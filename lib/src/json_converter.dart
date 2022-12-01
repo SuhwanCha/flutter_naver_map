@@ -148,3 +148,122 @@ class LocationTrackingModeConverter
     return object.index;
   }
 }
+
+class SizeConverter implements JsonConverter<Size, List<double>> {
+  const SizeConverter();
+
+  @override
+  Size fromJson(List<double> json) {
+    return Size(json[0], json[1]);
+  }
+
+  @override
+  List<double> toJson(Size object) {
+    return [object.width, object.height];
+  }
+}
+
+class AnchorPointConverter implements JsonConverter<AnchorPoint, List<double>> {
+  const AnchorPointConverter();
+
+  @override
+  AnchorPoint fromJson(List<double> json) {
+    return AnchorPoint(json[0], json[1]);
+  }
+
+  @override
+  List<double> toJson(AnchorPoint object) {
+    return [object.x, object.y];
+  }
+}
+
+class ColorConverter implements JsonConverter<Color, int> {
+  const ColorConverter();
+
+  @override
+  Color fromJson(int json) {
+    return Color(json);
+  }
+
+  @override
+  int toJson(Color object) {
+    return object.value;
+  }
+}
+
+Marker _$MarkerFromJson(Map<String, dynamic> json) => Marker(
+      id: json['markerId'] as String,
+      position: LatLng.fromJson((json['position'] as List<dynamic>)
+          .map((e) => (e as num).toDouble())
+          .toList()),
+      infoWindow: json['infoWindow'] as String?,
+      opacity: (json['alpha'] as num?)?.toDouble(),
+      size: _$JsonConverterFromJson<List<double>, Size>(
+          json['size'], const SizeConverter().fromJson),
+      flatten: json['flat'] as bool?,
+      captionText: json['captionText'] as String?,
+      captionTextSize: (json['captionTextSize'] as num?)?.toDouble(),
+      captionColor: _$JsonConverterFromJson<int, Color>(
+          json['captionColor'], const ColorConverter().fromJson),
+      captionStrokeColor: _$JsonConverterFromJson<int, Color>(
+          json['captionHaloColor'], const ColorConverter().fromJson),
+      maxZoom: (json['maxZoom'] as num?)?.toDouble(),
+      minZoom: (json['minZoom'] as num?)?.toDouble(),
+      angle: (json['angle'] as num?)?.toDouble(),
+      anchor: _$JsonConverterFromJson<List<double>, AnchorPoint>(
+          json['anchor'], const AnchorPointConverter().fromJson),
+      captionMaxWidth: (json['captionRequestedWidth'] as num?)?.toDouble(),
+      captionMaxZoom: (json['captionMaxZoom'] as num?)?.toDouble(),
+      captionMinZoom: (json['captionMinZoom'] as num?)?.toDouble(),
+      captionOffset: (json['captionOffset'] as num?)?.toDouble(),
+      captionPerspectiveEnabled: json['captionPerspectiveEnabled'] as bool?,
+      zIndex: json['zIndex'] as int?,
+      globalZIndex: json['globalZIndex'] as int?,
+      iconTintColor: _$JsonConverterFromJson<int, Color>(
+          json['iconTintColor'], const ColorConverter().fromJson),
+      subCaptionText: json['subCaptionText'] as String?,
+      subCaptionTextSize: (json['subCaptionTextSize'] as num?)?.toDouble(),
+      subCaptionColor: _$JsonConverterFromJson<int, Color>(
+          json['subCaptionColor'], const ColorConverter().fromJson),
+      subCaptionStrokeColor: _$JsonConverterFromJson<int, Color>(
+          json['subCaptionHaloColor'], const ColorConverter().fromJson),
+      subCaptionMaxWidth:
+          (json['subCaptionRequestedWidth'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$MarkerToJson(Marker instance) => <String, dynamic>{
+      'markerId': instance.id,
+      'infoWindow': instance.infoWindow,
+      'iconTintColor': _$JsonConverterToJson<int, Color>(
+          instance.iconTintColor, const ColorConverter().toJson),
+      'width': instance.size?.width,
+      'height': instance.size?.height,
+      'alpha': instance.opacity,
+      'flat': instance.flatten,
+      'anchor': _$JsonConverterToJson<List<double>, AnchorPoint>(
+          instance.anchor, const AnchorPointConverter().toJson),
+      'angle': instance.angle,
+      'captionText': instance.captionText,
+      'captionRequestedWidth': instance.captionMaxWidth,
+      'captionOffset': instance.captionOffset,
+      'captionColor': _$JsonConverterToJson<int, Color>(
+          instance.captionColor, const ColorConverter().toJson),
+      'captionHaloColor': _$JsonConverterToJson<int, Color>(
+          instance.captionStrokeColor, const ColorConverter().toJson),
+      'captionTextSize': instance.captionTextSize,
+      'position': instance.position.toJson(),
+      'subCaptionText': instance.subCaptionText,
+      'subCaptionTextSize': instance.subCaptionTextSize,
+      'subCaptionRequestedWidth': instance.subCaptionMaxWidth,
+      'subCaptionColor': _$JsonConverterToJson<int, Color>(
+          instance.subCaptionColor, const ColorConverter().toJson),
+      'subCaptionHaloColor': _$JsonConverterToJson<int, Color>(
+          instance.subCaptionStrokeColor, const ColorConverter().toJson),
+      'captionMaxZoom': instance.captionMaxZoom,
+      'captionMinZoom': instance.captionMinZoom,
+      'maxZoom': instance.maxZoom,
+      'minZoom': instance.minZoom,
+      'captionPerspectiveEnabled': instance.captionPerspectiveEnabled,
+      'zIndex': instance.zIndex,
+      'globalZIndex': instance.globalZIndex,
+    };

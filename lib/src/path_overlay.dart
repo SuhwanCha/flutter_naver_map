@@ -51,7 +51,7 @@ class PathOverlay extends Equatable {
     this.patternInterval = 50,
     this.progress = 0,
     this.width = 10,
-    this.onPathOverlayTab,
+    this.onPathOverlayTap,
   }) : assert(coords.length > 1, 'coords must have at least 2 elements');
 
   /// 기본 전역 Z 인덱스.
@@ -153,7 +153,7 @@ class PathOverlay extends Equatable {
   /// <br/>
   ///
   /// 탭 이벤트를 먹은 [PathOverlayId]를 반환합니다.
-  final OnPathOverlayTab? onPathOverlayTab;
+  final void Function(PathOverlayId pathOverlayId)? onPathOverlayTap;
 
   Map<String, dynamic> get json => {
         'pathOverlayId': pathOverlayId.value,
@@ -190,7 +190,7 @@ class PathOverlay extends Equatable {
     int? patternIntervalParams,
     double? progressParams,
     int? widthParams,
-    OnPathOverlayTab? onPathOverlayTabParams,
+    void Function(PathOverlayId pathOverlayId)? onPathOverlayTabParams,
   }) =>
       PathOverlay(
         pathOverlayId,
@@ -209,7 +209,7 @@ class PathOverlay extends Equatable {
         patternInterval: patternIntervalParams ?? patternInterval,
         progress: progressParams ?? progress,
         width: widthParams ?? width,
-        onPathOverlayTab: onPathOverlayTabParams ?? onPathOverlayTab,
+        onPathOverlayTap: onPathOverlayTabParams ?? onPathOverlayTap,
       );
 
   /// 같은 값을 지닌 새로운 [PathOverlay] 객체를 생성합니다.

@@ -27,11 +27,11 @@ class Convert {
     static void carveMapOptions(NaverMapOptionSink sink, Map<String, Object> options) {
         if (options.containsKey("mapType"))
             sink.setMapType((Integer) options.get("mapType"));
-        if (options.containsKey("liteModeEnable"))
+        if (options.containsKey("liteModeEnabled"))
             sink.setLiteModeEnable((Boolean) options.get("liteModeEnabled"));
-        if (options.containsKey("nightModeEnable"))
+        if (options.containsKey("nightModeEnabled"))
             sink.setNightModeEnable((Boolean) options.get("nightModeEnabled"));
-        if (options.containsKey("indoorEnable"))
+        if (options.containsKey("indoorEnabled"))
             sink.setIndoorEnable((Boolean) options.get("indoorEnabled"));
         if (options.containsKey("buildingHeight"))
             sink.setBuildingHeight((Double) options.get("buildingHeight"));
@@ -39,19 +39,19 @@ class Convert {
             sink.setSymbolScale((Double) options.get("symbolScale"));
         if (options.containsKey("symbolPerspectiveRatio"))
             sink.setSymbolPerspectiveRatio((Double) options.get("symbolPerspectiveRatio"));
-        if (options.containsKey("activeLayers"))
+        if (options.containsKey("layers"))
             sink.setActiveLayers((List) options.get("layers"));
-        if (options.containsKey("locationButtonEnable"))
+        if (options.containsKey("locationButtonEnabled"))
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnabled"));
-        if (options.containsKey("scrollGestureEnable"))
+        if (options.containsKey("scrollGestureEnabled"))
             sink.setScrollGestureEnable((Boolean) options.get("scrollGestureEnabled"));
-        if (options.containsKey("zoomGestureEnable"))
+        if (options.containsKey("zoomGestureEnabled"))
             sink.setZoomGestureEnable((Boolean) options.get("zoomGestureEnabled"));
-        if (options.containsKey("rotationGestureEnable"))
+        if (options.containsKey("rotationGestureEnabled"))
             sink.setRotationGestureEnable((Boolean) options.get("rotationGestureEnabled"));
-        if (options.containsKey("tiltGestureEnable"))
+        if (options.containsKey("tiltGestureEnabled"))
             sink.setTiltGestureEnable((Boolean) options.get("tiltGestureEnabled"));
-        if (options.containsKey("locationButtonEnable"))
+        if (options.containsKey("locationButtonEnabled"))
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnabled"));
         if (options.containsKey("locationTrackingMode"))
             sink.setLocationTrackingMode((Integer) options.get("locationTrackingMode"));

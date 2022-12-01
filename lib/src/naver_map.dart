@@ -1,52 +1,83 @@
-// ignore_for_file: prefer_constructors_over_static_methods
-
 part of flutter_naver_map;
 
 /// ### 네이버지도
 /// 네이버 지도는 네이버 SDK 를 flutter 에서 사용할 수 있게 하는 주요 widget 이다.
 class NaverMap extends StatefulWidget {
-  const NaverMap({
+  NaverMap({
     required this.controller,
     this.options = const NaverMapOptions(),
-    Key? key,
+    super.key,
     this.onMapCreated,
-    this.onMapTap,
-    this.onMapLongTap,
-    this.onMapDoubleTap,
-    this.onMapTwoFingerTap,
+    this.onTap,
+    this.onLongPress,
+    this.onDoubleTap,
+    this.onTwoFingerTap,
     this.onSymbolTap,
     this.onCameraChange,
-    this.onCameraIdle,
+    this.onCameraChangeStop,
     this.pathOverlays,
     this.contentPadding,
     this.markers = const [],
     this.circles = const [],
     this.polygons = const [],
-  }) : super(key: key);
+  });
 
+  /// [NaverMapController] for controlling the [NaverMap].
   final NaverMapController controller;
 
-  /// 지도가 완전히 만들어진 후에 컨트롤러를 파라미터로 가지는 콜백.
-  /// 해당 콜백이 호출되기 전에는 지도가 만들어지는 중이다.
-  final MapCreateCallback? onMapCreated;
-
-  /// 지도를 탭했을때 호출되는 콜백함수.
+  /// Called when the map is created.
   ///
+  /// The [NaverMapController] hasn't been initialized before this callback is
+  /// called.
+  final void Function()? onMapCreated;
+
+  /// Called when tap gesture is detected.
   ///
-  /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
-  final OnMapTap? onMapTap;
+  /// The position at which the pointer contacted the screen is available in the
+  /// [LatLng].
+  final void Function(LatLng latLng)? onTap;
 
-  /// ### 지도를 롱 탭했을때 호출되는 콜백함수. (Android only)
+  /// Called when a long press gesture is detected.
   ///
-  /// 사용자가 선택한 지점의 [LatLng]을 파라미터로 가진다.
-  final OnMapLongTap? onMapLongTap;
+  /// This callback is available only for Android.
+  ///
+  /// Triggered when a pointer has remained in contact with the screen at the
+  /// same location for a long period of time.
+  ///
+  /// The position at which the pointer contacted the screen is available in the
+  /// [LatLng].
+  final void Function(LatLng latlng)? onLongPress;
 
-  /// 카메라가 움직일때 호출되는 콜백
-  final OnCameraChange? onCameraChange;
+  /// Called when camera position is changed.
+  ///
+  /// [onCameraChange] is called with the [LatLng] of the camera position,
+  /// [CameraUpdatedReason] of the camera update, and [bool] of the camera
+  /// animation.
+  final void Function(
+    LatLng? latlng,
+    CameraUpdatedReason reason,
+    bool? isAnimated,
+  )? onCameraChange;
 
-  /// 카메라의 움직임이 완료되었을때 호출되는 콜백
-  final VoidCallback? onCameraIdle;
+  /// Called when camera position is stop changed.
+  final VoidCallback? onCameraChangeStop;
 
+  /// Called when a double tap gesture is detected.
+  ///
+  /// Only available on Android.
+  final void Function(LatLng latlng)? onDoubleTap;
+
+  /// Called when a two finger tap gesture is detected.
+  ///
+  /// Only available on Android.
+  final void Function(LatLng latLng)? onTwoFingerTap;
+
+  /// Called when a symbol is tapped.
+  ///
+  /// It is called when building or something is tapped.
+  final void Function(LatLng? position, String? caption)? onSymbolTap;
+
+  /// Options to configure the [NaverMap].
   final NaverMapOptions options;
 
   /// 지도에 표시될 마커의 리스트입니다.
@@ -61,31 +92,23 @@ class NaverMap extends StatefulWidget {
   /// 지도에 표시될 [PolygonOverlay]의 [List]입니다.
   final List<PolygonOverlay> polygons;
 
-  /// 지도가 더블탭될때 콜백되는 메서드. (Android only)
-  final OnMapDoubleTap? onMapDoubleTap;
-
-  /// 지도가 두 손가락으로 탭 되었을때 호출되는 콜백 메서드. (Android only)
-  final OnMapTwoFingerTap? onMapTwoFingerTap;
-
-  /// <h2>심볼 탭 이벤트</h2>
-  /// <p>빌딩을 나타내는 심볼이나, 공공시설을 표시하는 심볼등을 선택했을 경우 호출된다.</p>
-  final OnSymbolTap? onSymbolTap;
-
   /// ## 콘텐트 패딩
   /// Stack 구조의 화면에서 지도 상에 UI요소가 지도의 일부를 덮을 경우, 카메라는 지도
   /// 뷰의 중심에 위치하므로 실제 보이는 지도의 중심과 카메라의 위치가 불일치하게 됩니다.
   final EdgeInsets? contentPadding;
+
+  final _cameraStreamController = StreamController<bool>.broadcast();
 
   @override
   NaverMapState createState() => NaverMapState();
 }
 
 class NaverMapState extends State<NaverMap> {
-  late int viewId;
   Map<String, Marker> _markers = <String, Marker>{};
   Map<String, CircleOverlay> _circles = <String, CircleOverlay>{};
   Map<PathOverlayId, PathOverlay> _paths = <PathOverlayId, PathOverlay>{};
   Map<String, PolygonOverlay> _polygons = <String, PolygonOverlay>{};
+  late MethodChannel _channel;
 
   @override
   void initState() {
@@ -97,11 +120,95 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> onPlatformViewCreated(int id) async {
-    viewId = id;
-    await widget.controller.init(id, this);
+    _channel = MethodChannel('${viewType}_$id');
+    await _channel.invokeMethod<void>('map#waitForMap');
+    _channel.setMethodCallHandler(_handleMethodCall);
+
+    await widget.controller.init(_channel, widget._cameraStreamController);
     // TODO(suhwancha): request permission if needed
 
     widget.onMapCreated?.call();
+  }
+
+  Future<dynamic> _handleMethodCall(MethodCall call) {
+    Map<String, dynamic>? arguments;
+    try {
+      arguments =
+          Map<String, dynamic>.from(call.arguments as Map<Object?, Object?>);
+    } catch (e) {
+      arguments = null;
+    }
+
+    switch (call.method) {
+      case 'map#clearMapView':
+        clearMapView();
+        break;
+      case 'marker#onTap':
+        assert(arguments!['markerId'] != null, 'markerId is null');
+        final markerId = arguments!['markerId']! as String;
+        final iconWidth = arguments['iconWidth'] as int?;
+        final iconHeight = arguments['iconHeight'] as int?;
+        _markerTapped(markerId, iconWidth, iconHeight);
+        break;
+      case 'path#onTap':
+        assert(arguments!['pathId'] != null, 'pathId is null');
+        final pathId = arguments!['pathId']! as String;
+        _pathOverlayTapped(pathId);
+        break;
+      case 'circle#onTap':
+        assert(arguments!['circleId'] != null, 'circleId is null');
+        final overlayId = arguments!['overlayId']! as String;
+        _circleOverlayTapped(overlayId);
+        break;
+      case 'polygon#onTap':
+        assert(arguments!['polygonId'] != null, 'polygonId is null');
+        final overlayId = arguments!['polygonOverlayId']! as String;
+        _polygonOverlayTapped(overlayId);
+        break;
+      case 'map#onTap':
+        final latLng = LatLng.fromArguments(arguments!);
+        widget.onTap?.call(latLng);
+        break;
+      case 'map#onLongTap':
+        final latLng = LatLng.fromArguments(arguments!);
+        widget.onLongPress?.call(latLng);
+        break;
+      case 'map#onMapDoubleTap':
+        final latLng = LatLng.fromArguments(arguments!);
+        widget.onDoubleTap?.call(latLng);
+        break;
+      case 'map#onMapTwoFingerTap':
+        final latLng = LatLng.fromArguments(arguments!);
+        widget.onTwoFingerTap?.call(latLng);
+        break;
+      case 'map#onSymbolClick':
+        final latLng = LatLng.fromArguments(arguments!);
+        final caption = arguments['caption'] as String?;
+        widget.onSymbolTap?.call(latLng, caption);
+        break;
+      case 'camera#move':
+        assert(arguments!['reason'] != null, 'reason is null');
+        final position = LatLng.fromArguments(arguments!);
+        final reason = CameraUpdatedReason.values[arguments['reason']! as int];
+        final isAnimated = arguments['animated'] as bool?;
+        widget.onCameraChange?.call(position, reason, isAnimated);
+        break;
+      case 'camera#idle':
+        widget._cameraStreamController.add(true);
+        widget.onCameraChangeStop?.call();
+        break;
+      case 'snapshot#done':
+        // if (_onSnapShotDone != null) {
+        //   _onSnapShotDone!(arguments!['path'] as String?);
+        //   _onSnapShotDone = null;
+        // }
+        break;
+    }
+    return Future<void>.value();
+  }
+
+  Future<void> clearMapView() async {
+    await _channel.invokeMethod<List<dynamic>>('map#clearMapView');
   }
 
   @override
@@ -141,70 +248,68 @@ class NaverMapState extends State<NaverMap> {
   @override
   void didUpdateWidget(NaverMap oldWidget) {
     super.didUpdateWidget(oldWidget);
-    widget.controller.init(viewId, this);
-    // _updateOptions();
+    if (!widget.controller.isInitialized) {
+      widget.controller.init(_channel, widget._cameraStreamController);
+    }
+    _updateOptions();
     _updateMarkers();
     _updatePathOverlay();
     _updateCircleOverlay();
     _updatePolygonOverlay();
   }
 
-  // Future<void> _updateOptions() async {
-  //   final newOption = _NaverMapOptions.fromWidget(widget);
-  //   final updates = _naverMapOptions.updatesMap(newOption);
-  //   if (updates.isEmpty) return;
-  //   final controller = widget.controller;
-  //   await controller._updateMapOptions(updates);
-  //   _naverMapOptions = newOption;
-  // }
+  Future<void> _updateOptions() async {
+    final controller = widget.controller;
+    await controller.update(widget.options);
+  }
 
   Future<void> _updateMarkers() async {
-    final controller = widget.controller;
-    await controller._updateMarkers(
+    await _channel.invokeMethod<void>(
+      'markers#update',
       _MarkerUpdates.from(
         _markers.values.toSet(),
         widget.markers.toSet(),
-      ),
+      )._toMap(),
     );
     _markers = _keyByMarkerId(widget.markers);
   }
 
   Future<void> _updatePathOverlay() async {
-    final controller = widget.controller;
-    await controller._updatePathOverlay(
+    await _channel.invokeMethod(
+      'pathOverlay#update',
       _PathOverlayUpdates.from(
         _paths.values.toSet(),
         widget.pathOverlays?.toSet(),
-      ),
+      )._toMap(),
     );
     _paths = _keyByPathOverlayId(widget.pathOverlays);
   }
 
   Future<void> _updateCircleOverlay() async {
-    final controller = widget.controller;
-    await controller._updateCircleOverlay(
+    await _channel.invokeMethod(
+      'circleOverlay#update',
       _CircleOverlayUpdate.from(
         _circles.values.toSet(),
         widget.circles.toSet(),
-      ),
+      )._toMap(),
     );
     _circles = _keyByCircleId(widget.circles);
   }
 
   Future<void> _updatePolygonOverlay() async {
-    final controller = widget.controller;
-    await controller._updatePolygonOverlay(
+    await _channel.invokeMethod(
+      'polygonOverlay#update',
       _PolygonOverlayUpdate.from(
         _polygons.values.toSet(),
         widget.polygons.toSet(),
-      ),
+      )._toMap(),
     );
     _polygons = _keyByPolygonId(widget.polygons);
   }
 
   void _markerTapped(String markerId, int? iconWidth, int? iconHeight) {
-    if (_markers[markerId]?.onMarkerTab != null) {
-      _markers[markerId]!.onMarkerTab!(
+    if (_markers[markerId]?.onTap != null) {
+      _markers[markerId]!.onTap!(
         _markers[markerId],
         <String, int?>{'width': iconWidth, 'height': iconHeight},
       );
@@ -213,8 +318,8 @@ class NaverMapState extends State<NaverMap> {
 
   void _pathOverlayTapped(String pathId) {
     final pathOverlayId = PathOverlayId(pathId);
-    if (_paths[pathOverlayId]?.onPathOverlayTab != null) {
-      _paths[pathOverlayId]!.onPathOverlayTab!(pathOverlayId);
+    if (_paths[pathOverlayId]?.onPathOverlayTap != null) {
+      _paths[pathOverlayId]!.onPathOverlayTap!(pathOverlayId);
     }
   }
 
@@ -228,41 +333,5 @@ class NaverMapState extends State<NaverMap> {
     if (_polygons[overlayId]?.onTap != null) {
       _polygons[overlayId]!.onTap!(overlayId);
     }
-  }
-
-  void _mapTap(LatLng position) {
-    widget.onMapTap?.call(position);
-  }
-
-  void _mapLongTap(LatLng position) {
-    widget.onMapLongTap?.call(position);
-  }
-
-  void _mapDoubleTap(LatLng position) {
-    widget.onMapDoubleTap?.call(position);
-  }
-
-  void _mapTwoFingerTap(LatLng position) {
-    widget.onMapTwoFingerTap?.call(position);
-  }
-
-  void _symbolTab(LatLng? position, String? caption) {
-    assert(
-      position != null && caption != null,
-      'position and caption must not be null',
-    );
-    widget.onSymbolTap?.call(position, caption);
-  }
-
-  void _cameraMove(
-    LatLng? position,
-    CameraUpdatedReason reason,
-    bool? isAnimated,
-  ) {
-    widget.onCameraChange?.call(position, reason, isAnimated);
-  }
-
-  void _cameraIdle() {
-    widget.onCameraIdle?.call();
   }
 }

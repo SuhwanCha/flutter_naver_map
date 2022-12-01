@@ -12,6 +12,11 @@ class LatLng extends Equatable {
   factory LatLng.fromJson(List<double> json) =>
       const LatLngConverter().fromJson(json);
 
+  factory LatLng.fromArguments(Map<String, dynamic> arguments) {
+    final position = arguments['position'] as List<Object?>;
+    return LatLng(position[0]! as double, position[1]! as double);
+  }
+
   List<double> toJson() => const LatLngConverter().toJson(this);
 
   /// Latitude
