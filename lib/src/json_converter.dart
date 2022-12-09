@@ -1,3 +1,5 @@
+// ignore_for_file: require_trailing_commas
+
 part of flutter_naver_map;
 
 class OffsetConverter implements JsonConverter<Offset, List<double>> {
@@ -257,6 +259,7 @@ Map<String, dynamic> _$MarkerToJson(Marker instance) => <String, dynamic>{
       'subCaptionRequestedWidth': instance.subCaptionMaxWidth,
       'subCaptionColor': _$JsonConverterToJson<int, Color>(
           instance.subCaptionColor, const ColorConverter().toJson),
+      'icon': instance.icon?.key.name,
       'subCaptionHaloColor': _$JsonConverterToJson<int, Color>(
           instance.subCaptionStrokeColor, const ColorConverter().toJson),
       'captionMaxZoom': instance.captionMaxZoom,

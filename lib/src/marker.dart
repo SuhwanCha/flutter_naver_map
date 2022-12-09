@@ -369,10 +369,8 @@ List<Map<String, dynamic>>? _serializeMarkerSet(Iterable<Marker?>? markers) {
   if (markers == null) {
     return null;
   }
-  return null;
-  // return markers
-  //     .map<Map<String, dynamic>>((Marker? m) => m!.to())
-  //     .toList();
+  // return null;
+  return markers.map<Map<String, dynamic>>((Marker? m) => m!.toJson()).toList();
 }
 
 Map<String, Marker> _keyByMarkerId(Iterable<Marker> markers) {
