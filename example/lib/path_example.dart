@@ -36,7 +36,12 @@ class _PathExampleState extends State<PathExample> {
               //     as String,
               '${i++}',
               (elem as List<dynamic>)
-                  .map((e) => LatLng(e[1] as double, e[0] as double))
+                  .map(
+                    (e) => LatLng(
+                      (e as List<dynamic>)[1] as double,
+                      e[0] as double,
+                    ),
+                  )
                   .toList(),
               outlineColor: Colors.indigoAccent,
               outlineWidth: 3,

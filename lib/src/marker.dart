@@ -76,7 +76,6 @@ class Marker extends Equatable {
   ///
   /// Example: `Size(25, 40)`
   /// ![size](https://navermaps.github.io/ios-map-sdk/assets/5-2-resize.png)
-  // TODO(suhwancha): implement json converter and prune wid and height
   @SizeConverter()
   final Size? size;
 
@@ -251,46 +250,6 @@ class Marker extends Equatable {
   ///
   /// 기본값은 DEFAULT_GLOBAL_Z_INDEX입니다
   final int? globalZIndex;
-
-  // Map<String, dynamic> _toJson() {
-  //   final json = <String, dynamic>{};
-
-  //   void addIfPresent(String fieldName, dynamic value) {
-  //     if (value != null) {
-  //       json[fieldName] = value;
-  //     }
-  //   }
-
-  //   addIfPresent('markerId', id);
-  //   addIfPresent('alpha', opacity);
-  //   addIfPresent('flat', flatten);
-  //   addIfPresent('position', position.toJson());
-  //   addIfPresent('captionText', captionText);
-  //   addIfPresent('captionTextSize', captionTextSize);
-  //   addIfPresent('captionColor', captionColor?.value);
-  //   addIfPresent('captionHaloColor', captionStrokeColor?.value);
-  //   addIfPresent('maxZoom', maxZoom);
-  //   addIfPresent('minZoom', minZoom);
-  //   addIfPresent('angle', angle);
-  //   addIfPresent('captionRequestedWidth', captionMaxWidth);
-  //   addIfPresent('captionMaxZoom', captionMaxZoom);
-  //   addIfPresent('captionMinZoom', captionMinZoom);
-  //   addIfPresent('captionOffset', captionOffset);
-  //   addIfPresent('captionPerspectiveEnabled', captionPerspectiveEnabled);
-  //   addIfPresent('zIndex', zIndex);
-  //   addIfPresent('globalZIndex', globalZIndex);
-  //   addIfPresent('iconTintColor', iconTintColor?.value);
-  //   addIfPresent('subCaptionText', subCaptionText);
-  //   addIfPresent('subCaptionTextSize', subCaptionTextSize);
-  //   addIfPresent('subCaptionColor', subCaptionColor?.value);
-  //   addIfPresent('subCaptionHaloColor', subCaptionStrokeColor?.value);
-  //   addIfPresent('subCaptionRequestedWidth', subCaptionMaxWidth);
-  //   addIfPresent('icon', icon?.key.name);
-  //   addIfPresent('infoWindow', infoWindow);
-  //   addIfPresent('anchor', anchor?._json);
-  //   print(json);
-  //   return json;
-  // }
 
   /// 같은 값을 가진 새로운 Maker 객체를 반환한다.
   Marker clone() {
