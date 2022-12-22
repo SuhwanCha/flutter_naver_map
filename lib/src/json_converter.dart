@@ -151,17 +151,17 @@ class LocationTrackingModeConverter
   }
 }
 
-class SizeConverter implements JsonConverter<Size, List<double>> {
+class SizeConverter implements JsonConverter<Size, List<int>> {
   const SizeConverter();
 
   @override
-  Size fromJson(List<double> json) {
-    return Size(json[0], json[1]);
+  Size fromJson(List<int> json) {
+    return Size(json[0].toDouble(), json[1].toDouble());
   }
 
   @override
-  List<double> toJson(Size object) {
-    return [object.width, object.height];
+  List<int> toJson(Size object) {
+    return [object.width.toInt(), object.height.toInt()];
   }
 }
 
@@ -200,7 +200,7 @@ Marker _$MarkerFromJson(Map<String, dynamic> json) => Marker(
           .toList()),
       infoWindow: json['infoWindow'] as String?,
       opacity: (json['alpha'] as num?)?.toDouble(),
-      size: _$JsonConverterFromJson<List<double>, Size>(
+      size: _$JsonConverterFromJson<List<int>, Size>(
           json['size'], const SizeConverter().fromJson),
       flatten: json['flat'] as bool?,
       captionText: json['captionText'] as String?,
@@ -238,8 +238,8 @@ Map<String, dynamic> _$MarkerToJson(Marker instance) => <String, dynamic>{
       'infoWindow': instance.infoWindow,
       'iconTintColor': _$JsonConverterToJson<int, Color>(
           instance.iconTintColor, const ColorConverter().toJson),
-      'width': instance.size?.width,
-      'height': instance.size?.height,
+      'width': instance.size?.width.toInt(),
+      'height': instance.size?.height.toInt(),
       'alpha': instance.opacity,
       'flat': instance.flatten,
       'anchor': _$JsonConverterToJson<List<double>, AnchorPoint>(

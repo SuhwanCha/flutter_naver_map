@@ -233,6 +233,11 @@ public class NaverMapController implements
                 result.success(true);
             }
             break;
+            case "map#updatePaths": {
+                pathsController.set(methodCall.argument("paths"));
+                result.success(true);
+            }
+            break;
             case "map#getVisibleRegion": {
                 if (naverMap != null) {
                     LatLngBounds latLngBounds = naverMap.getContentBounds();

@@ -56,11 +56,24 @@ class NaverMapController {
   }
 
   /// Updates the options on the map.
-  Future<void> update(NaverMapOptions options) async {
+  Future<void> updateOptions(NaverMapOptions options) async {
     return _channel?.invokeMethod(
       'map#update',
       <String, dynamic>{
         'options': options.toJson(),
+      },
+    );
+  }
+
+  /// Updates the paths on the map.
+  Future<void> updatePaths(Set<PathOverlay> paths) async {
+    return _channel?.invokeMethod(
+      'pathOverlay#update',
+      <String, dynamic>{
+        'paths': _PathOverlayUpdates.from(
+          const <PathOverlay>{},
+          paths.toSet(),
+        )._toMap(),
       },
     );
   }

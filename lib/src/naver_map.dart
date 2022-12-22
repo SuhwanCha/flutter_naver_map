@@ -260,7 +260,7 @@ class NaverMapState extends State<NaverMap> {
 
   Future<void> _updateOptions() async {
     final controller = widget.controller;
-    await controller.update(widget.options);
+    await controller.updateOptions(widget.options);
   }
 
   Future<void> _updateMarkers() async {
