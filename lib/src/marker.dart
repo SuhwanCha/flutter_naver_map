@@ -251,6 +251,54 @@ class Marker extends Equatable {
   /// 기본값은 DEFAULT_GLOBAL_Z_INDEX입니다
   final int? globalZIndex;
 
+  //copy with
+  Marker copyWith({
+    LatLng? position,
+    String? id,
+    double? opacity,
+    Size? size,
+    double? angle,
+    Color? captionColor,
+    Color? captionStrokeColor,
+    double? captionMaxZoom,
+    double? captionMinZoom,
+    double? captionOffset,
+    bool? captionPerspectiveEnabled,
+    double? captionMaxWidth,
+    String? captionText,
+    double? captionTextSize,
+    bool? flatten,
+    int? zIndex,
+    int? globalZIndex,
+    Color? iconTintColor,
+    double? maxZoom,
+    double? minZoom,
+  }) {
+    return Marker(
+      position: position ?? this.position,
+      id: id ?? this.id,
+      opacity: opacity ?? this.opacity,
+      size: size ?? this.size,
+      angle: angle ?? this.angle,
+      captionColor: captionColor ?? this.captionColor,
+      captionStrokeColor: captionStrokeColor ?? this.captionStrokeColor,
+      captionMaxZoom: captionMaxZoom ?? this.captionMaxZoom,
+      captionMinZoom: captionMinZoom ?? this.captionMinZoom,
+      captionOffset: captionOffset ?? this.captionOffset,
+      captionPerspectiveEnabled:
+          captionPerspectiveEnabled ?? this.captionPerspectiveEnabled,
+      captionMaxWidth: captionMaxWidth ?? this.captionMaxWidth,
+      captionText: captionText ?? this.captionText,
+      captionTextSize: captionTextSize ?? this.captionTextSize,
+      flatten: flatten ?? this.flatten,
+      zIndex: zIndex ?? this.zIndex,
+      globalZIndex: globalZIndex ?? this.globalZIndex,
+      iconTintColor: iconTintColor ?? this.iconTintColor,
+      maxZoom: maxZoom ?? this.maxZoom,
+      minZoom: minZoom ?? this.minZoom,
+    );
+  }
+
   /// 같은 값을 가진 새로운 Maker 객체를 반환한다.
   Marker clone() {
     return Marker(
