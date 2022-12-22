@@ -143,7 +143,7 @@ class NaverMarkerController {
             if (angle != null) marker.setAngle(Convert.toFloat(angle));
 
             final Object captionRequestedWidth = json.get("captionRequestedWidth");
-            if (captionRequestedWidth != null) marker.setCaptionRequestedWidth((int) captionRequestedWidth);
+            if (captionRequestedWidth != null) marker.setCaptionRequestedWidth((int)((double) captionRequestedWidth));
 
             final Object captionMaxZoom = json.get("captionMaxZoom");
             if (captionMaxZoom != null) marker.setCaptionMaxZoom((double) captionMaxZoom);
@@ -152,7 +152,7 @@ class NaverMarkerController {
             if (captionMinZoom != null) marker.setCaptionMinZoom((double) captionMinZoom);
 
             final Object captionOffset = json.get("captionOffset");
-            if (captionOffset != null) marker.setCaptionOffset(Math.round((int) captionOffset * density));
+            if (captionOffset != null) marker.setCaptionOffset(Math.round((int)((double) captionOffset) * density));
 
             final Object captionPerspectiveEnabled = json.get("captionPerspectiveEnabled");
             if (captionPerspectiveEnabled != null)
@@ -182,7 +182,7 @@ class NaverMarkerController {
 
             final Object subCaptionRequestedWidth = json.get("subCaptionRequestedWidth");
             if (subCaptionRequestedWidth != null)
-                marker.setSubCaptionRequestedWidth(Math.round((int)subCaptionRequestedWidth * NaverMarkerController.this.density));
+                marker.setSubCaptionRequestedWidth(Math.round((int)((double)subCaptionRequestedWidth) * NaverMarkerController.this.density));
 
             final Object icon = json.get("icon");
             if (icon != null) marker.setIcon(Convert.toOverlayImage(icon));
