@@ -124,7 +124,8 @@ class NaverMapState extends State<NaverMap> {
     await _channel.invokeMethod<void>('map#waitForMap');
     _channel.setMethodCallHandler(_handleMethodCall);
 
-    await widget.controller.init(_channel, widget._cameraStreamController);
+    await widget.controller
+        .init(_channel, widget._cameraStreamController, widget.markers);
     // TODO(suhwancha): request permission if needed
 
     widget.onMapCreated?.call();
@@ -249,7 +250,11 @@ class NaverMapState extends State<NaverMap> {
   void didUpdateWidget(NaverMap oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!widget.controller.isInitialized) {
-      widget.controller.init(_channel, widget._cameraStreamController);
+      widget.controller.init(
+        _channel,
+        widget._cameraStreamController,
+        widget.markers,
+      );
     }
     _updateOptions();
     _updateMarkers();

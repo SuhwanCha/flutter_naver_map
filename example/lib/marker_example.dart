@@ -79,15 +79,36 @@ class _MarkerExampleState extends State<MarkerExample> {
   Widget build(BuildContext context) {
     final mapController = NaverMapController();
 
-    return NaverMap(
-      controller: mapController,
-      options: const NaverMapOptions(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(37.52504866440145, 127.03169168035946),
-          zoom: 14,
+    return Column(
+      children: [
+        Expanded(
+          child: NaverMap(
+            controller: mapController,
+            options: const NaverMapOptions(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(37.52504866440145, 127.03169168035946),
+                zoom: 14,
+              ),
+            ),
+            markers: _markers,
+          ),
         ),
-      ),
-      markers: _markers,
+        ElevatedButton(
+          onPressed: () async {
+            // remove last marker
+            _markers
+              ..removeLast()
+              ..add(
+                const Marker(
+                  id: '2',
+                  position: LatLng(37.62535248909687, 127.02881618354651),
+                ),
+              );
+            await mapController.updateMarkers(_markers);
+          },
+          child: const Icon(Icons.ac_unit_sharp),
+        )
+      ],
     );
   }
 }

@@ -9,16 +9,20 @@ class NaverMapController {
 
   bool get isInitialized => _channel != null;
 
+  Map<String, Marker> _markers = <String, Marker>{};
+
   /// [StreamController] to emit events from the native side.
   late final StreamController<bool> _cameraStreamController;
 
   Future<void> init(
     MethodChannel channel,
     StreamController<bool> streamController,
+    List<Marker> markers,
   ) async {
     _channel = channel;
     _cameraStreamController = streamController;
     locationOverlay = LocationOverlay(this);
+    _markers = _keyByMarkerId(markers);
   }
 
   Future<void> moveCamera({
@@ -63,6 +67,19 @@ class NaverMapController {
         'options': options.toJson(),
       },
     );
+  }
+
+  /// Updates the markers on the map.
+  Future<void> updateMarkers(List<Marker> markers) async {
+    await _channel?.invokeMethod(
+      'markers#update',
+      _MarkerUpdates.from(
+        _markers.values.toSet(),
+        markers.toSet(),
+      )._toMap(),
+    );
+    _markers = _keyByMarkerId(markers);
+    return;
   }
 
   /// Updates the paths on the map.

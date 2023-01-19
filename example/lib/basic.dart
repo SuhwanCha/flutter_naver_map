@@ -27,7 +27,7 @@ class BasicExmaple extends StatelessWidget {
         Positioned(
           child: ElevatedButton(
             onPressed: () async {
-              await mapController.update(
+              await mapController.updateOptions(
                 NaverMapOptions(
                   layers: [],
                   mapType: MapType.navi,
