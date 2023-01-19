@@ -1,75 +1,70 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_naver_map/flutter_naver_map.dart';
 
-class PathExample extends StatefulWidget {
+class PathExample extends StatelessWidget {
   const PathExample({super.key});
 
   @override
-  State<PathExample> createState() => _PathExampleState();
-}
-
-class _PathExampleState extends State<PathExample> {
-  List<PolygonOverlay> polygon = <PolygonOverlay>[];
-
-  @override
-  void initState() {
-    super.initState();
-    DefaultAssetBundle.of(context)
-        .loadString('assets/TL_SCCO_SIG.json')
-        .then((data) {
-      var i = 0;
-      final jsonResult = jsonDecode(data) as Map<String, dynamic>;
-      final features = jsonResult['features'] as List<dynamic>;
-      for (final element in features) {
-        element as Map<String, dynamic>;
-
-        final geometry = element['geometry'] as Map<String, dynamic>;
-
-        final coords = geometry['coordinates'] as List<dynamic>;
-
-        for (final elem in coords) {
-          polygon.add(
-            PolygonOverlay(
-              // (element['properties'] as Map<String, dynamic>)['SIG_ENG_NM']
-              //     as String,
-              '${i++}',
-              (elem as List<dynamic>)
-                  .map(
-                    (e) => LatLng(
-                      (e as List<dynamic>)[1] as double,
-                      e[0] as double,
-                    ),
-                  )
-                  .toList(),
-              outlineColor: Colors.indigoAccent,
-              outlineWidth: 3,
-              color: Colors.white.withOpacity(0.2),
-            ),
-          );
-        }
-      }
-
-      setState(() {});
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final controller = NaverMapController();
-    return NaverMap(
-      controller: controller,
-      options: NaverMapOptions(
-        layers: [],
-        initialCameraPosition: const CameraPosition(
-          target: LatLng(37.56823358823172, 126.9838688358965),
-          zoom: 6,
+    final naverMapController = NaverMapController();
+    return Column(
+      children: [
+        Expanded(
+          child: NaverMap(
+            controller: naverMapController,
+            options: const NaverMapOptions(
+              initialCameraPosition: CameraPosition(
+                target: LatLng(37.5666102, 126.9753881),
+              ),
+            ),
+            pathOverlays: <PathOverlay>{
+              PathOverlay(
+                const PathOverlayId('1'),
+                const <LatLng>[
+                  LatLng(37.5656102, 126.9783881),
+                  LatLng(37.5666102, 126.9783881),
+                  LatLng(37.5676102, 126.9793881),
+                  LatLng(37.5686102, 126.9793881),
+                ],
+                color: Colors.red,
+                outlineColor: Colors.red,
+                outlineWidth: 3,
+              ),
+              PathOverlay(
+                const PathOverlayId('2'),
+                const <LatLng>[
+                  LatLng(37.5666102, 126.9753881),
+                  LatLng(37.5656102, 126.9763881),
+                  LatLng(37.5656102, 126.9773881),
+                  LatLng(37.5666102, 126.9783881),
+                ],
+                color: Colors.blue,
+                outlineColor: Colors.blue,
+                outlineWidth: 3,
+              ),
+            },
+          ),
         ),
-        mapType: MapType.navi,
-        nightModeEnabled: true,
-      ),
-      polygons: polygon,
+        ElevatedButton(
+          onPressed: () {
+            naverMapController.updatePaths([
+              PathOverlay(
+                const PathOverlayId('2'),
+                const <LatLng>[
+                  LatLng(37.5766102, 126.9753881),
+                  LatLng(37.5756102, 126.9763881),
+                  LatLng(37.5756102, 126.9773881),
+                  LatLng(37.5766102, 126.9783881),
+                ],
+                color: Colors.amber,
+                outlineColor: Colors.amber,
+                outlineWidth: 3,
+              )
+            ]);
+          },
+          child: const Text('Add Path'),
+        ),
+      ],
     );
   }
 }

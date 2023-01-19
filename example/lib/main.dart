@@ -1,4 +1,4 @@
-import 'package:example/marker_example.dart';
+import 'package:example/path_example.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -30,7 +30,7 @@ class FlutterNaverMapExampleScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Flutter Naver Map Example'),
       ),
-      body: const MarkerExample(),
+      body: const PathExample(),
     );
   }
 }
