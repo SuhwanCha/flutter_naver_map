@@ -86,7 +86,7 @@ class NaverMapController {
   }
 
   /// Updates the paths on the map.
-  Future<void> updatePaths(List<PathOverlay> paths) async {
+  Future<void> updatePaths(Set<PathOverlay> paths) async {
     await _channel?.invokeMethod(
       'pathOverlay#update',
       _PathOverlayUpdates.from(
