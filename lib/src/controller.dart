@@ -10,6 +10,7 @@ class NaverMapController {
   bool get isInitialized => _channel != null;
 
   Map<String, Marker> _markers = <String, Marker>{};
+  Map<PathOverlayId, PathOverlay> _paths = <PathOverlayId, PathOverlay>{};
 
   /// [StreamController] to emit events from the native side.
   late final StreamController<bool> _cameraStreamController;
@@ -18,11 +19,13 @@ class NaverMapController {
     MethodChannel channel,
     StreamController<bool> streamController,
     List<Marker> markers,
+    Set<PathOverlay> paths,
   ) async {
     _channel = channel;
     _cameraStreamController = streamController;
     locationOverlay = LocationOverlay(this);
     _markers = _keyByMarkerId(markers);
+    _paths = _keyByPathOverlayId(paths);
   }
 
   Future<void> moveCamera({
@@ -84,13 +87,15 @@ class NaverMapController {
 
   /// Updates the paths on the map.
   Future<void> updatePaths(List<PathOverlay> paths) async {
-    return _channel?.invokeMethod(
+    await _channel?.invokeMethod(
       'pathOverlay#update',
       _PathOverlayUpdates.from(
-        const {},
+        _paths.values.toSet(),
         paths.toSet(),
       )._toMap(),
     );
+    _paths = _keyByPathOverlayId(paths);
+    return;
   }
 
   /// 네이버 맵 위젯의 메모리 할당을 해제합니다

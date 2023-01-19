@@ -15,7 +15,7 @@ class NaverMap extends StatefulWidget {
     this.onSymbolTap,
     this.onCameraChange,
     this.onCameraChangeStop,
-    this.pathOverlays,
+    this.pathOverlays = const {},
     this.contentPadding,
     this.markers = const [],
     this.circles = const [],
@@ -84,7 +84,7 @@ class NaverMap extends StatefulWidget {
   final List<Marker> markers;
 
   /// 지도에 표시될 [PathOverlay]의 [Set] 입니다..
-  final Set<PathOverlay>? pathOverlays;
+  final Set<PathOverlay> pathOverlays;
 
   /// 지도에 표시될 [CircleOverlay]의 [List]입니다.
   final List<CircleOverlay> circles;
@@ -124,8 +124,12 @@ class NaverMapState extends State<NaverMap> {
     await _channel.invokeMethod<void>('map#waitForMap');
     _channel.setMethodCallHandler(_handleMethodCall);
 
-    await widget.controller
-        .init(_channel, widget._cameraStreamController, widget.markers);
+    await widget.controller.init(
+      _channel,
+      widget._cameraStreamController,
+      widget.markers,
+      widget.pathOverlays,
+    );
     // TODO(suhwancha): request permission if needed
 
     widget.onMapCreated?.call();
@@ -254,6 +258,7 @@ class NaverMapState extends State<NaverMap> {
         _channel,
         widget._cameraStreamController,
         widget.markers,
+        widget.pathOverlays,
       );
     }
     _updateOptions();
@@ -284,7 +289,7 @@ class NaverMapState extends State<NaverMap> {
       'pathOverlay#update',
       _PathOverlayUpdates.from(
         _paths.values.toSet(),
-        widget.pathOverlays?.toSet(),
+        widget.pathOverlays.toSet(),
       )._toMap(),
     );
     _paths = _keyByPathOverlayId(widget.pathOverlays);

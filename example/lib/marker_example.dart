@@ -100,7 +100,7 @@ class _MarkerExampleState extends State<MarkerExample> {
               ..removeLast()
               ..add(
                 const Marker(
-                  id: '2',
+                  id: '2-a',
                   position: LatLng(37.62535248909687, 127.02881618354651),
                 ),
               );
