@@ -128,7 +128,8 @@ public class NaverMapController implements
             mapReadyResult = null;
         }
         NaverMapListeners listeners = new NaverMapListeners(methodChannel, mapView.getContext(), naverMap);
-
+        naverMap.setExtent(
+        new LatLngBounds(new LatLng(31.43, 122.37), new LatLng(44.35, 132)));
         naverMap.setOnMapClickListener(listeners);
         naverMap.setOnMapDoubleTapListener(listeners);
         naverMap.setOnMapLongClickListener(listeners);
