@@ -158,6 +158,19 @@ class NaverMarkerController {
             if (captionPerspectiveEnabled != null)
                 marker.setCaptionPerspectiveEnabled((boolean) captionPerspectiveEnabled);
 
+            // isHideCollidedSymbols
+            final Object isHideCollidedSymbols = json.get("isHideCollidedSymbols");
+            if (isHideCollidedSymbols != null)
+                marker.setHideCollidedSymbols((boolean) isHideCollidedSymbols);
+
+            final Object isHideCollidedCaptions = json.get("isHideCollidedCaptions");
+            if (isHideCollidedCaptions != null)
+                marker.setHideCollidedCaptions((boolean) isHideCollidedCaptions);
+
+            final Object isHideCollidedMarkers = json.get("isHideCollidedMarkers");
+            if (isHideCollidedMarkers != null)
+                marker.setHideCollidedMarkers((boolean) isHideCollidedMarkers); 
+
             final Object zIndex = json.get("zIndex");
             if (zIndex != null) marker.setZIndex((int)zIndex);
 

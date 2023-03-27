@@ -25,6 +25,9 @@ class Marker extends Equatable {
     this.captionMinZoom,
     this.captionOffset,
     this.captionPerspectiveEnabled,
+    this.isHideCollidedSymbols,
+    this.isHideCollidedMarkers,
+    this.isHideCollidedCaptions,
     this.zIndex,
     this.globalZIndex,
     this.iconTintColor,
@@ -238,6 +241,16 @@ class Marker extends Equatable {
   /// 기본값은 false입니다.
   final bool? captionPerspectiveEnabled;
 
+  /// hide symbols overlapped with markers
+  final bool? isHideCollidedSymbols;
+
+  /// hide overlapped markers.
+  /// Then, only markers that are not overlapped are displayed on the map
+  final bool? isHideCollidedMarkers;
+
+  /// hide the caption of a marker overlapped with other markers
+  final bool? isHideCollidedCaptions;
+
   /// 보조 Z 인덱스를 지정합니다. 전역 Z 인덱스가 동일한 여러 오버레이가 화면에서
   /// 겹쳐지면 보조 Z 인덱스가 큰 오버레이가 작은 오버레이를 덮습니다.
   final int? zIndex;
@@ -264,6 +277,9 @@ class Marker extends Equatable {
     double? captionMinZoom,
     double? captionOffset,
     bool? captionPerspectiveEnabled,
+    bool? isHideCollidedSymbols,
+    bool? isHideCollidedMarkers,
+    bool? isHideCollidedCaptions,
     double? captionMaxWidth,
     String? captionText,
     double? captionTextSize,
@@ -287,6 +303,12 @@ class Marker extends Equatable {
       captionOffset: captionOffset ?? this.captionOffset,
       captionPerspectiveEnabled:
           captionPerspectiveEnabled ?? this.captionPerspectiveEnabled,
+      isHideCollidedSymbols:
+          isHideCollidedSymbols ?? this.isHideCollidedSymbols,
+      isHideCollidedMarkers:
+          isHideCollidedMarkers ?? this.isHideCollidedMarkers,
+      isHideCollidedCaptions:
+          isHideCollidedCaptions ?? this.isHideCollidedCaptions,
       captionMaxWidth: captionMaxWidth ?? this.captionMaxWidth,
       captionText: captionText ?? this.captionText,
       captionTextSize: captionTextSize ?? this.captionTextSize,
@@ -313,6 +335,9 @@ class Marker extends Equatable {
       captionMinZoom: captionMinZoom,
       captionOffset: captionOffset,
       captionPerspectiveEnabled: captionPerspectiveEnabled,
+      isHideCollidedSymbols: isHideCollidedSymbols,
+      isHideCollidedMarkers: isHideCollidedMarkers,
+      isHideCollidedCaptions: isHideCollidedCaptions,
       captionMaxWidth: captionMaxWidth,
       captionText: captionText,
       captionTextSize: captionTextSize,
@@ -360,6 +385,9 @@ class Marker extends Equatable {
         captionMinZoom,
         captionOffset,
         captionPerspectiveEnabled,
+        isHideCollidedSymbols,
+        isHideCollidedMarkers,
+        isHideCollidedCaptions,
         zIndex,
         globalZIndex,
         iconTintColor,
