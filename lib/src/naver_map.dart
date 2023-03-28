@@ -20,6 +20,7 @@ class NaverMap extends StatefulWidget {
     this.markers = const [],
     this.circles = const [],
     this.polygons = const [],
+    this.gestureRecognizers,
   });
 
   /// [NaverMapController] for controlling the [NaverMap].
@@ -96,6 +97,14 @@ class NaverMap extends StatefulWidget {
   /// Stack 구조의 화면에서 지도 상에 UI요소가 지도의 일부를 덮을 경우, 카메라는 지도
   /// 뷰의 중심에 위치하므로 실제 보이는 지도의 중심과 카메라의 위치가 불일치하게 됩니다.
   final EdgeInsets? contentPadding;
+
+  /// The gesture recognizers that will participate in gesture arenas for
+  /// pointer events.
+  ///
+  /// It is rarely necessary to specify this property. If you want to
+  /// customize the gesture recognizers of this widget, consider using
+  /// another one instead of this widget.
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
   final _cameraStreamController = StreamController<bool>.broadcast();
 
@@ -233,12 +242,14 @@ class NaverMapState extends State<NaverMap> {
         onPlatformViewCreated: onPlatformViewCreated,
         creationParams: createParams,
         creationParamsCodec: const StandardMessageCodec(),
+        gestureRecognizers: widget.gestureRecognizers,
       );
       return view;
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       final view = UiKitView(
         viewType: viewType,
         onPlatformViewCreated: onPlatformViewCreated,
+        gestureRecognizers: widget.gestureRecognizers,
         creationParams: createParams,
         creationParamsCodec: const StandardMessageCodec(),
       );
