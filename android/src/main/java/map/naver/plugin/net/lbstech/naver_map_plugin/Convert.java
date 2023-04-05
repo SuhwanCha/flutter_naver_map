@@ -47,8 +47,8 @@ class Convert {
             sink.setScrollGestureEnable((Boolean) options.get("scrollGesturesEnabled"));
         if (options.containsKey("zoomGesturesEnabled"))
             sink.setZoomGestureEnable((Boolean) options.get("zoomGesturesEnabled"));
-        if (options.containsKey("rotationGesturesEnabled"))
-            sink.setRotationGestureEnable((Boolean) options.get("rotationGesturesEnabled"));
+        if (options.containsKey("rotateGesturesEnabled"))
+            sink.setRotationGestureEnable((Boolean) options.get("rotateGesturesEnabled"));
         if (options.containsKey("tiltGesturesEnabled"))
             sink.setTiltGestureEnable((Boolean) options.get("tiltGesturesEnabled"));
         if (options.containsKey("locationButtonEnabled"))

@@ -351,7 +351,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let layers = option["layers"] as? Array<Any> {
             sink.setActiveLayers(layers)
         }
-        if let rotationGestureEnable = option["rotationGesturesEnabled"] as? Bool {
+        if let rotationGestureEnable = option["rotateGesturesEnabled"] as? Bool {
             sink.setRotationGestureEnable(rotationGestureEnable)
         }
         if let scrollGestureEnable = option["scrollGesturesEnabled"] as? Bool {
