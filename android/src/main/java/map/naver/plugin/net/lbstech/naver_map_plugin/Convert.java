@@ -43,14 +43,14 @@ class Convert {
             sink.setActiveLayers((List) options.get("layers"));
         if (options.containsKey("locationButtonEnabled"))
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnabled"));
-        if (options.containsKey("scrollGestureEnabled"))
-            sink.setScrollGestureEnable((Boolean) options.get("scrollGestureEnabled"));
-        if (options.containsKey("zoomGestureEnabled"))
-            sink.setZoomGestureEnable((Boolean) options.get("zoomGestureEnabled"));
-        if (options.containsKey("rotationGestureEnabled"))
-            sink.setRotationGestureEnable((Boolean) options.get("rotationGestureEnabled"));
-        if (options.containsKey("tiltGestureEnabled"))
-            sink.setTiltGestureEnable((Boolean) options.get("tiltGestureEnabled"));
+        if (options.containsKey("scrollGesturesEnabled"))
+            sink.setScrollGestureEnable((Boolean) options.get("scrollGesturesEnabled"));
+        if (options.containsKey("zoomGesturesEnabled"))
+            sink.setZoomGestureEnable((Boolean) options.get("zoomGesturesEnabled"));
+        if (options.containsKey("rotationGesturesEnabled"))
+            sink.setRotationGestureEnable((Boolean) options.get("rotationGesturesEnabled"));
+        if (options.containsKey("tiltGesturesEnabled"))
+            sink.setTiltGestureEnable((Boolean) options.get("tiltGesturesEnabled"));
         if (options.containsKey("locationButtonEnabled"))
             sink.setLocationButtonEnable((Boolean) options.get("locationButtonEnabled"));
         if (options.containsKey("locationTrackingMode"))

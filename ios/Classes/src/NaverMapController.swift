@@ -351,16 +351,16 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         if let layers = option["layers"] as? Array<Any> {
             sink.setActiveLayers(layers)
         }
-        if let rotationGestureEnable = option["rotationGestureEnabled"] as? Bool {
+        if let rotationGestureEnable = option["rotationGesturesEnabled"] as? Bool {
             sink.setRotationGestureEnable(rotationGestureEnable)
         }
-        if let scrollGestureEnable = option["scrollGestureEnabled"] as? Bool {
+        if let scrollGestureEnable = option["scrollGesturesEnabled"] as? Bool {
             sink.setScrollGestureEnable(scrollGestureEnable)
         }
-        if let tiltGestureEnable = option["tiltGestureEnabled"] as? Bool {
+        if let tiltGestureEnable = option["tiltGesturesEnabled"] as? Bool {
             sink.setTiltGestureEnable(tiltGestureEnable)
         }
-        if let zoomGestureEnable = option["zoomGestureEnabled"] as? Bool{
+        if let zoomGestureEnable = option["zoomGesturesEnabled"] as? Bool{
             sink.setZoomGestureEnable(zoomGestureEnable)
         }
         if let locationTrackingMode = option["locationTrackingModed"] as? UInt {
