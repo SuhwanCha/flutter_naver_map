@@ -117,7 +117,7 @@ class NaverMapState extends State<NaverMap> {
   Map<String, CircleOverlay> _circles = <String, CircleOverlay>{};
   Map<PathOverlayId, PathOverlay> _paths = <PathOverlayId, PathOverlay>{};
   Map<String, PolygonOverlay> _polygons = <String, PolygonOverlay>{};
-  late MethodChannel _channel;
+  MethodChannel? _channel;
 
   @override
   void initState() {
@@ -130,11 +130,14 @@ class NaverMapState extends State<NaverMap> {
 
   Future<void> onPlatformViewCreated(int id) async {
     _channel = MethodChannel('${viewType}_$id');
-    await _channel.invokeMethod<void>('map#waitForMap');
-    _channel.setMethodCallHandler(_handleMethodCall);
+    await _channel?.invokeMethod<void>('map#waitForMap');
+    _channel?.setMethodCallHandler(_handleMethodCall);
 
+    if (_channel == null) {
+      return;
+    }
     await widget.controller.init(
-      _channel,
+      _channel!,
       widget._cameraStreamController,
       widget.markers,
       widget.pathOverlays,
@@ -222,7 +225,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> clearMapView() async {
-    await _channel.invokeMethod<List<dynamic>>('map#clearMapView');
+    await _channel?.invokeMethod<List<dynamic>>('map#clearMapView');
   }
 
   @override
@@ -264,9 +267,9 @@ class NaverMapState extends State<NaverMap> {
   @override
   void didUpdateWidget(NaverMap oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!widget.controller.isInitialized) {
+    if (!widget.controller.isInitialized && _channel != null) {
       widget.controller.init(
-        _channel,
+        _channel!,
         widget._cameraStreamController,
         widget.markers,
         widget.pathOverlays,
@@ -285,7 +288,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updateMarkers() async {
-    await _channel.invokeMethod<void>(
+    await _channel?.invokeMethod<void>(
       'markers#update',
       _MarkerUpdates.from(
         _markers.values.toSet(),
@@ -296,7 +299,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updatePathOverlay() async {
-    await _channel.invokeMethod(
+    await _channel?.invokeMethod(
       'pathOverlay#update',
       _PathOverlayUpdates.from(
         _paths.values.toSet(),
@@ -307,7 +310,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updateCircleOverlay() async {
-    await _channel.invokeMethod(
+    await _channel?.invokeMethod(
       'circleOverlay#update',
       _CircleOverlayUpdate.from(
         _circles.values.toSet(),
@@ -318,7 +321,7 @@ class NaverMapState extends State<NaverMap> {
   }
 
   Future<void> _updatePolygonOverlay() async {
-    await _channel.invokeMethod(
+    await _channel?.invokeMethod(
       'polygonOverlay#update',
       _PolygonOverlayUpdate.from(
         _polygons.values.toSet(),
