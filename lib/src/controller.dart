@@ -12,6 +12,9 @@ class NaverMapController {
   Map<String, Marker> _markers = <String, Marker>{};
   Map<PathOverlayId, PathOverlay> _paths = <PathOverlayId, PathOverlay>{};
 
+  Map<String, Marker> get markers => _markers;
+  Map<PathOverlayId, PathOverlay> get paths => _paths;
+
   /// [StreamController] to emit events from the native side.
   late final StreamController<bool> _cameraStreamController;
 
