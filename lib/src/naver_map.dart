@@ -295,6 +295,7 @@ class NaverMapState extends State<NaverMap> {
         widget.markers.toSet(),
       )._toMap(),
     );
+
     _markers = _keyByMarkerId(widget.markers);
   }
 
@@ -332,9 +333,15 @@ class NaverMapState extends State<NaverMap> {
   }
 
   void _markerTapped(String markerId, int? iconWidth, int? iconHeight) {
+    print(widget.controller.markers);
     if (_markers[markerId]?.onTap != null) {
       _markers[markerId]!.onTap!(
         _markers[markerId],
+        <String, int?>{'width': iconWidth, 'height': iconHeight},
+      );
+    } else if (widget.controller.markers[markerId]?.onTap != null) {
+      widget.controller.markers[markerId]!.onTap!(
+        widget.controller.markers[markerId],
         <String, int?>{'width': iconWidth, 'height': iconHeight},
       );
     }
