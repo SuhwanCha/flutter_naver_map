@@ -124,9 +124,10 @@ class NaverMapController {
   /// 현재 지도의 중심점 좌표에 대한 [CameraPosition] 객체를 리턴.
   Future<CameraPosition> getCameraPosition() async {
     final position = (await _channel
-        ?.invokeMethod<Map<String, dynamic>>('map#getPosition'))!;
+        ?.invokeMethod<Map<Object?, Object?>>('map#getPosition'))!;
+    final target = position['target']! as List<Object?>;
     return CameraPosition(
-      target: LatLng.fromJson(position['target'] as List<double>),
+      target: LatLng(target[0]! as double, target[1]! as double),
       zoom: position['zoom'] as double,
       tilt: position['tilt'] as double,
       bearing: position['bearing'] as double,
