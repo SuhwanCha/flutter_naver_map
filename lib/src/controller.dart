@@ -16,7 +16,7 @@ class NaverMapController {
   Map<PathOverlayId, PathOverlay> get paths => _paths;
 
   /// [StreamController] to emit events from the native side.
-  late final StreamController<bool> _cameraStreamController;
+  StreamController<bool>? _cameraStreamController;
 
   Future<void> init(
     MethodChannel channel,
@@ -55,7 +55,7 @@ class NaverMapController {
 
     StreamSubscription<bool>? subscription;
 
-    subscription = _cameraStreamController.stream.listen((isFinished) {
+    subscription = _cameraStreamController?.stream.listen((isFinished) {
       if (isFinished) {
         subscription?.cancel();
         complete.complete();
