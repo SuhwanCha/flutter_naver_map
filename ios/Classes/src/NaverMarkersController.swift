@@ -81,14 +81,14 @@ class NMarkerController: NSObject {
         if let isCaptionPerspectiveEnable = json["captionPerspectiveEnabled"] as? Bool {
             marker.iconPerspectiveEnabled = isCaptionPerspectiveEnable
         }
-        // isHideCollidedSymbols
-        if let isHideCollidedSymbols = json["hideCollidedSymbols"] as? Bool {
+        
+        if let isHideCollidedSymbols = json["isHideCollidedSymbols"] as? Bool {
             marker.isHideCollidedSymbols = isHideCollidedSymbols
         }
-        if let isHideCollidedCaptions = json["hideCollidedCaptions"] as? Bool {
+        if let isHideCollidedCaptions = json["isHideCollidedCaptions"] as? Bool {
             marker.isHideCollidedCaptions = isHideCollidedCaptions
         }
-        if let isHideCollidedMarkers = json["hideCollidedMarkers"] as? Bool {
+        if let isHideCollidedMarkers = json["isHideCollidedMarkers"] as? Bool {
             marker.isHideCollidedMarkers = isHideCollidedMarkers
         }
         if let zIndex = json["zIndex"] as? Int {
