@@ -595,7 +595,7 @@ public class NaverMapController implements
 
     @Override
     public void setZoomGestureEnable(boolean zoomGestureEnable) {
-        naverMap.getUiSettings().setZoomControlEnabled(zoomGestureEnable);
+        naverMap.getUiSettings().setZoomGesturesEnabled(zoomGestureEnable);
     }
 
     @Override
