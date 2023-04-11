@@ -158,6 +158,10 @@ class NaverMarkerController {
             if (captionPerspectiveEnabled != null)
                 marker.setCaptionPerspectiveEnabled((boolean) captionPerspectiveEnabled);
 
+            final Object iconPerspectiveEnabled = json.get("iconPerspectiveEnabled");
+            if (iconPerspectiveEnabled != null)
+                marker.setIconPerspectiveEnabled((boolean) iconPerspectiveEnabled);
+
             // isHideCollidedSymbols
             final Object isHideCollidedSymbols = json.get("isHideCollidedSymbols");
             if (isHideCollidedSymbols != null)

@@ -25,6 +25,7 @@ class Marker extends Equatable {
     this.captionMinZoom,
     this.captionOffset,
     this.captionPerspectiveEnabled,
+    this.iconPerspectiveEnabled,
     this.isHideCollidedSymbols,
     this.isHideCollidedMarkers,
     this.isHideCollidedCaptions,
@@ -241,6 +242,8 @@ class Marker extends Equatable {
   /// 기본값은 false입니다.
   final bool? captionPerspectiveEnabled;
 
+  final bool? iconPerspectiveEnabled;
+
   /// hide symbols overlapped with markers
   final bool? isHideCollidedSymbols;
 
@@ -277,6 +280,7 @@ class Marker extends Equatable {
     double? captionMinZoom,
     double? captionOffset,
     bool? captionPerspectiveEnabled,
+    bool? iconPerspectiveEnabled,
     bool? isHideCollidedSymbols,
     bool? isHideCollidedMarkers,
     bool? isHideCollidedCaptions,
@@ -303,6 +307,8 @@ class Marker extends Equatable {
       captionOffset: captionOffset ?? this.captionOffset,
       captionPerspectiveEnabled:
           captionPerspectiveEnabled ?? this.captionPerspectiveEnabled,
+      iconPerspectiveEnabled:
+          iconPerspectiveEnabled ?? this.iconPerspectiveEnabled,
       isHideCollidedSymbols:
           isHideCollidedSymbols ?? this.isHideCollidedSymbols,
       isHideCollidedMarkers:
@@ -335,6 +341,7 @@ class Marker extends Equatable {
       captionMinZoom: captionMinZoom,
       captionOffset: captionOffset,
       captionPerspectiveEnabled: captionPerspectiveEnabled,
+      iconPerspectiveEnabled: iconPerspectiveEnabled,
       isHideCollidedSymbols: isHideCollidedSymbols,
       isHideCollidedMarkers: isHideCollidedMarkers,
       isHideCollidedCaptions: isHideCollidedCaptions,
@@ -385,6 +392,7 @@ class Marker extends Equatable {
         captionMinZoom,
         captionOffset,
         captionPerspectiveEnabled,
+        iconPerspectiveEnabled,
         isHideCollidedSymbols,
         isHideCollidedMarkers,
         isHideCollidedCaptions,

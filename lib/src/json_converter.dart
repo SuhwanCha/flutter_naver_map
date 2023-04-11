@@ -219,6 +219,7 @@ Marker _$MarkerFromJson(Map<String, dynamic> json) => Marker(
       captionMinZoom: (json['captionMinZoom'] as num?)?.toDouble(),
       captionOffset: (json['captionOffset'] as num?)?.toDouble(),
       captionPerspectiveEnabled: json['captionPerspectiveEnabled'] as bool?,
+      iconPerspectiveEnabled: json['iconPerspectiveEnabled'] as bool?,
       zIndex: json['zIndex'] as int?,
       globalZIndex: json['globalZIndex'] as int?,
       iconTintColor: _$JsonConverterFromJson<int, Color>(
@@ -270,6 +271,7 @@ Map<String, dynamic> _$MarkerToJson(Marker instance) => <String, dynamic>{
       'isHideCollidedMarkers': instance.isHideCollidedMarkers,
       'isHideCollidedSymbols': instance.isHideCollidedSymbols,
       'captionPerspectiveEnabled': instance.captionPerspectiveEnabled,
+      'iconPerspectiveEnabled': instance.iconPerspectiveEnabled,
       'zIndex': instance.zIndex,
       'globalZIndex': instance.globalZIndex,
     };
