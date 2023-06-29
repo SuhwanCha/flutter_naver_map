@@ -3,7 +3,7 @@ part of flutter_naver_map;
 /// [NaverMap]의 [PathOverlay]에 대한 유일 식별자
 ///
 /// 전역적으로 유일할 필요는 없으며 목록상에서 유일하면 된다.
-@immutable
+
 class PathOverlayId {
   const PathOverlayId(this.value);
 

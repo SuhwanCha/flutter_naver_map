@@ -61,7 +61,7 @@ class NaverMapController: NSObject, FlutterPlatformView, NaverMapOptionSink, NMF
         // property set
         naverMap = NMFNaverMapView(frame: frame)
         mapView = naverMap!.mapView
-        mapView!.extent = NMGLatLngBounds(southWest: NMGLatLng(lat: 31.43, lng: 122.37), northEast: NMGLatLng(lat: 44.35, lng: 132));
+        mapView!.extent = NMGLatLngBounds(southWest: NMGLatLng(lat: 32.697068730366226, lng: 124.59951870385675), northEast: NMGLatLng(lat: 39.41875863457344, lng: 132.55958522697884));
 
         channel = FlutterMethodChannel(name: "flutter_naver_map_\(viewId)",
                                        binaryMessenger: registrar.messenger())

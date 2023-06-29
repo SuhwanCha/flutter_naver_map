@@ -96,7 +96,6 @@ class LatLngBounds extends Equatable {
     }
   }
 
-  @visibleForTesting
   static LatLngBounds? fromList(List<List<double>>? json) {
     if (json == null) {
       return null;
