@@ -48,6 +48,9 @@ class NMarkerController: NSObject {
         if let captionHaloColor = json["captionHaloColor"] as? NSNumber{
             marker.captionHaloColor = toColor(colorNumber: captionHaloColor)
         }
+        if let subCaptionHaloColor = json["subCaptionHaloColor"] as? NSNumber{
+            marker.subCaptionHaloColor = toColor(colorNumber: subCaptionHaloColor)
+        }
         if let width = json["width"] as? CGFloat {
             marker.width = width
         }
